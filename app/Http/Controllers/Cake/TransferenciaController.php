@@ -10,6 +10,8 @@ use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Gate;
+
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Nette\Utils\Json;
@@ -25,12 +27,15 @@ class TransferenciaController extends Controller
         // $group = Auth::user()->group_id; 
 
       
-        $statusBar = $this->getStatusBar($this->bar_id);
-      
+      $statusBar = $this->getStatusBar($this->bar_id);
+      if(Gate::allows('transferir_produto',$this->group_id)){
         return  view('transferencia.index')
             ->with('statusBar', $statusBar)
             ->with('group_id', $this->group_id);
-            
+      }else {
+       return redirect()->route('home');
+      }   
+ 
 
     }
 
@@ -213,7 +218,8 @@ class TransferenciaController extends Controller
         try {
             $productExist = Products::where([
                 'erp_id' => $idProduct,
-                'bar_id' => $this->bar_id])
+                'bar_id' => $this->bar_id,
+                'active' => 1])
              ->exists();
                     // DB::table('products')->where('erp_id', $idProduct)->exists();
         } catch (\Throwable $th) {

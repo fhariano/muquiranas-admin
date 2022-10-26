@@ -246,15 +246,15 @@ return [
             'icon_color' => 'red',
             'url'        => 'transferencia',
             'icon'       => 'fas fa-fw fa-share',
-            // 'can'        => 'transferir_produto',
+            'can'        => 'transferir_produto',
         ],
-        [
-            'text'       => 'Bar',
-            'icon_color' => 'green',
-            'url'        => 'bar',
-            'icon'       => 'fas fa-fw fa-share',
-            // 'can'        => 'gerenciar_bar',
-        ],
+        // [
+        //     'text'       => 'Bar',
+        //     'icon_color' => 'green',
+        //     'url'        => 'bar',
+        //     'icon'       => 'fas fa-fw fa-share',
+        //     // 'can'        => 'gerenciar_bar',
+        // ],
 
         [
             'text'       => 'Cardápio',

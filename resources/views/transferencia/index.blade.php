@@ -3,32 +3,12 @@
 @section('content')
 <div class="card card-default">
 
-    <div class="card-header">
-        <h1 style="text-align:center;">Transferência de Produtos para o Cardápio</h1>
-    </div>
-
-    <br> </br>
-    <div class="container-fluid">
-    
-    @can('transferir_produto',$group_id)  
-            @if($statusBar != 1)
-
-            <a href="javascript:void(0)" class="btn btn-sm btn-primary" role="button" id="transferProductApi" title="Transferir Produto" aria-label="Transferir Produto"><i class="fas fa-random"></i> Trasnferir </a>
-
-            @else
-            <a href="javascript:void(0)" class="btn btn-sm btn-primary" role="button" id="transferProductApi" title="Transferir Produto" aria-label="Transferir Produto" hidden><i class="fas fa-random"></i> Trasnferir </a>
-
-            @endif
-    @endCan
-            <!-- <h3 style="align:center" id="headerTransferencia">Transferência de Produtos para o Cardápio</h3> -->
-
-       
-    </div>
-
-
     <div class="card-body">
 
         <div class="row">
+            <div id="productsApiToolbar">
+
+            </div>
 
 
             <div id="productsApi" class="col-12 table-responsive pt-1">
@@ -37,7 +17,7 @@
         </div>
 
     </div>
- </div>
+</div>
 
 @endsection
 
@@ -58,21 +38,20 @@
         // botton = ('#save_products');
 
 
-        const transferProductApi = document.getElementById('transferProductApi');
-        transferProductApi.onclick = function() {
 
 
-            var fieldsProductsApi = JSON.stringify($tblProductsApi.bootstrapTable('getSelections'));
-            console.log(fieldsProductsApi);
-            saveProductsCardapio(fieldsProductsApi);
-        }
+        window.addEventListener('click', (event) => {
 
-        // window.addEventListener('click', (event) => {
+         
+
+            transferirProductApi = () => {
+                var fieldsProductsApi = JSON.stringify($tblProductsApi.bootstrapTable('getSelections'));
+                // console.log(fieldsProductsApi);
+                saveProductsCardapio(fieldsProductsApi);
+            }
 
 
-
-
-        // });
+        });
 
         function saveProductsCardapio(fields) {
 
@@ -158,7 +137,7 @@
 
             url: urlBase + urlController + 'consultaApi', //nome 
             // showRefresh: true,
-            // toolbar: '#productsApiToolbar',
+            toolbar: '#productsApiToolbar',
             pagination: true,
             clickToSelect: true,
             checkboxHeader: false,
@@ -255,6 +234,17 @@
                 },
 
             ],
+            onLoadSuccess: function(data) {
+                html = '@can("transferir_produto",$group_id)';
+                html += '@if($statusBar != 1)';
+                html += '';
+                html += '<div class="bs-bars float-left">  <button type="button"  class="btn btn-sm btn-primary" role="button"  id="transferProductApi" title="Transferir Produto" aria-label="Transferir Produto" onclick="transferirProductApi();" ><i class="fas fa-random"></i> Trasnferir </button> <br> </br> <h3 align="center" id="headerTransferencia">Transferência de Produtos para o Cardápio</h3> </div>';
+                html += '@endif';
+                html +='@endcan'
+
+                $('#productsApiToolbar').html(html);
+
+            },
         });
 
     })
