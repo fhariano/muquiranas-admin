@@ -284,10 +284,6 @@
 
                         }
 
-                        // console.log(
-                        // 'STATUS : ' + data.status + 
-                        // ' TEXT STATUS : ' + data.statusText + 
-                        // 'TEXT RESPONSE :' + data.responseText);
                     }
 
                 });

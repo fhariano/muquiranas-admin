@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PromosLists extends Model
 {
@@ -20,10 +21,13 @@ class PromosLists extends Model
         return $this->belongsTo(Bars::class);
     } 
    
-    public function existName($data)
+    public function existName($data, $bar_id)
     {
         try {
-            $existName = DB::table('promos_lists')->where('name', $data)->exists();
+            $existName = DB::table('promos_lists')
+            ->where('name', $data)
+            ->where('bar_id', $bar_id)
+            ->exists();
         } catch (\Throwable $th) {
             return $th;
         }

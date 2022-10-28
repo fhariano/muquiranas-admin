@@ -11,6 +11,6 @@ class Products extends Model
 
     protected $table ="products";
 	// protected $primaryKey ="id";
-    protected $fillable = ['bar_id','erp_id','image_url','category_id','ean_erp','name','short_name','short_description','unity','quantity','price_cost_erp','price_sell_erp','price_base','order','active'];
+    protected $fillable = ['bar_id','erp_id','image_url','category_id','ean_erp','name','short_name','short_description','unity','quantity','price_cost_erp','price_sell_erp','price_base','order','active','inserted_for','updated_for'];
 
 }

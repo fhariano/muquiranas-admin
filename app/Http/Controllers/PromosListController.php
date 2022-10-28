@@ -31,16 +31,17 @@ class PromosListController extends Controller
 
         $promosList = new PromosLists();
         $name = $request->name;
-        $resultExistName = $promosList->existName($name);
+        $resultExistName = $promosList->existName($name, $this->bar_id);
 
 
 
         if ($resultExistName == true) {
             return  2;
         } else {
-            $promosList->bar_id = 1;
+            $promosList->bar_id = $this->bar_id ;
             $promosList->name = $name;
-            $promosList->inserted_for = 'Murilo';
+            $promosList->inserted_for =  $this->name_user;
+            $promosList->updated_for = $this->name_user;
             $promosList->save();
             return true;
         }
@@ -52,7 +53,7 @@ class PromosListController extends Controller
     public function show()
     {
         try {
-            $listAll = PromosLists::all();
+            $listAll = PromosLists::where(['bar_id' => $this->bar_id,])->get();;
             if ($listAll) {
                 $data['rows'] = $listAll; //Criar formato rows para bootstrap ler o json
                 $listas_data = json_encode($data); //Enviado para tabela o Json
@@ -75,7 +76,7 @@ class PromosListController extends Controller
         $id = $request->id;
         $name = $request->name;
         $active = $request->active;
-        $bar = 1;
+        $bar = $this->bar_id;
 
         try {
 
@@ -111,7 +112,7 @@ class PromosListController extends Controller
 
 
             $fieldsListPromo = PromosLists::find($id);
-            $fieldsListPromo->bar_id = 1;
+            $fieldsListPromo->bar_id = $this->bar_id;
             $fieldsListPromo->active = $fieldsActive;
             $fieldsListPromo->save();
             $resultUpdateListPromo = true;

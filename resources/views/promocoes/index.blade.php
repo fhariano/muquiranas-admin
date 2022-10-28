@@ -218,6 +218,8 @@
                 // validatedFields = true;
             }
 
+            console.log('productValidator' + productValidator.value);
+            console.log('hourStartValidator' + hourStartValidator.value);
 
             let fields = {
                 product_id: productValidator.value,
@@ -241,7 +243,8 @@
             var hourEnd = document.getElementById('hourEnd');
             var price = document.getElementById('price');
             var id = document.getElementById('idPromo');
-
+            
+    
             var actionButtonSavePreco = event.target.name;
             var resultValidation = formValidator(product, hourStart, hourEnd, price);
 
@@ -250,7 +253,7 @@
 
             if (actionButtonSavePreco == 'InsertPrice' && resultValidation != false) {
 
-                console.log('ID produto vindo resultValidation: ' + resultValidation);
+                // console.log('ID produto vindo resultValidation: ' + resultValidation.product_id);
                 savePriceProduct(resultValidation);
 
 
@@ -650,8 +653,8 @@
                         }
                     });
 
-                    console.log('ROW Product :' + row);
-                    // console.log("Id Lista =" + idList);
+                    
+         
                     var dataJson = [];
                     getProductsDetail(idList, row.product_id).then((result) => { 
                         dataJson[index] = [];

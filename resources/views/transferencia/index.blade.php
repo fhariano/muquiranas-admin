@@ -46,8 +46,8 @@
 
             transferirProductApi = () => {
                 var fieldsProductsApi = JSON.stringify($tblProductsApi.bootstrapTable('getSelections'));
-                // console.log(fieldsProductsApi);
-                saveProductsCardapio(fieldsProductsApi);
+                //  console.log(fieldsProductsApi);
+                 saveProductsCardapio(fieldsProductsApi);
             }
 
 
@@ -67,7 +67,7 @@
 
                 },
                 success: function(success) {
-                    // console.log('Retorno success:' + success);
+                     console.log('Retorno success:' + success);
                     if (success == true) {
                         Swal.fire({
                             icon: 'success',
@@ -167,7 +167,7 @@
                     visible: false,
                 },
                 {
-                    field: 'id_category',
+                    field: 'category_id',
                     title: 'ID CATEGORIA',
                     visible: false,
                 },

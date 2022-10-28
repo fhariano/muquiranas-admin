@@ -12,7 +12,7 @@ class Categories extends Model
 
     protected $table ="categories";
 	// protected $primaryKey ="id";
-	protected $fillable = ['bar_id','id_erp','name','icon_data','icon_name','order','active','inserted_for','updated_for'];
+	protected $fillable = ['bar_id','erp_id','name','icon_data','icon_name','order','active','inserted_for','updated_for'];
 
 	public function bars() {
         return $this->belongsTo(Bars::class);

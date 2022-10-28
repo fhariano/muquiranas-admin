@@ -14,33 +14,7 @@ use Illuminate\Support\Facades\Gate;
 
 class ProductsController extends Controller
 {
-    protected  $bar_id;
-    protected  $group_id;
-
-
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            $this->bar_id = Auth::user()->bar_id;
-            $this->group_id = Auth::user()->group_id;
-            return $next($request);
-        });
-    }
-
-
-    // public $user_info;
-    // public function __construct(){
-    // $this->middleware(function ($request, $next) {
-    //         $this->user_info=Auth::user(); // returns user
-    //     return $next($request);
-    //     });
-    // }
-
-
-
-
-
-
+    
     public function index()
     {
         
@@ -78,9 +52,9 @@ class ProductsController extends Controller
      */
     public function show(Products $products)
     {
-        $idBar = Auth::user()->bar_id;
+   
         $fields = $products->where('active', 1)
-            ->where('bar_id', $idBar)
+            ->where('bar_id', $this->bar_id)
             ->orderBy('name')
             ->get();
 
@@ -174,8 +148,7 @@ class ProductsController extends Controller
             ->orderBy('order')
             ->get();
 
-        // $data['rows'] = $fields;
-        // $fields_products=json_encode($data);
+      
         return $fields;
     }
 }

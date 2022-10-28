@@ -9,78 +9,6 @@
         <h1 style=text-align:center> <b> Cardápio </b> </h1>
     </div>
 
-    <!-- <div class="container-fluid">
-        <div class="row"> -->
-            <!-- <div class="col-lg-3 col-6">
-
-            <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>150</h3>
-                    <p>New Orders</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-bag"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-6">
-
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3>53<sup style="font-size: 20px">%</sup></h3>
-                    <p>Bounce Rate</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-6">
-
-            <div class="small-box bg-warning">
-                <div class="inner">
-                    <h3>44</h3>
-                    <p>User Registrations</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-6">
-
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3>65</h3>
-                    <p>Unique Visitors</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-pie-graph"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-        </div> -->
-       <!-- <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <a href="javascript:void(0)" class="btn btn-sm btn-primary" role="button" id="transferirEstoque" title="Transferir Estoque" aria-label="Transferir Estoque">
-                        <span class="info-box-icon sm-primary elevation-1"> <i class="fas fa-random"></i> </span>
-                        TRANSFERIR
-                    </a>
-                </div>
-            </div>
-
-
-        </div>
-    </div> -->
-
-
-
 
     <div class="card-body">
 
@@ -208,7 +136,7 @@
             var html = '<div>';
             html += '<img style="height:50px" src="' + row.image_url + '">';
             html += '</div>';
-            // console.log('formaterImgProduct', row);
+            
 
             return html;
 
@@ -221,7 +149,6 @@
             clickToSelect: false,
             search: false,
             searchTimeOut: 1500,
-            // searchOnEnterKey: true,
             searchAccentNeutralise: true,
             sortable: true,
             detailView: true,
@@ -278,20 +205,12 @@
                 });
 
                 $("#tblDetailCardapio" + index).bootstrapTable({
-                    // url: urlBase + urlController + 'show',
-                    // pagination: true,
-                    // clickToSelect: false,
-                    // search: true,
-                    // searchTimeOut: 1500,
-                    // // searchOnEnterKey: true,
-                    // searchAccentNeutralise: true,
-                    // sortable: true,
-                    // clickToSelect: false,
+              
                     search: true,
                     uniqueId: 'id',
                     shortOrder: 'order',
                     detailFormatter: 'actionCardapioFormatter',
-                    // events: 'cardapioEvents',
+                
                     columns: [{
                             field: 'id',
                             title: 'ID',
@@ -391,7 +310,7 @@
             var order = document.getElementById('order')
 
             var resultValidation = formValidator(shortName, shortDescription, unity, priceBase, order);
-            // console.log('Resultado da validação: ' + JSON.stringify(resultValidation));
+       ;
             if (resultValidation != false) {
                 updateFieldsCardapio(resultValidation, idProductCardapio);
             }
@@ -459,10 +378,7 @@
 
                     }
 
-                    // console.log(
-                    // 'STATUS : ' + data.status + 
-                    // ' TEXT STATUS : ' + data.statusText + 
-                    // 'TEXT RESPONSE :' + data.responseText);
+                 
                 }
 
 
@@ -532,11 +448,7 @@
 
                     }
 
-                    // console.log(
-                    // 'STATUS : ' + data.status + 
-                    // ' TEXT STATUS : ' + data.statusText + 
-                    // 'TEXT RESPONSE :' + data.responseText);
-                }
+            }
 
 
             })
@@ -578,7 +490,7 @@
             } else {
                 fieldPriceBase.classList.remove("is-invalid");
                 fieldPriceBase.classList.add("is-valid");
-                // validatedFields = true;
+              
             }
 
             if (order.value == '') {
@@ -606,7 +518,6 @@
         $('#modalCardapio').on('show.bs.modal', function() {});
 
 
-
         window.actionsCardapioFormatter = function(index, row, $detail) {
           
             var html= '@can("gerenciar_cardapio",$group_id)';
@@ -630,9 +541,9 @@
                 $('#priceBase').val(row.price_base);
                 $('#order').val(row.order);
                 $("input").removeClass(["is-valid", "is-invalid"])
-                // $("select").removeClass(["is-invalid"])
+              
                 $('#modalCardapio').modal('show');
-                // alert('Nome do produto Selecionado ' + row.name);
+              
 
             },
             'click #delCardapio': function(e, value, row, index) {

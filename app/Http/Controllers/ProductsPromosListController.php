@@ -27,13 +27,14 @@ class ProductsPromosListController extends Controller
 
     public function index()
     {
-        $promoList = new PromosLists;
-        $resultPromoList = $promoList->all();
-        $products = new Products;
-        $resultProduct = $products->all();
-
-
-        return view('promocoes.index', ['resultPromoList' => $resultPromoList, 'resultProducts' => $resultProduct, 'group_id' => $this->group_id]);
+        $resultPromoList = PromosLists::where(['bar_id' => $this->bar_id,])->get();
+        $resultProduct = Products::where(['bar_id' => $this->bar_id,])->get();
+        return view('promocoes.index', 
+        [
+            'resultPromoList' => $resultPromoList, 
+            'resultProducts' => $resultProduct, 
+            'group_id' => $this->group_id
+        ]);
     }
 
     /**
@@ -86,6 +87,7 @@ class ProductsPromosListController extends Controller
                 $productPromosFields->hour_start = $hourStart;
                 $productPromosFields->hour_end = $hourEnd;
                 $productPromosFields->price = $price;
+                $productPromosFields->inserted_for = $this->name_user;
                 $productPromosFields->save();
                 return  true;
                 break;
@@ -172,6 +174,8 @@ class ProductsPromosListController extends Controller
                 $productPromosFields->hour_start = $hourStart;
                 $productPromosFields->hour_end = $hourEnd;
                 $productPromosFields->price = $price;
+                $productPromosFields->updated_for = $this->name_user;
+
          
                 $productPromosFields->save();
                 return  true;
