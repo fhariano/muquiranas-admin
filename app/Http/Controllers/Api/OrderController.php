@@ -28,7 +28,8 @@ class OrderController extends Controller
         ->where('orders.bar_id', $bar_id)
         ->where('orders.active', 1)
         ->where('bars.active', 1)
-        ->orderBy('orders_items.items', 'asc')
+        ->orderBy('orders_items.bar_id', 'asc')
+        ->orderBy('orders_items.item', 'asc')
         ->get();
         // dd($orders);
         if ($orders->isEmpty()) {
