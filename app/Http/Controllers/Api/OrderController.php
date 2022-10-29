@@ -29,15 +29,15 @@ class OrderController extends Controller
         ->where('orders.active', 1)
         ->where('bars.active', 1)
         ->orderBy('orders_items.items', 'asc')
-        ->toSql();
-        dd($orders);
-        // if ($orders->isEmpty()) {
-        //     return response()->json([
-        //         "error" => true,
-        //         "message" => "Nenhum registro foi encontrado!",
-        //         "data" => [],
-        //     ], 404);
-        // }
+        ->get();
+        // dd($orders);
+        if ($orders->isEmpty()) {
+            return response()->json([
+                "error" => true,
+                "message" => "Nenhum registro foi encontrado!",
+                "data" => [],
+            ], 404);
+        }
         // return BarResource::collection($orders);
         return response()->json([
             "error" => false,
