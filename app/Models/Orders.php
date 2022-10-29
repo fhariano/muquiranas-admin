@@ -15,9 +15,4 @@ class Orders extends Model
     {
         return $this->hasMany(Bars::class);
     }
-
-    public function users()
-    {
-        return $this->hasMany(Users::class);
-    }
 }

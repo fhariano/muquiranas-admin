@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Orders;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -20,11 +21,14 @@ class OrderController extends Controller
      */
     public function index($user_id, $bar_id)
     {
-        $orders = Orders::with('bars')
-        ->where('bars.active', 1)
+        $orders = DB::table('orders')
+        ->leftJoin('bars', 'orders.bar_id', 'bars.id')
         ->where('orders.costumer_id', $user_id)
-        ->where('borders.ar_id', $bar_id)
-        ->orderBy('orders.items', 'asc')->get();
+        ->where('orders.bar_id', $bar_id)
+        ->where('orders.active', 1)
+        ->where('bars.active', 1)
+        ->orderBy('orders.items', 'asc')
+        ->get();
         // dd($orders);
         if ($orders->isEmpty()) {
             return response()->json([
