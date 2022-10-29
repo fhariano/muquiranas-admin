@@ -20,10 +20,11 @@ class OrderController extends Controller
      */
     public function index($user_id, $bar_id)
     {
-        $orders = Orders::where('bars.active', 1)
-        ->where('user_id', $user_id)
-        ->where('bar_id', $bar_id)
-        ->orderBy('bars.order', 'asc')->get();
+        $orders = Orders::with('bars')
+        ->where('bars.active', 1)
+        ->where('orders.costumer_id', $user_id)
+        ->where('borders.ar_id', $bar_id)
+        ->orderBy('orders.items', 'asc')->get();
         // dd($orders);
         if ($orders->isEmpty()) {
             return response()->json([
