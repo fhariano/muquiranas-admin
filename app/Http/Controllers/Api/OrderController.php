@@ -23,20 +23,21 @@ class OrderController extends Controller
     {
         $orders = DB::table('orders')
         ->leftJoin('bars', 'orders.bar_id', 'bars.id')
+        ->leftJoin('orders_items', 'orders.id', 'orders_items.order_id')
         ->where('orders.customer_id', $user_id)
         ->where('orders.bar_id', $bar_id)
         ->where('orders.active', 1)
         ->where('bars.active', 1)
-        ->orderBy('orders.items', 'asc')
-        ->get();
-        // dd($orders);
-        if ($orders->isEmpty()) {
-            return response()->json([
-                "error" => true,
-                "message" => "Nenhum registro foi encontrado!",
-                "data" => [],
-            ], 404);
-        }
+        ->orderBy('orders_items.items', 'asc')
+        ->toSql();
+        dd($orders);
+        // if ($orders->isEmpty()) {
+        //     return response()->json([
+        //         "error" => true,
+        //         "message" => "Nenhum registro foi encontrado!",
+        //         "data" => [],
+        //     ], 404);
+        // }
         // return BarResource::collection($orders);
         return response()->json([
             "error" => false,
