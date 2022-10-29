@@ -23,7 +23,7 @@ class OrderController extends Controller
     {
         $orders = DB::table('orders')
         ->leftJoin('bars', 'orders.bar_id', 'bars.id')
-        ->where('orders.costumer_id', $user_id)
+        ->where('orders.customer_id', $user_id)
         ->where('orders.bar_id', $bar_id)
         ->where('orders.active', 1)
         ->where('bars.active', 1)
