@@ -36,3 +36,5 @@ Route::get('/products/bar/{bar_id}', [ProductController::class, 'barProducts']);
 Route::get('/products/favorites/bar/{bar_id}/user/{user_id}', [ProductController::class, 'favoritesProducts']);
 Route::put('/products/favorites/bar/{bar_id}/user/{user_id}', [ProductController::class, 'toggleFavoriteProduct']);
 
+Route::get('/orders/user/{user_id}/bar/{bar_id}', [OrderController::class, 'index']);
+
