@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ConstraintOrdersUsersBars extends Migration
+class ConstraintsOrdersUsersBars extends Migration
 {
     /**
      * Run the migrations.
@@ -27,8 +27,8 @@ class ConstraintOrdersUsersBars extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
             $table->dropForeign(['bar_id']);
+            $table->dropForeign(['user_id']);
         });
     }
 }
