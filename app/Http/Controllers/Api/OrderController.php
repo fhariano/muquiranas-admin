@@ -18,22 +18,25 @@ class OrderController extends Controller
      * @param  Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user_id, $bar_id)
     {
-        $bars = Orders::where('bars.active', 1)->orderBy('bars.order', 'asc')->get();
-        // dd($bars);
-        if ($bars->isEmpty()) {
+        $orders = Orders::where('bars.active', 1)
+        ->where('user_id', $user_id)
+        ->where('bar_id', $bar_id)
+        ->orderBy('bars.order', 'asc')->get();
+        // dd($orders);
+        if ($orders->isEmpty()) {
             return response()->json([
                 "error" => true,
                 "message" => "Nenhum registro foi encontrado!",
                 "data" => [],
             ], 404);
         }
-        // return BarResource::collection($bars);
+        // return BarResource::collection($orders);
         return response()->json([
             "error" => false,
-            "message" => "Lista de bares!",
-            "data" => $bars,
+            "message" => "Lista de orders!",
+            "data" => $orders,
         ], 200);
     }
 
