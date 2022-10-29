@@ -24,9 +24,7 @@ class TransferenciaController extends Controller
     public function index()
     {
         
-        // $group = Auth::user()->group_id; 
-
-      
+              
       $statusBar = $this->getStatusBar($this->bar_id);
       if(Gate::allows('transferir_produto',$this->group_id)){
         return  view('transferencia.index')
@@ -102,20 +100,20 @@ class TransferenciaController extends Controller
             if ($value->ean_erp == '') {
                 return 3;
             } else if ($value->category_id  != '') {
-             
-                $resultExistCategory = $this->ifExistCategory($value->category_id, $value->name_category);
-                $idCategory = json_decode($resultExistCategory);
-
+            
+                 $resultExistCategory = $this->ifExistCategory($this->bar_id, $value->category_id, $value->name_category, $this->name_user);
+                 $idCategory = json_decode($resultExistCategory);
+            
 
                 $productsFields = Products::updateOrCreate([
                     'erp_id' => $value->id,
                     'bar_id' => $this->bar_id,
                 ], [
                     
-                    'category_id' => $idCategory->id,
                     'ean_erp' => $value->ean_erp,
                     'name' => $value->name,
                     'short_name' => $value->short_name,
+                    'category_id' => $idCategory->id,
                     'short_description' => $value->short_description,
                     'unity' => $value->unity,
                     'quantity' => $value->quantity,
@@ -125,10 +123,12 @@ class TransferenciaController extends Controller
                     'image_url'     => $value->image_url,
                     'order' => 1,
                     'active' => 1,
+                    'inserted_for' => $this->name_user,
+                    'updated_for'  => $this->name_user,
 
                 ]);
                 $productsFields->save();
-
+        
                 
             }
         }
@@ -258,16 +258,21 @@ class TransferenciaController extends Controller
         return $result;
     }
 
-    public function ifExistCategory($idCategory, $nameCategory)
+    public function ifExistCategory($idBar,$idCategory, $nameCategory, $nameUser )
     {
         
         try {
             $categoryExist = Categories::updateOrCreate([
+                'bar_id' => $idBar,
                 'erp_id' => $idCategory,
-                'bar_id' => $this->bar_id,
+               
             ], [
 
-                'name' => $nameCategory,   
+                'name' => $nameCategory,
+                'order' => 1 ,
+                'inserted_for' => $nameUser,
+                'updated_for' => $nameUser,
+
             ]);
             $categoryExist->save();
 

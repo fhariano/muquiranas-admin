@@ -33,8 +33,8 @@ class CategoriesController extends Controller
  
     public function show(Categories $categories)
     {
-        $idBar = Auth::user()->bar_id;
-        $fieldsCategories = $categories->where('bar_id',$idBar)
+       
+        $fieldsCategories = $categories->where('bar_id',$this->bar_id)
         ->orderBy('order')
         ->get();
 
@@ -50,13 +50,14 @@ class CategoriesController extends Controller
     {
         $fieldsActive = $request->data;
         $id = $request->id;
-        $idBar = Auth::user()->bar_id;
+        
 
         try{
 
            $fieldsCategories = Categories::find($id);
-           $fieldsCategories->bar_id = $idBar;
+           $fieldsCategories->bar_id = $this->bar_id;
            $fieldsCategories->active = $fieldsActive;
+           $fieldsCategories->updated_for = $this->name_user;
            $fieldsCategories->save();
            $resultUpdate = true;
 
@@ -77,7 +78,7 @@ class CategoriesController extends Controller
     public function update(Request $request, Categories $categories)
     {
         
-        $idBar = Auth::user()->bar_id;
+      
         $id = $request->id;
         $name = $request->name;
         $order = $request->order;
@@ -85,7 +86,7 @@ class CategoriesController extends Controller
         try{
 
            $fieldsCategories = Categories::find($id);
-           $fieldsCategories->bar_id = $idBar;
+           $fieldsCategories->bar_id = $this->bar_id;
            $fieldsCategories->name = $name;
            $fieldsCategories->order = $order;
            $fieldsCategories->save();
