@@ -39,15 +39,27 @@ class OrderController extends Controller
         }
 
         foreach ($orders as $order) {
-            $orders_items = DB::table('orders_items AS oItems')
-                ->select('oItems.order_id', 'oItems.item', 'oItems.product_id', 'p.erp_id', 'p.short_name',
-                'p.short_description', 'p.unity', 'oItems.quantity', 'oItems.price', 'oItems.total')
+            $items = DB::table('orders_items AS oItems')
+                ->select(
+                    'oItems.order_id',
+                    'oItems.item',
+                    'oItems.product_id',
+                    'p.erp_id',
+                    'p.short_name',
+                    'p.short_description',
+                    'p.unity',
+                    'oItems.quantity',
+                    'oItems.price',
+                    'oItems.total'
+                )
                 ->leftJoin('products AS p', 'oItems.product_id', 'p.id')
                 ->where('order_id', $order->order_id)
                 ->orderBy('oItems.item', 'asc')
                 ->get();
 
-            $order['products'] = $orders_items;
+            foreach ($items as $item) {
+                $order['products'] = $item;
+            }
         }
 
         return response()->json([
