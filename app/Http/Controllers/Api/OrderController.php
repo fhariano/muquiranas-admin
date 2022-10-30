@@ -22,16 +22,14 @@ class OrderController extends Controller
     public function index($user_id, $bar_id)
     {
         $orders = DB::table('orders')
-        ->leftJoin('bars', 'orders.bar_id', 'bars.id')
-        ->leftJoin('orders_items', 'orders.id', 'orders_items.order_id')
-        ->where('orders.customer_id', $user_id)
-        ->where('orders.bar_id', $bar_id)
-        ->where('orders.active', 1)
-        ->where('bars.active', 1)
-        ->orderBy('orders.bar_id', 'asc')
-        ->orderBy('orders_items.item', 'asc')
-        ->get();
-        // dd($orders);
+            ->leftJoin('bars', 'orders.bar_id', 'bars.id')
+            ->where('orders.customer_id', $user_id)
+            ->where('orders.bar_id', $bar_id)
+            ->where('orders.active', 1)
+            ->where('bars.active', 1)
+            ->orderBy('orders.id', 'desc')
+            ->get();
+
         if ($orders->isEmpty()) {
             return response()->json([
                 "error" => true,
@@ -39,7 +37,19 @@ class OrderController extends Controller
                 "data" => [],
             ], 404);
         }
-        // return BarResource::collection($orders);
+
+        foreach ($orders as $order) {
+            $orders_items = DB::table('orders_items AS oItems')
+                ->select('oItems.order_id, oItems.item, oItems.product_id, p.erp_id, p.short_name, p.short_description,
+                 p.unity, oItems.quantity, oItems.price, oItems.total')
+                ->leftJoin('products AS p', 'oItems.product_id', 'p.id')
+                ->where('order_id', $order->order_id)
+                ->orderBy('oItems.items', 'asc')
+                ->get();
+
+            $order['products'] = $orders_items;
+        }
+
         return response()->json([
             "error" => false,
             "message" => "Lista de orders!",
@@ -47,22 +57,26 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function show(Request $request)
+    public function show($order_id)
     {
-        $bar = Orders::where('bars.active', 1)->where('bars.id', $request->id)->orderBy('bars.order', 'asc')->get();
-        // dd($bar);
-        if ($bar->isEmpty()) {
+        $order = DB::table('orders')
+            ->where('orders.order_id', $order_id)
+            ->where('orders.active', 1)
+            ->orderBy('orders.id', 'desc')
+            ->get();
+
+        if ($order->isEmpty()) {
             return response()->json([
                 "error" => true,
                 "message" => "Nenhum registro foi encontrado!",
                 "data" => [],
             ], 404);
         }
-        // return BarResource::collection($bar);
+
         return response()->json([
             "error" => false,
             "message" => "Bar por id!",
-            "data" => $bar,
+            "data" => $order,
         ], 200);
     }
 }

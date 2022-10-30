@@ -21,7 +21,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Categories::where('categories.active', 1)->orderBy('categories.order', 'asc')->get();
+        $categories = Categories::where('categories.active', 1)
+            ->orderBy('categories.order', 'asc')
+            ->get();
         // dd($categories);
         if ($categories->isEmpty()) {
             return response()->json([
@@ -44,8 +46,8 @@ class CategoryController extends Controller
             ->where('categories.id', $request->id)
             ->orderBy('categories.order', 'asc')
             ->get();
-        
-            // dd($category);
+
+        // dd($category);
         if ($category->isEmpty()) {
             return response()->json([
                 "error" => true,
@@ -63,7 +65,10 @@ class CategoryController extends Controller
 
     public function barCategories(Request $request)
     {
-        $categories = Categories::where('categories.active', 1)->where('categories.bar_id', $request->bar_id)->orderBy('categories.order', 'asc')->get();
+        $categories = Categories::where('categories.active', 1)
+            ->where('categories.bar_id', $request->bar_id)
+            ->orderBy('categories.order', 'asc')
+            ->get();
         // dd($categories);
         if ($categories->isEmpty()) {
             return response()->json([
