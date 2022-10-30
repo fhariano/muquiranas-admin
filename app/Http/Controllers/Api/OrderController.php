@@ -44,7 +44,7 @@ class OrderController extends Controller
                 'p.short_description', 'p.unity', 'oItems.quantity', 'oItems.price', 'oItems.total')
                 ->leftJoin('products AS p', 'oItems.product_id', 'p.id')
                 ->where('order_id', $order->order_id)
-                ->orderBy('oItems.items', 'asc')
+                ->orderBy('oItems.item', 'asc')
                 ->get();
 
             $order['products'] = $orders_items;
