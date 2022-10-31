@@ -124,7 +124,8 @@ class OrderController extends Controller
 
         return response()->json([
             "error" => false,
-            "message" => "Created Order!"
+            "message" => "Created Order!",
+            "data" => $data
         ], 200);
 
     }
