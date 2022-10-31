@@ -27,6 +27,6 @@ class Orders extends Model
 
     public function ordersItems()
     {
-        return $this->hasMany(OrdersItems::class);
+        return $this->belongsToMany(OrdersItems::class);
     }
 }
