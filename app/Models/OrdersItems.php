@@ -20,7 +20,7 @@ class OrdersItems extends Model
 
     public function orders()
     {
-        return $this->hasMany(Orders::class);
+        return $this->belongsTo(Orders::class);
     }
 
     public function products()
