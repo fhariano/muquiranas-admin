@@ -72,8 +72,10 @@ class OrderController extends Controller
     public function show($order_id)
     {
         $order = DB::table('orders')
+            ->leftJoin('bars', 'orders.bar_id', 'bars.id')
             ->where('orders.order_id', $order_id)
             ->where('orders.active', 1)
+            ->where('bars.active', 1)
             ->orderBy('orders.id', 'desc')
             ->get();
 
@@ -85,9 +87,33 @@ class OrderController extends Controller
             ], 404);
         }
 
+        foreach ($order as $order) {
+            $items = DB::table('orders_items AS oItems')
+                ->select(
+                    'oItems.order_id',
+                    'oItems.item',
+                    'oItems.product_id',
+                    'p.erp_id',
+                    'p.short_name',
+                    'p.short_description',
+                    'p.unity',
+                    'oItems.quantity',
+                    'oItems.price',
+                    'oItems.total'
+                )
+                ->leftJoin('products AS p', 'oItems.product_id', 'p.id')
+                ->where('order_id', $order->order_id)
+                ->orderBy('oItems.item', 'asc')
+                ->get();
+
+            foreach ($items as $item) {
+                $order->products[] = $item;
+            }
+        }
+
         return response()->json([
             "error" => false,
-            "message" => "Bar por id!",
+            "message" => "Order by id!",
             "data" => $order,
         ], 200);
     }
