@@ -117,4 +117,14 @@ class OrderController extends Controller
             "data" => $order,
         ], 200);
     }
+
+    public function store(Request $request){
+        $data = $request->validated();
+
+        return response()->json([
+            "error" => false,
+            "message" => "Created Order!"
+        ], 200);
+
+    }
 }
