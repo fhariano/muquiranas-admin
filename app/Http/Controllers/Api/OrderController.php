@@ -27,6 +27,7 @@ class OrderController extends Controller
     public function index($user_id, $bar_id)
     {
         $orders = DB::table('orders')
+            ->select('orders.*')
             ->leftJoin('bars', 'orders.bar_id', 'bars.id')
             ->where('orders.customer_id', $user_id)
             ->where('orders.bar_id', $bar_id)
@@ -77,6 +78,7 @@ class OrderController extends Controller
     public function show($order_id)
     {
         $order = DB::table('orders')
+            ->select('orders.*')
             ->leftJoin('bars', 'orders.bar_id', 'bars.id')
             ->where('orders.order_id', $order_id)
             ->where('orders.active', 1)
@@ -123,7 +125,8 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function store(StoreOrder $request){
+    public function store(StoreOrder $request)
+    {
         $data = $request->validated();
 
         Log::channel('muquiranas')->info('data:' . print_r($data, true));
@@ -137,13 +140,12 @@ class OrderController extends Controller
             'inserted_for' => $data['inserted_for'],
         ]);
 
-        $order->ordersItems()->sync($data['items']);
+        $items = $order->ordersItems()->sync($data['items']);
 
         return response()->json([
             "error" => false,
             "message" => "Created Order!",
             "data" => []
         ], 200);
-
     }
 }
