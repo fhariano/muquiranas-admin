@@ -126,7 +126,7 @@ class OrderController extends Controller
     public function store(StoreOrder $request){
         $data = $request->validated();
 
-        // Log::channel('muquiranas')->info('data:' . print_r($data, true));
+        Log::channel('muquiranas')->info('data:' . print_r($data, true));
 
         $order = $this->model->create([
             'bar_id' => $data['bar_id'],
@@ -137,7 +137,7 @@ class OrderController extends Controller
             'inserted_for' => $data['inserted_for'],
         ]);
 
-        $order->ordersItems()->sync($data['items']);
+        // $order->ordersItems()->sync($data['items']);
 
         return response()->json([
             "error" => false,
