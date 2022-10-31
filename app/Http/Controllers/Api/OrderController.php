@@ -125,7 +125,7 @@ class OrderController extends Controller
     public function store(StoreOrder $request){
         $data = $request->validated();
 
-        dd($data->items);
+        dd($data['items']);
 
         $order = $this->model->create([
             'bar_id' => $data['bar_id'],
