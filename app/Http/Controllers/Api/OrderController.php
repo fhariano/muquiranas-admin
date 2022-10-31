@@ -125,6 +125,8 @@ class OrderController extends Controller
     public function store(StoreOrder $request){
         $data = $request->validated();
 
+        dd($data['items']);
+
         $order = $this->model->create([
             'bar_id' => $data['bar_id'],
             'customer_id' => $data['customer_id'],
@@ -134,7 +136,7 @@ class OrderController extends Controller
             'inserted_for' => $data['inserted_for'],
         ]);
 
-        $order->ordersItems($data['products']);
+        $order->ordersItems($data['items']);
 
         return response()->json([
             "error" => false,
