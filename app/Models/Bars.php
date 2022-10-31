@@ -15,9 +15,4 @@ class Bars extends Model
     {
         return $this->hasMany(Categories::class);
     }
-
-    public function orders()
-    {
-        return $this->belongsTo(Orders::class);
-    }
 }

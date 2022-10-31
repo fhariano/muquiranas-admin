@@ -58,7 +58,7 @@ class OrderController extends Controller
                     'oItems.total'
                 )
                 ->leftJoin('products AS p', 'oItems.product_id', 'p.id')
-                ->where('order_id', $order->order_id)
+                ->where('order_id', $order->id)
                 ->orderBy('oItems.item', 'asc')
                 ->get();
 
@@ -107,7 +107,7 @@ class OrderController extends Controller
                     'oItems.total'
                 )
                 ->leftJoin('products AS p', 'oItems.product_id', 'p.id')
-                ->where('order_id', $order->order_id)
+                ->where('order_id', $order->id)
                 ->orderBy('oItems.item', 'asc')
                 ->get();
 
@@ -137,7 +137,7 @@ class OrderController extends Controller
             'inserted_for' => $data['inserted_for'],
         ]);
 
-        $items = $order->ordersItems()->sync($data['items']);
+        $order->ordersItems()->sync($data['items']);
 
         return response()->json([
             "error" => false,

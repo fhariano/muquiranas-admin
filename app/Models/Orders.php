@@ -19,12 +19,6 @@ class Orders extends Model
         'inserted_for'
     ];
 
-
-    public function bars()
-    {
-        return $this->hasMany(Bars::class);
-    }
-
     public function ordersItems()
     {
         return $this->belongsToMany(OrdersItems::class, 'orders_items', 'order_id', 'order_id');
