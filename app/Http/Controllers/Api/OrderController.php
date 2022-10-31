@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\StoreOrder;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -118,7 +119,7 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function store(Request $request){
+    public function store(StoreOrder $request){
         $data = $request->validated();
 
         return response()->json([
