@@ -32,7 +32,7 @@ class StoreOrder extends FormRequest
             'total' => ['required', 'numeric', 'gt:0'],
             'order_at' => ['required'],
             'inserted_for' => ['required', 'string', 'min:3'],
-            'items' => ['required'],
+            'items' => ['required', 'array'],
             'apikey' => ['required', 'string', 'max:50', Rule::in($apikeys['web'], $apikeys['mobile'])],
         ];
 
