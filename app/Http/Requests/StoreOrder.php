@@ -30,7 +30,8 @@ class StoreOrder extends FormRequest
             'customer_id' => ['required', 'int'],
             'order_id' => ['required', 'string', 'min:9', 'max:11', 'unique:orders'],
             'total' => ['required', 'numeric', 'gt:0'],
-            'date' => ['required'],
+            'order_at' => ['required'],
+            'inserted_for' => ['required', 'string', 'min:3'],
             'apikey' => ['required', 'string', 'max:50', Rule::in($apikeys['web'], $apikeys['mobile'])],
         ];
 
