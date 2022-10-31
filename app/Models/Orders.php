@@ -10,9 +10,23 @@ class Orders extends Model
     use HasFactory;
 
     protected $table ="orders";
+    protected $fillable = [
+        'bar_id',
+        'customer_id',
+        'order_id',
+        'total',
+        'order_at',
+        'inserted_for'
+    ];
+
 
     public function bars()
     {
         return $this->hasMany(Bars::class);
+    }
+
+    public function ordersItems()
+    {
+        return $this->hasMany(OrdersItems::class);
     }
 }

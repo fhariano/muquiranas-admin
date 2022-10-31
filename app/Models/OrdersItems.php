@@ -10,6 +10,13 @@ class OrdersItems extends Model
     use HasFactory;
 
     protected $table ="orders_items";
+    protected $fillable = [
+        'order_id',
+        'product_id',
+        'item',
+        'quantity',
+        'total'
+    ];
 
     public function orders()
     {

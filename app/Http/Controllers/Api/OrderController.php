@@ -134,7 +134,7 @@ class OrderController extends Controller
             'inserted_for' => $data['inserted_for'],
         ]);
 
-        $order->products($data['products']);
+        $order->ordersItems($data['products']);
 
         return response()->json([
             "error" => false,
