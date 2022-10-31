@@ -7,6 +7,7 @@ use App\Http\Requests\StoreOrder;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -125,7 +126,7 @@ class OrderController extends Controller
     public function store(StoreOrder $request){
         $data = $request->validated();
 
-        dd($data['items']);
+        Log::channel('muquiranas')->info('items:' . print_r($data['items'], true));
 
         $order = $this->model->create([
             'bar_id' => $data['bar_id'],
