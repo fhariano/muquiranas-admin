@@ -137,7 +137,7 @@ class OrderController extends Controller
             'inserted_for' => $data['inserted_for'],
         ]);
 
-        // $order->ordersItems()->sync($data['items']);
+        $order->ordersItems()->sync($data['items']);
 
         return response()->json([
             "error" => false,
