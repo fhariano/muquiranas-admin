@@ -122,11 +122,9 @@ class OrderController extends Controller
     public function store(StoreOrder $request){
         $data = $request->validated();
 
-        return response()->json([
+        return [
             "error" => false,
             "message" => "Created Order!",
-            "data" => $data
-        ], 200);
-
+        ];
     }
 }
