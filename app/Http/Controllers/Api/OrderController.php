@@ -10,8 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    public function __construct()
+    protected $model;
+
+    public function __construct(Orders $order)
     {
+        $this->model = $order;
     }
 
     /**
@@ -122,9 +125,22 @@ class OrderController extends Controller
     public function store(StoreOrder $request){
         $data = $request->validated();
 
-        return [
+        $order = $this->model->create([
+            'bar_id' => $data['bar_id'],
+            'customer_id' => $data['customer_id'],
+            'order_id' => $data['order_id'],
+            'total' => $data['total'],
+            'order_at' => $data['order_at'],
+            'inserted_for' => $data['inserted_for'],
+        ]);
+
+        $order->products($data['products']);
+
+        return response()->json([
             "error" => false,
             "message" => "Created Order!",
-        ];
+            "data" => []
+        ], 200);
+
     }
 }
