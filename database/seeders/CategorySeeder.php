@@ -16,7 +16,7 @@ class CategorySeeder extends Seeder
     {
         $categories = Categories::create([
             "bar_id" => 1,
-            "erp_id" => 536095,
+            "erp_id" => 536095, 
             "name" => "Cervejas",
             "icon_data" => "0xe5e4",
             "icon_name" => "sports_bar",
