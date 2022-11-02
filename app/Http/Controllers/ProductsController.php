@@ -86,6 +86,7 @@ class ProductsController extends Controller
     {
         $fields = json_decode($request['data']);
         $id = $request->id;
+        $name_user = $this->name_user;
 
         try {
 
@@ -95,6 +96,7 @@ class ProductsController extends Controller
             $fieldsCardapio->unity = $fields->unity;
             $fieldsCardapio->price_base = $fields->price_base;
             $fieldsCardapio->order = $fields->order;
+            $fieldsCardapio->updated_for = $name_user;
             $fieldsCardapio->save();
             $resultUpdate = true;
         } catch (\Throwable $th) {
@@ -113,10 +115,12 @@ class ProductsController extends Controller
     public function destroy(Request $request, Products $products)
     {
         $id = $request->id;
+        $name_user = $this->name_user;
         try {
-            $fieldCardapio = Products::find($id);
-            $fieldCardapio->active = 0;
-            $fieldCardapio->save();
+            $fieldsCardapio = Products::find($id);
+            $fieldsCardapio->active = 0;
+            $fieldsCardapio->updated_for = $name_user;
+            $fieldsCardapio->save();
             $resultDestroy = true;
         } catch (\Throwable $th) {
             return $th;

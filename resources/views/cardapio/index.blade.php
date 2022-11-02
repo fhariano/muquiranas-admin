@@ -126,7 +126,7 @@
             return new Promise((resolve, reject) => {
 
                 $.getJSON(urlBase + urlController + 'getProductsFromCategory/' + idCategories, function(result) {
-                    console.log('Retorno do Result' + idCategories);
+                   
                     return resolve(result);
                 });
             });
@@ -177,7 +177,7 @@
 
                 getProductsFromCategoryDetail(row.id).then((result) => {
                     dataJson[index] = [];
-                    console.log('resultado do get' + result);
+                  
                     result.forEach(function(field, idx) {
 
                         dataJson[index].push({
@@ -199,7 +199,6 @@
 
                 }).then(() => {
                     indexDetailsCardapioRow = index;
-                    console.log('dados:' + dataJson[index]);
                     $("#tblDetailCardapio" + index).bootstrapTable('load', dataJson[index]);
 
                 });
@@ -329,7 +328,7 @@
                 },
                 success: function(success) {
 
-                    console.log("Result Sucesso Cardapio:" + success);
+             
 
                     if (success == true) {
 
@@ -400,11 +399,12 @@
                 },
                 success: function(success) {
 
-                    console.log("Result Sucesso Cardapio:" + success);
+                 
 
                     if (success == true) {
 
-                        $tblCardapio.bootstrapTable('refresh');
+                        $tblCardapio.bootstrapTable('collapseRow', indexDetailsCardapioRow)
+                        $tblCardapio.bootstrapTable('expandRow', indexDetailsCardapioRow)
 
                         Swal.fire({
                             icon: 'success',
@@ -418,7 +418,7 @@
 
                 },
                 error: function(data) {
-                    console.log(data);
+              
                     if (data.status === 0) {
                         Swal.fire({
                             icon: 'error',
@@ -534,7 +534,7 @@
 
             'click #editCardapio': function(e, value, row, index) {
                 idProductCardapio = row.id;
-                console.log('ID do produto:' + idProductCardapio);
+               
                 $('#shortName').val(row.short_name);
                 $('#shortDescription').val(row.short_description);
                 $('#unity').val(row.unity);
