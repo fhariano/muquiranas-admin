@@ -226,11 +226,12 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
-            'topnav_right' => true,
-        ],
+        // [
+        //     'type'         => 'user-menu',
+        //     'text'         => 'BAR ABERTO',
+        //     'topnav_right' => true,
+        //     'icon_color' => 'red',
+        // ],
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
@@ -248,13 +249,13 @@ return [
             'icon'       => 'fas fa-fw fa-share',
             'can'        => 'transferir_produto',
         ],
-        // [
-        //     'text'       => 'Bar',
-        //     'icon_color' => 'green',
-        //     'url'        => 'bar',
-        //     'icon'       => 'fas fa-fw fa-share',
-        //     // 'can'        => 'gerenciar_bar',
-        // ],
+        [
+            'text'       => 'Bar',
+            'icon_color' => 'green',
+            'url'        => 'bar',
+            'icon'       => 'fas fa-fw fa-share',
+            //  'can'        => 'gerenciar_bar',
+        ],
 
         [
             'text'       => 'Cardápio',
