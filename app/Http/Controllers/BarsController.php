@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Bars;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
@@ -16,12 +17,11 @@ class BarsController extends Controller
      */
     public function index()
     {
-     
-        if(Gate::allows('visualizar_bar',$this->group_id)){
+
+        if (Gate::allows('visualizar_bar', $this->group_id)) {
             return view('bar.index')
-            ->with('group_id',$this->group_id);
+                ->with('group_id', $this->group_id);
         }
-      
     }
 
     /**
@@ -43,7 +43,7 @@ class BarsController extends Controller
     public function store(Request $request)
     {
         $fields = json_decode($request['data']);
-        
+
 
         try {
 
@@ -68,11 +68,9 @@ class BarsController extends Controller
             $barFields->order = '3';
             $barFields->inserted_for = $this->name_user;
             $barFields->save();
-
-        } catch(\Throwable $th) {
+        } catch (\Throwable $th) {
             return $th;
         }
-        
     }
 
     /**
@@ -83,37 +81,33 @@ class BarsController extends Controller
      */
     public function show()
     {
-        if ( $this->group_id === 1) {
+        if ($this->group_id === 1) {
 
             try {
-                $barAll = Bars::all();
-    
-                if($barAll){
-                    $data['rows'] = $barAll; 
+                $barAll = Bars::where(['active' => 1])->get();
+
+                if ($barAll) {
+                    $data['rows'] = $barAll;
                     $bar_data = json_encode($data);
                     return $bar_data;
                 }
-            } catch(\Throwable $th){
+            } catch (\Throwable $th) {
                 return $th;
             }
-        }else {
+        } else {
 
             try {
                 $barAll = Bars::where(['id' => $this->bar_id])->get();
-    
-                if($barAll){
-                    $data['rows'] = $barAll; 
+
+                if ($barAll) {
+                    $data['rows'] = $barAll;
                     $bar_data = json_encode($data);
                     return $bar_data;
                 }
-            } catch(\Throwable $th){
+            } catch (\Throwable $th) {
                 return $th;
             }
-
         }
-    
-
-     
     }
 
     /**
@@ -134,9 +128,28 @@ class BarsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Bars $bars)
     {
-        //
+        $fields = json_decode($request['data']);
+        $id = $request->id;
+
+        try {
+            $updateBarFields = Bars::find($id);
+            $updateBarFields->name = $fields->name;
+            $updateBarFields->short_name = $fields->short_name;
+            $updateBarFields->address = $fields->address;
+            // $updateBarFields->city_state = 'Salvador';
+            // $updateBarFields->start_at = '14:00';
+            // $updateBarFields->end_at = '01:00';
+            // $updateBarFields->order = '3';
+            // $updateBarFields->inserted_for = $this->name_user;
+            $updateBarFields->save();
+            $resultUpdateBar = true;
+        } catch (\Throwable $th) {
+            return $th;
+        }
+
+        return $resultUpdateBar;
     }
 
     /**
@@ -145,8 +158,18 @@ class BarsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $destroyBarFilds = Bars::find($request->id);
+            $destroyBarFilds->active = 0;
+            $destroyBarFilds->save();
+            $resultDestroyBar = true;
+
+        }catch(\Throwable $th) {
+            return $th;
+        }
+
+        return $resultDestroyBar;   
     }
 }

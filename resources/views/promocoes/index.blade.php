@@ -542,8 +542,8 @@
         window.actionsProductPromoFormatter = function(index, row, $detail) {
             var html =  '@can("gerenciar_promocoes",$group_id)';
             html += '<div>';
-            html += '<a href="javascript:void(0)" class="editPromo" id="editPromo" title="Editar devedor" onclick="clickOpenModalPreco(0);"><i class=" fas fa-pencil-alt fa-lg pr-2"></i></a>';
-            html += '<a href="javascript:void(0)" class="delPromo" id="delPromo" title="Apagar devedor"><i class=" fas fa-times fa-lg text-danger pl-2"></i></a>';
+            html += '<a href="javascript:void(0)" class="editPromo" id="editPromo" title="Editar Promo" onclick="clickOpenModalPreco(0);"><i class=" fas fa-pencil-alt fa-lg pr-2"></i></a>';
+            html += '<a href="javascript:void(0)" class="delPromo" id="delPromo" title="Apagar Promo"><i class=" fas fa-times fa-lg text-danger pl-2"></i></a>';
             html += '</div>';
             html += '@endcan';
 

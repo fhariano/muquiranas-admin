@@ -38,6 +38,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->group_id <= 5;
         });
 
+        Gate::define('editar_bar', function(User $user){
+            return $user->group_id <= 2;
+        });
+
         Gate::define('transferir_produto', function(User $user){
             return $user->group_id <= 1;
         });
