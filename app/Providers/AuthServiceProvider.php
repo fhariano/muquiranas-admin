@@ -33,13 +33,15 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('gerenciar_bar', function(User $user){
             return $user->group_id == 1;
         });
+
+        Gate::define('visualizar_bar', function(User $user){
+            return $user->group_id <= 5;
+        });
+
         Gate::define('transferir_produto', function(User $user){
-            return $user->group_id <= 3;
+            return $user->group_id <= 1;
         });
-        Gate::define('gerenciar_bar', function(User $user){
-            return $user->group_id == 1;
-        });
-    
+          
         Gate::define('gerenciar_cardapio', function(User $user){
             
             return $user->group_id <= 3;
@@ -64,8 +66,8 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         // Gate::define('gerenciar_listas', function(User $user)){
-        //     return $user->bar_id == 
+        //     return $user->bar_id === 1;
         // }
-        //
+        
     }
 }

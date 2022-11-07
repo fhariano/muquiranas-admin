@@ -218,9 +218,7 @@
                 // validatedFields = true;
             }
 
-            console.log('productValidator' + productValidator.value);
-            console.log('hourStartValidator' + hourStartValidator.value);
-
+        
             let fields = {
                 product_id: productValidator.value,
                 hourStart: hourStartValidator.value,

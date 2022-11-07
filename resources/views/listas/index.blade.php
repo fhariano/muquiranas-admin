@@ -63,7 +63,6 @@
         urlBase = window.location.origin;
         urlController = '/listas/';
         var idPromoList = '';
-        const bar_id = 1;
         var fieldActive = '';
 
 
@@ -247,6 +246,7 @@
 
             search: true,
             columns: [{
+                
                     field: 'active',
                     title: 'Ativo',
                     sortable: false,

@@ -13,9 +13,9 @@
             <div class="col-12 col-sm-6 col-md-3" id="divAbrirBar">
                 <div class="info-box mb-3">
 
-                    <a href="javascript:void(0)" class="btn btn-sm btn-primary" role="button" id="abrirBar" title="Abrir Bar" aria-label="Abrir Bar">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-success" role="button" id="abrirBar" title="Abrir Bar" aria-label="Abrir Bar">
                         <span class="info-box-icon sm-primary elevation-1"> <i class="fas fa-lock-open"></i> </span>
-                        OPEN BAR
+                        ABRI BAR
                     </a>
                 </div>
             </div>

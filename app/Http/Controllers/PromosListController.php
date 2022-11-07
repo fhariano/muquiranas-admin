@@ -53,7 +53,7 @@ class PromosListController extends Controller
     public function show()
     {
         try {
-            $listAll = PromosLists::where(['bar_id' => $this->bar_id,])->get();;
+            $listAll = PromosLists::where(['bar_id' => $this->bar_id])->get();
             if ($listAll) {
                 $data['rows'] = $listAll; //Criar formato rows para bootstrap ler o json
                 $listas_data = json_encode($data); //Enviado para tabela o Json

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\ProductsPromosLists;
 use App\Models\PromosLists;
 use App\Models\Products;

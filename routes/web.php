@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BarsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductsController;
@@ -71,6 +72,18 @@ Route::name('listas.')->middleware('auth')->prefix('/listas')->controller(Promos
     Route::put('/disableListPromo', 'disableListPromo')->name('disableListPromo');
 });
 
+
+Route::name('bar.')->middleware('auth')->prefix('/bar')->controller(BarsController::class)->group(function() {
+
+    Route::get('/', 'index')->name('index');
+    Route::post('/create', 'create')->name('create');
+    Route::get('/show', 'show')->name('show');
+    Route::post('/store', 'store')->name('store');
+    Route::put('/update','update')->name('update');
+    Route::put('/disableBar','disableBar')->name('disableBar');
+
+
+});
 
 Route::name('promocoes.')->middleware('auth')->prefix('/promocoes')->controller(ProductsPromosListController::class)->group(function () {
     Route::get('/', 'index')->name('index');
