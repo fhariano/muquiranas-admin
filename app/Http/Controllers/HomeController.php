@@ -14,12 +14,26 @@ use App\Models\Bars;
 
 class HomeController extends Controller
 {   
+    
+
+    function __construct() {
+        $idBar = 2;
+        $statusBarAtual = $this->getStatusBar($idBar);
+        if($statusBarAtual == 1){
+            $this->globalStatusBar  = 1;
+        }
+        else{
+            $this->globalStatusBar  = 0;
+        }
+        
+
+    }
     public function index(Request $request)
     {
         $group = Auth::user()->group_id; 
         $idBar = Auth::user()->bar_id;
        $statusBar = $this->getStatusBar($idBar);
-        return view('home.home')
+        return view('home.home')'layouts.app'])
             ->with('statusBar', $statusBar)
             ->with('group', $group);
   

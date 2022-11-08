@@ -70,7 +70,10 @@ return [
     'usermenu_image' => false,
     'usermenu_desc' => false,
     'usermenu_profile_url' => false,
+    'status_bar' => true,
 
+    
+  
     /*
     |--------------------------------------------------------------------------
     | Layout

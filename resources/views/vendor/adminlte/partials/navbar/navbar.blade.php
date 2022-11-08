@@ -21,7 +21,13 @@
 
         {{-- Configured right links --}}
         @each('adminlte::partials.navbar.menu-item', $adminlte->menu('navbar-right'), 'item')
+        
+        @if(statusBar == 1)
+            @each('adminlte::partials.navbar.menu-item-statusBar-aberto', $adminlte->menu('navbar-right'), 'item')
+        @else
+        @each('adminlte::partials.navbar.menu-item-statusBar-fechado', $adminlte->menu('navbar-right'), 'item')
 
+        @endif
         {{-- User menu link --}}
         @if(Auth::user())
             @if(config('adminlte.usermenu_enabled'))
@@ -30,11 +36,13 @@
                 @include('adminlte::partials.navbar.menu-item-logout-link')
             @endif
         @endif
+        
 
         {{-- Right sidebar toggler link --}}
         @if(config('adminlte.right_sidebar'))
             @include('adminlte::partials.navbar.menu-item-right-sidebar-toggler')
         @endif
+        
     </ul>
 
 </nav>

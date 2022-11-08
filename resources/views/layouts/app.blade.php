@@ -43,6 +43,7 @@
                     <ul class="navbar-nav me-auto">
 
                     </ul>
+                 
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -58,6 +59,8 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
+                             
+                                
                             @endif
                         @else
                             <li class="nav-item dropdown">
@@ -77,6 +80,7 @@
                                     </form>
                                 </div>
                             </li>
+
                         @endguest
                     </ul>
                 </div>
