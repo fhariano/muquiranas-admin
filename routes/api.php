@@ -40,4 +40,3 @@ Route::put('/products/favorites/bar/{bar_id}/user/{user_id}', [ProductController
 Route::get('/orders/{order_id}', [OrderController::class, 'show']);
 Route::get('/orders/user/{user_id}/bar/{bar_id}', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
-
