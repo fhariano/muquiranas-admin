@@ -91,6 +91,7 @@
 
                     statusBarAtualizado = 1;
                     updateStatusBar(statusBarAtualizado).then((result) => {
+                        location.reload();   
                         Swal.fire({
                             icon: 'success',
                             title: 'BAR ABERTO!',
@@ -124,6 +125,7 @@
                     document.getElementById("abrirBar").disabled = false;
 
                     statusBarAtualizado = 0;
+                    location.reload();   
                     updateStatusBar(statusBarAtualizado).then((result) => {
                         Swal.fire({
                             icon: 'success',

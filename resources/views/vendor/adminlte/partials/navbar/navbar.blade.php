@@ -1,3 +1,25 @@
+<?php
+use Illuminate\Support\Facades\Auth;
+use App\Models\Bars;
+
+$idBar = Auth::user()->bar_id;
+$statusBar = getStatusBar($idBar);
+
+function getStatusBar($id)
+{
+    try {
+        $bar = Bars::find($id);
+        $result = $bar->status;
+    } catch (\Throwable $th) {
+        return $th;
+    }
+
+    return $result;
+}
+
+?>
+
+
 <nav class="main-header navbar
     {{ config('adminlte.classes_topnav_nav', 'navbar-expand') }}
     {{ config('adminlte.classes_topnav', 'navbar-white navbar-light') }}">
@@ -22,7 +44,7 @@
         {{-- Configured right links --}}
         @each('adminlte::partials.navbar.menu-item', $adminlte->menu('navbar-right'), 'item')
         
-        @if(statusBar == 1)
+        @if($statusBar == 1)
             @each('adminlte::partials.navbar.menu-item-statusBar-aberto', $adminlte->menu('navbar-right'), 'item')
         @else
         @each('adminlte::partials.navbar.menu-item-statusBar-fechado', $adminlte->menu('navbar-right'), 'item')
@@ -46,3 +68,4 @@
     </ul>
 
 </nav>
+
