@@ -25,7 +25,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Products::where('products.active', 1)->orderBy('products.order', 'asc')->get();
+        $products = Products::where('products.active', 1)
+            ->orderBy('products.order', 'asc')
+            ->get();
         // dd($products);
         if ($products->isEmpty()) {
             return response()->json([
@@ -129,9 +131,9 @@ class ProductController extends Controller
 
     public function favoritesProducts(Request $request)
     {
-        Log::channel('muquiranas')->info("favoritesProducts - barId: " . $request->bar_id . " - UserId: ". $request->user_id);
+        Log::channel('muquiranas')->info("favoritesProducts - barId: " . $request->bar_id . " - UserId: " . $request->user_id);
         $favorites = UsersFavorites::where('users_favorites.bar_id', $request->bar_id)
-        ->where('users_favorites.user_id', $request->user_id)
+            ->where('users_favorites.user_id', $request->user_id)
             ->where('users_favorites.isFavorite', true)
             ->orderBy('users_favorites.bar_id', 'asc')
             ->orderBy('users_favorites.user_id', 'asc')
@@ -155,14 +157,14 @@ class ProductController extends Controller
 
     public function toggleFavoriteProduct(Request $request)
     {
-        Log::channel('muquiranas')->info("toggleFavoriteProduct - barId: " . $request->bar_id . " - UserId: ". $request->user_id);
+        Log::channel('muquiranas')->info("toggleFavoriteProduct - barId: " . $request->bar_id . " - UserId: " . $request->user_id);
         $favorite = UsersFavorites::select('id')
             ->where('bar_id', $request->bar_id)
             ->where('user_id', $request->user_id)
             ->where('product_id', $request->product_id)
             ->first();
 
-        if($favorite){
+        if ($favorite) {
             $favorite->isFavorite = $request->isFavorite;
             $result = $favorite->save();
         } else {

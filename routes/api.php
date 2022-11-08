@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\BarController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,3 +37,6 @@ Route::get('/products/bar/{bar_id}', [ProductController::class, 'barProducts']);
 Route::get('/products/favorites/bar/{bar_id}/user/{user_id}', [ProductController::class, 'favoritesProducts']);
 Route::put('/products/favorites/bar/{bar_id}/user/{user_id}', [ProductController::class, 'toggleFavoriteProduct']);
 
+Route::get('/orders/{order_id}', [OrderController::class, 'show']);
+Route::get('/orders/user/{user_id}/bar/{bar_id}', [OrderController::class, 'index']);
+Route::post('/orders', [OrderController::class, 'store']);
