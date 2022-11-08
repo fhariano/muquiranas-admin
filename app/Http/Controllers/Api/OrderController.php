@@ -65,7 +65,7 @@ class OrderController extends Controller
                 ->get();
 
             foreach ($items as $item) {
-                $order->products[] = $item;
+                $order->items[] = $item;
             }
         }
 
@@ -116,7 +116,7 @@ class OrderController extends Controller
                 ->get();
 
             foreach ($items as $item) {
-                $order->products[] = $item;
+                $order->items[] = $item;
             }
         }
 
