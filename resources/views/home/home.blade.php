@@ -7,33 +7,34 @@
         <h1 style="text-align:center;">Muquiranas Bar</h1>
     </div>
     <div class="container-fluid">
-    @can('gerenciar_bar',$group)  
-    @if($statusBar == 0)
+        @can('gerenciar_bar',$group)
+
+        <input hidden type="text" id="statusBar" class="form-control" value="<?=$statusBar;?>">
+
         <div class="row">
             <div class="col-12 col-sm-6 col-md-3" id="divAbrirBar">
                 <div class="info-box mb-3">
 
-                    <a href="javascript:void(0)" class="btn btn-sm btn-success" role="button" id="abrirBar" title="Abrir Bar" aria-label="Abrir Bar">
+                    <button href="javascript:void(0)" class="btn btn-sm btn-success" role="button" id="abrirBar" title="Abrir Bar" aria-label="Abrir Bar">
                         <span class="info-box-icon sm-primary elevation-1"> <i class="fas fa-lock-open"></i> </span>
                         ABRI BAR
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
-    @endif
-    @if($statusBar == 1)
+
         <div class="row">
             <div class="col-12 col-sm-6 col-md-3" id="divFecharBar">
                 <div class="info-box mb-3">
-                    <a href="javascript:void(0)" class="btn btn-sm btn-danger" role="button" id="fecharBar" title="Fechar Bar" aria-label="Fechar Bar">
+                    <button href="javascript:void(0)" class="btn btn-sm btn-danger" role="button" id="fecharBar" title="Fechar Bar" aria-label="Fechar Bar">
                         <span class="info-box-icon sm-danger elevation-1"> <i class="fas fa-lock"></i> </span>
                         FECHAR BAR
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
-    @endif
-    @endCan
+
+        @endCan
     </div>
 
     <div class="card-body">
@@ -60,45 +61,88 @@
 
         urlBase = window.location.origin;
         var urlController = '/updateStatusBar';
-      
+        const statusBar = document.getElementById('statusBar').value;
+
+        if(statusBar == 1){
+            document.getElementById("abrirBar").disabled = true;
+        }else{
+            document.getElementById("fecharBar").disabled = true;
+        }
+
+        //desabilita o botão no início
+
         $("#abrirBar").click(function() {
-            statusBar = 1;
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Abrir bar?',
+                html: 'Deseja realmente abrir esse bar?',
+                allowOutsideClick: false,
+                showCloseButton: true,
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: '<i class="fa fa-thumbs-up pr-1 pl-1"></i> SIM ',
+                cancelButtonText: '<i class="fa fa-thumbs-down pr-1 pl-1"></i> CANCELAR',
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-            
-            updateStatusBar(statusBar).then((result) => {
+                    document.getElementById("abrirBar").disabled = true;
+                    document.getElementById("fecharBar").disabled = false;
 
-                window.location.reload();
-            
+                    statusBarAtualizado = 1;
+                    updateStatusBar(statusBarAtualizado).then((result) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'BAR ABERTO!',
+                            html: 'O bar foi aberto com sucesso!',
+                        });
+                    });
+
+                }
             });
 
-               
+
         });
 
         $('#fecharBar').click(function() {
-            statusBar = 0;
-         
 
-            updateStatusBar(statusBar).then((result) => {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Fechar bar?',
+                html: 'Deseja realmente fechar esse bar?',
+                allowOutsideClick: false,
+                showCloseButton: true,
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: '<i class="fa fa-thumbs-up pr-1 pl-1"></i> SIM ',
+                cancelButtonText: '<i class="fa fa-thumbs-down pr-1 pl-1"></i> CANCELAR',
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-                console.log('resultado é ' + result);
-                location.reload();                       
+                    document.getElementById("fecharBar").disabled = true;
+                    document.getElementById("abrirBar").disabled = false;
 
+                    statusBarAtualizado = 0;
+                    updateStatusBar(statusBarAtualizado).then((result) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'BAR FECHADO!',
+                            html: 'O bar foi fechado com sucesso!',
+                        });
+
+                    });
+
+                }
             });
-      
+
+
+
+
+
         });
 
-        // function showButtonOpenCloseBar(status) {
-        //     if (status == 0) {
-        //         $("#divAbrirBar").attr("hidden", true);
-        //         $('#divFecharBar').attr("hidden", false);
-
-        //     } else {
-        //         $('#divFecharBar').attr("hidden", true);
-        //         $("#divAbrirBar").attr("hidden", false);
-
-        //     }
-        // }
-
+    
         updateStatusBar = (fieldStatus) => {
             return new Promise((resolve, reject) => {
                 $.ajax({

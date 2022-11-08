@@ -80,7 +80,7 @@ Route::name('bar.')->middleware('auth')->prefix('/bar')->controller(BarsControll
     Route::get('/show', 'show')->name('show');
     Route::post('/store', 'store')->name('store');
     Route::put('/update','update')->name('update');
-    Route::put('/disableBar','disableBar')->name('disableBar');
+    Route::put('/destroy','destroy')->name('destroy');
 
 
 });

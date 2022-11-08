@@ -77,9 +77,58 @@
 <script>
     $(function() {
 
-       var $tbl_adminBar = $('#tbl_adminBar');
-       var urlBase = window.location.origin;
-       var urlController = '/bar/';
+        var $tbl_adminBar = $('#tbl_adminBar');
+        var urlBase = window.location.origin;
+        var urlController = '/bar/';
+        var idBar = '';
+
+
+        window.barEvents = {
+
+            'click #editBar': function(e, value, row, index) {
+                idBar = row.id;
+                $('#name_bar').val(row.name);
+                $('#short_name').val(row.short_name);
+                $('#address_bar').val(row.address);
+                // $('#promoProduct').attr('disabled', 'disabled');
+                $('#button_insert_bar').text('Salvar Bar')
+                $('#button_insert_bar').removeAttr('name', 'InsertPrice');
+                $("#button_insert_bar").attr('name', 'UpdateBar');
+                $("input").removeClass(["is-valid", "is-invalid"]);
+                $('#modalbar_label').html('<b>Editar Bar</b>');
+                $('#modal_bar').modal('show');
+
+            },
+            'click #delBar': function(e, value, row, index) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: 'Apagar Bar?',
+                    html: 'ATENÇÃO: Esse bar será excluído!',
+                    allowOutsideClick: false,
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    focusConfirm: false,
+                    confirmButtonText: '<i class="fa fa-thumbs-up pr-1 pl-1"></i> SIM ',
+                    cancelButtonText: '<i class="fa fa-thumbs-down pr-1 pl-1"></i> CANCELAR',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        disableProuctCardapio(row.id);
+                    }
+                });
+            },
+
+
+
+        }
+
+        window.formaterImgBar = function(index, row, $detail) {
+            var html = '<div>';
+            html += '<img style="height:50px" src="' + row.image_url + '">';
+            html += '</div>';
+            return html;
+
+        }
 
         $tbl_adminBar.bootstrapTable({
 
@@ -94,6 +143,17 @@
                     visible: false
                 },
                 {
+                    field: 'image_url',
+                    title: 'Imagem',
+                    sortable: false,
+                    visible: true,
+                    halign: 'center',
+                    align: 'center',
+                    width: '1',
+                    widthUnit: '%',
+                    formatter: 'formaterImgBar'
+                },
+                {
                     field: 'name',
                     title: 'Name'
                 },
@@ -105,6 +165,18 @@
                     field: 'address',
                     title: 'Endereço'
                 },
+                {
+                    field: 'actions',
+                    title: 'Ações',
+                    sortable: false,
+                    visible: true,
+                    halign: 'center',
+                    align: 'center',
+                    width: '100',
+                    widthUnit: 'px',
+                    formatter: 'actionsBarFormatter',
+                    events: 'barEvents',
+                }
             ],
             onLoadSuccess: function(data) {
                 html = '@can("gerenciar_bar",$group_id)';
@@ -114,6 +186,18 @@
                 $('#barToolbar').html(html);
             }
         });
+
+        window.actionsBarFormatter = function(index, row, $detail) {
+            var html = '@can("editar_bar",$group_id)';
+            html += '<div>';
+            html += '<a href="javascript:void(0)" class="editBar" id="editBar" title="Editar Bar" onclick="clickOpenModalBar(0);"><i class=" fas fa-pencil-alt fa-lg pr-2"></i></a>';
+            html += '<a href="javascript:void(0)" class="delBar" id="delBar" title="Apagar Bar"><i class=" fas fa-times fa-lg text-danger pl-2"></i></a>';
+            html += '</div>';
+            html += '@endcan';
+
+            return html;
+
+        }
 
         clickOpenModalBar = (val) => {
             if (val == 1) {
@@ -186,18 +270,22 @@
             var actionButtonSaveBar = event.target.name;
             var resultValidation = formValidator(name_bar, short_name, address_bar);
 
-            if(actionButtonSaveBar == 'InsertBar' && resultValidation != false){
+            if (actionButtonSaveBar == 'InsertBar' && resultValidation != false) {
                 saveBar(resultValidation);
-            }else {
-                console.log('Fazer update');
+            } else {
+                if (actionButtonSaveBar == 'UpdateBar' && resultValidation != false) {
+
+                    updateBar(resultValidation, idBar);
+                }
+
             }
-        
+
         });
 
 
         function saveBar(fields) {
             $.ajax({
-                url: urlBase + urlController + 'store', 
+                url: urlBase + urlController + 'store',
                 method: 'POST',
                 data: {
                     'data': JSON.stringify(fields),
@@ -206,17 +294,17 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(success) {
-               
+
                     console.log('retorno:  ' + success);
 
                     $tbl_adminBar.bootstrapTable('refresh');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Salvo!',
-                            html: 'Novo bar cadastrado com sucesso!',
-                        });
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Salvo!',
+                        html: 'Novo bar cadastrado com sucesso!',
+                    });
 
-                        $('#modal_bar').modal('hide');                  
+                    $('#modal_bar').modal('hide');
 
                 },
                 error: function(data) {
@@ -248,11 +336,131 @@
                         });
 
                     }
-            
+
                 }
 
             })
         }
+
+        function updateBar(fields, id) {
+            $.ajax({
+                url: urlBase + urlController + 'update',
+                method: 'PUT',
+                data: {
+                    'data': JSON.stringify(fields),
+                    'id': JSON.stringify(id)
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(success) {
+
+                    console.log("Result Sucesso:" + success);
+                    $tbl_adminBar.bootstrapTable('refresh');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Atualizado com Sucesso!',
+                        html: 'Informações Atualizadas!',
+                    });
+                    $('#modal_bar').modal('hide');
+                },
+                error: function(data) {
+                    if (data.status === 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Sem conexão com internet!',
+                            html: '<br>Contate o administrador.',
+                        });
+                    } else if (data.status == 404 || data.status == 405) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Página Solicitada não encontrada',
+                            html: '<br>Contate o administrador.',
+                        });
+
+                    } else if (data.status == 500) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro!',
+                            html: '<br>Contate o administrador.',
+                        });
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro!',
+                            html: 'Erro Crítico! <br>Contate o administrador.',
+                        });
+
+                    }
+
+                }
+
+
+            })
+        }
+
+        function disableProuctCardapio(id) {
+
+            $.ajax({
+                url: urlBase + urlController + 'destroy',
+                method: 'PUT',
+                data: {
+                    'id': JSON.stringify(id)
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+                },
+                success: function(success) {
+                    console.log("Result Sucesso:" + success);
+                    $tbl_adminBar.bootstrapTable('refresh');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'OK',
+                        html: 'Bar Excluido com sucesso!',
+                    });
+                    $('#modal_bar').modal('hide');
+
+                },
+                error: function(data) {
+
+                    if (data.status === 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Sem conexão com internet!',
+                            html: '<br>Contate o administrador.',
+                        });
+                    } else if (data.status == 404 || data.status == 405) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Página Solicitada não encontrada',
+                            html: '<br>Contate o administrador.',
+                        });
+
+                    } else if (data.status == 500) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro!',
+                            html: '<br>Contate o administrador.',
+                        });
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro!',
+                            html: 'Erro Crítico! <br>Contate o administrador.',
+                        });
+
+                    }
+
+                }
+
+
+            })
+
+        }
+
 
 
 
