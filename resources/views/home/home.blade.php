@@ -15,7 +15,7 @@
             <div class="col-12 col-sm-6 col-md-2" id="divAbrirBar">
                 <div class="info-box mb-3">
 
-                    <button href="javascript:void(0)" class="btn btn-sm btn-success" role="button" id="abrirBar" title="Abrir Bar" aria-label="Abrir Bar">
+                    <button href="javascript:void(0)" class="btn btn-sm" role="button" id="abrirBar" title="Abrir Bar" aria-label="Abrir Bar">
                         <span class="info-box-icon sm-primary elevation-1"> <i class="fas fa-lock-open"></i> </span>
                         ABRI BAR
                     </button>
@@ -24,7 +24,7 @@
 &nbsp;
             <div class="col-12 col-sm-6 col-md-3" id="divFecharBar">
                 <div class="info-box mb-3">
-                    <button href="javascript:void(0)" class="btn btn-sm btn-danger" role="button" id="fecharBar" title="Fechar Bar" aria-label="Fechar Bar">
+                    <button href="javascript:void(0)" class="btn btn-sm" role="button" id="fecharBar" title="Fechar Bar" aria-label="Fechar Bar">
                         <span class="info-box-icon sm-danger elevation-1"> <i class="fas fa-lock"></i> </span>
                         FECHAR BAR
                     </button>
@@ -65,8 +65,12 @@
 
         if(statusBar == 1){
             document.getElementById("abrirBar").disabled = true;
+            $( "#abrirBar" ).addClass( "btn-secondary" );
+            $( "#fecharBar" ).addClass( "btn-danger" );
         }else{
             document.getElementById("fecharBar").disabled = true;
+            $( "#fecharBar" ).addClass( "btn-secondary" );
+            $( "#abrirBar" ).addClass( "btn-success" );
         }
 
         //desabilita o botão no início
@@ -88,15 +92,17 @@
 
                     document.getElementById("abrirBar").disabled = true;
                     document.getElementById("fecharBar").disabled = false;
-
+                    // $( "#abrirBar" ).removeClass( "btn-success" ).addClass( "btn-secondary" );
                     statusBarAtualizado = 1;
                     updateStatusBar(statusBarAtualizado).then((result) => {
-                        location.reload();   
+                        
                         Swal.fire({
                             icon: 'success',
                             title: 'BAR ABERTO!',
                             html: 'O bar foi aberto com sucesso!',
                         });
+
+                        location.reload();   
                     });
 
                 }
@@ -125,13 +131,15 @@
                     document.getElementById("abrirBar").disabled = false;
 
                     statusBarAtualizado = 0;
-                    location.reload();   
+                   
                     updateStatusBar(statusBarAtualizado).then((result) => {
                         Swal.fire({
                             icon: 'success',
                             title: 'BAR FECHADO!',
                             html: 'O bar foi fechado com sucesso!',
                         });
+                        
+                        location.reload();  
 
                     });
 
