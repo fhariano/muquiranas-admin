@@ -55,6 +55,7 @@ class OrderController extends Controller
                     'p.short_description',
                     'p.marca',
                     'p.unity',
+                    'p.image_url',
                     'oItems.quantity',
                     'oItems.price',
                     'oItems.total'
@@ -106,6 +107,7 @@ class OrderController extends Controller
                     'p.short_description',
                     'p.marca',
                     'p.unity',
+                    'p.image_url',
                     'oItems.quantity',
                     'oItems.price',
                     'oItems.total'
