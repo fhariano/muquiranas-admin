@@ -12,7 +12,7 @@
         <input hidden type="text" id="statusBar" class="form-control" value="<?=$statusBar;?>">
 
         <div class="row">
-            <div class="col-12 col-sm-6 col-md-3" id="divAbrirBar">
+            <div class="col-12 col-sm-6 col-md-2" id="divAbrirBar">
                 <div class="info-box mb-3">
 
                     <button href="javascript:void(0)" class="btn btn-sm btn-success" role="button" id="abrirBar" title="Abrir Bar" aria-label="Abrir Bar">
@@ -21,9 +21,7 @@
                     </button>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
+&nbsp;
             <div class="col-12 col-sm-6 col-md-3" id="divFecharBar">
                 <div class="info-box mb-3">
                     <button href="javascript:void(0)" class="btn btn-sm btn-danger" role="button" id="fecharBar" title="Fechar Bar" aria-label="Fechar Bar">
@@ -33,6 +31,8 @@
                 </div>
             </div>
         </div>
+
+
 
         @endCan
     </div>
