@@ -11,16 +11,16 @@ class OrdersItems extends Model
 
     protected $table ="orders_items";
     protected $fillable = [
-        'order_id',
         'item',
         'product_id',
         'quantity',
+        'price',
         'total'
     ];
 
     public function orders()
     {
-        return $this->belongsToMany(Orders::class, 'orders', 'id', 'order_id');
+        return $this->hasMany(Orders::class);
     }
 
     public function products()
