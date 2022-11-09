@@ -19,8 +19,8 @@ class Orders extends Model
         'inserted_for'
     ];
 
-    public function ordersItems()
+    public function Products()
     {
-        return $this->belongsToMany(Products::class, 'orders_items', 'order_id', 'id');
+        return $this->belongsToMany(Products::class, 'orders_items', 'order_id', 'product_id');
     }
 }
