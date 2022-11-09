@@ -15,7 +15,7 @@ class ConstraintOrdersItems extends Migration
     {
         Schema::table('orders_items', function (Blueprint $table) {
             $table->foreignId('order_id')->nullable()->after('id')->constrained('orders')->onDelete('cascade');
-            $table->foreignId('product_id')->nullable()->after('order_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('product_id')->nullable()->after('item')->constrained('products')->onDelete('cascade');
         });
     }
 
