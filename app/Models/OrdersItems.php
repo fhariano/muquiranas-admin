@@ -17,14 +17,4 @@ class OrdersItems extends Model
         'price',
         'total'
     ];
-
-    public function orders()
-    {
-        return $this->hasMany(Orders::class);
-    }
-
-    public function products()
-    {
-        return $this->hasMany(Products::class);
-    }
 }
