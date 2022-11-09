@@ -12,15 +12,15 @@ class OrdersItems extends Model
     protected $table ="orders_items";
     protected $fillable = [
         'order_id',
-        'product_id',
         'item',
+        'product_id',
         'quantity',
         'total'
     ];
 
     public function orders()
     {
-        return $this->belongsToMany(Orders::class, 'orders_items', 'id', 'order_id');
+        return $this->belongsToMany(Orders::class, 'orders_items', 'order_id', 'id');
     }
 
     public function products()
