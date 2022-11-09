@@ -13,7 +13,7 @@ class Orders extends Model
     protected $fillable = [
         'bar_id',
         'customer_id',
-        'order_id',
+        'order_num',
         'total',
         'order_at',
         'inserted_for'
@@ -21,6 +21,6 @@ class Orders extends Model
 
     public function ordersItems()
     {
-        return $this->belongsToMany(OrdersItems::class, 'orders_items', 'order_id', 'order_id');
+        return $this->belongsToMany(OrdersItems::class, 'orders_items', 'order_id', 'id');
     }
 }

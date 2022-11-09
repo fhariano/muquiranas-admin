@@ -28,7 +28,7 @@ class StoreOrder extends FormRequest
         $rules = [
             'bar_id' => ['required', 'int'],
             'customer_id' => ['required', 'int'],
-            'order_id' => ['required', 'string', 'min:9', 'max:11', 'unique:orders'],
+            'order_num' => ['required', 'string', 'min:15', 'max:15', 'unique:orders'],
             'total' => ['required', 'numeric', 'gt:0'],
             'order_at' => ['required'],
             'inserted_for' => ['required', 'string', 'min:3'],

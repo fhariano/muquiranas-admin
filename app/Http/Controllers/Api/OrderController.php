@@ -77,12 +77,12 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function show($order_id)
+    public function show($order_num)
     {
         $order = DB::table('orders')
             ->select('orders.*')
             ->leftJoin('bars', 'orders.bar_id', 'bars.id')
-            ->where('orders.order_id', $order_id)
+            ->where('orders.order_num', $order_num)
             ->where('orders.active', 1)
             ->where('bars.active', 1)
             ->orderBy('orders.id', 'desc')
@@ -138,7 +138,7 @@ class OrderController extends Controller
         $order = $this->model->create([
             'bar_id' => $data['bar_id'],
             'customer_id' => $data['customer_id'],
-            'order_id' => $data['order_id'],
+            'order_num' => $data['order_num'],
             'total' => $data['total'],
             'order_at' => $data['order_at'],
             'inserted_for' => $data['inserted_for'],

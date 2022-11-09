@@ -16,7 +16,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('customer_id');
-            $table->string('order_id',12);
+            $table->string('order_num',15);
             $table->integer('erp_id')->nullable();
             $table->string('invoice')->nullable();
             $table->double('total', 14,2)->default(0.00);

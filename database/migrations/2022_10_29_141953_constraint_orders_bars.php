@@ -14,7 +14,7 @@ class ConstraintOrdersBars extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->foreignId('bar_id')->nullable()->after('customer_id')->constrained('bars')->onDelete('cascade');
+            $table->foreignId('bar_id')->nullable()->after('id')->constrained('bars')->onDelete('cascade');
         });
     }
 

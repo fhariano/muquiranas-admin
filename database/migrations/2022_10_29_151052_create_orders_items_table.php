@@ -15,7 +15,6 @@ class CreateOrdersItemsTable extends Migration
     {
         Schema::create('orders_items', function (Blueprint $table) {
             $table->id();
-            $table->string('order_id',12);
             $table->tinyInteger('item'); // The signed range is -128 to 127. The unsigned range is 0 to 255
             $table->tinyInteger('quantity'); // The signed range is -128 to 127. The unsigned range is 0 to 255
             $table->double('price', 9,2); // 00.000,00
