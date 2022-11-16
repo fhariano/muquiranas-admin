@@ -134,8 +134,8 @@ class ProductSeeder extends Seeder
         $products->create([
             "bar_id" => 1,
             "category_id" => 1,
-            "erp_id" => 7611928,
-            "ean_erp" => "7501035010109",
+            "erp_id" => 7543657,
+            "ean_erp" => "7891149107711",
             "name" => "CERVEJA SKOL",
             "short_name" => "SKOL",
             "short_description" => "LONG NECK",
@@ -219,8 +219,8 @@ class ProductSeeder extends Seeder
         $products->create([
             "bar_id" => 1,
             "category_id" => 5,
-            "erp_id" => 7611928,
-            "ean_erp" => "7501035010109",
+            "erp_id" => 7690561,
+            "ean_erp" => "7898203910065",
             "name" => "MINI PASTÉIS",
             "short_name" => "MINI PASTÉIS",
             "short_description" => "Porção",
@@ -270,8 +270,8 @@ class ProductSeeder extends Seeder
         $products->create([
             "bar_id" => 2,
             "category_id" => 7,
-            "erp_id" => 7611928,
-            "ean_erp" => "7501035010109",
+            "erp_id" => 7543657,
+            "ean_erp" => "7891149107711",
             "name" => "CERVEJA SKOL",
             "short_name" => "SKOL",
             "short_description" => "LONG NECK",
