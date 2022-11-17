@@ -47,25 +47,19 @@ class BarsController extends Controller
 
         try {
 
-            // $barFields = new Bars();
-            // $barFields->name = $fields->name;
-            // $barFields->short_name = $fields->short_name;
-            // $barFields->address = $fields->address;
-            // $barFields->city_state = $fields->city_state;
-            // $barFields->start_at = $fields->start_at;
-            // $barFields->end_at = $fields->end_at;
-            // $barFields->order = $fields->order;
-            // $barFields->inserted_for = $this->name_user;
-            // $barFields->save();
-
             $barFields = new Bars();
+            $barFields->erp_token = $fields->erp_token;
+            $barFields->cnpj = $fields->cnpj;
             $barFields->name = $fields->name;
             $barFields->short_name = $fields->short_name;
             $barFields->address = $fields->address;
-            $barFields->city_state = 'Salvador';
-            $barFields->start_at = '14:00';
-            $barFields->end_at = '01:00';
-            $barFields->order = '3';
+            $barFields->complement = $fields->complement;
+            $barFields->number = $fields->number;
+            $barFields->cep = $fields->cep;
+            $barFields->city_state =  $fields->city_state;
+            $barFields->start_at = $fields->start_at;
+            $barFields->end_at =  $fields->end_at;
+            $barFields->order = $fields->order;
             $barFields->inserted_for = $this->name_user;
             $barFields->save();
         } catch (\Throwable $th) {
@@ -134,21 +128,25 @@ class BarsController extends Controller
         $id = $request->id;
 
         try {
-            $updateBarFields = Bars::find($id);
+            $updateBarFields = Bars::find($id);        
+            $updateBarFields->erp_token = $fields->erp_token;
+            $updateBarFields->cnpj = $fields->cnpj;
             $updateBarFields->name = $fields->name;
             $updateBarFields->short_name = $fields->short_name;
             $updateBarFields->address = $fields->address;
-            // $updateBarFields->city_state = 'Salvador';
-            // $updateBarFields->start_at = '14:00';
-            // $updateBarFields->end_at = '01:00';
-            // $updateBarFields->order = '3';
-            // $updateBarFields->inserted_for = $this->name_user;
+            $updateBarFields->complement = $fields->complement;
+            $updateBarFields->number = $fields->number;
+            $updateBarFields->cep = $fields->cep;
+            $updateBarFields->city_state =  $fields->city_state;
+            $updateBarFields->start_at = $fields->start_at;
+            $updateBarFields->end_at =  $fields->end_at;
+            $updateBarFields->order = $fields->order;
+            $updateBarFields->updated_for = $this->name_user;
             $updateBarFields->save();
             $resultUpdateBar = true;
         } catch (\Throwable $th) {
             return $th;
         }
-
         return $resultUpdateBar;
     }
 
