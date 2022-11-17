@@ -1,12 +1,11 @@
 
-<li class="nav-item dropdown user-menu">
+<li class="nav-item dropdown user-menu" style="height: 80px;">
 
-    <a class="nav-link dropdown-item" href="{{ $item['href'] }}">
-    <span>
-         <b>  Status: BAR ABERTO  </b> 
-  </span>      
-    </a>
+ 
+    <iframe src="https://giphy.com/embed/Iymqy2tAjp9Xd3JT3J" width="80" height="80" frameBorder="0" class="giphy-embed" allowFullScreen></iframe> <p>   </p>
+
 
 
  
 </li>
+

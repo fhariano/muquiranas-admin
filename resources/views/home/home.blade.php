@@ -3,9 +3,7 @@
 @section('content')
 <div class="card card-default">
 
-    <div class="card-header">
-        <h1 style="text-align:center;">Muquiranas Bar</h1>
-    </div>
+ 
     <div class="container-fluid">
         @can('gerenciar_bar',$group)
 

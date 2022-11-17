@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
 use App\Models\Bars;
+use App\Models\BarsHistory;
 
 
 class HomeController extends Controller
@@ -33,14 +34,40 @@ class HomeController extends Controller
         $idBar = Auth::user()->bar_id;
 
         try {
+            $this->actionBar($request->status);
             $barFields = Bars::find($idBar);
             $barFields->status = $request->status;
             $barFields->save();
-            
+        
+          
         }catch (\Throwable $th){
             return $th;
         }
-          return $resultUpStatusBar = true; 
+          return true; 
+    }
+
+    public function actionBar($action){
+
+        if($action === '1'){
+            $action = 'Abriu Bar';
+        }else{
+            $action = 'Fechou Bar';
+        }
+
+        try {
+
+            $barsHistoryFilds = new BarsHistory();
+            $barsHistoryFilds->bar_id = Auth::user()->bar_id;
+            $barsHistoryFilds->user_id = Auth::user()->id;
+            $barsHistoryFilds->name = Auth::user()->name;
+            $barsHistoryFilds->inserted_for = Auth::user()->name;
+            $barsHistoryFilds->action = $action;
+            $barsHistoryFilds->save();
+
+        }catch(\Throwable $th){
+            return $th;
+        }
+
     }
 
     public function getStatusBar($id)

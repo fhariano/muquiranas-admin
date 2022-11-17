@@ -16,9 +16,14 @@ class CreateBarsTable extends Migration
         Schema::create('bars', function (Blueprint $table) {
             $table->id();
             $table->integer('erp_id')->nullable();
+            $table->string('erp_token',255)->nullable();
+            $table->string('cnpj',14);
             $table->string('name',120);
             $table->string('short_name',45);
             $table->string('address',60);
+            $table->string('number',5);
+            $table->string('complement',120)->nullable();
+            $table->string('googleMaps_url',255)->nullable();
             $table->string('city_state',60);
             $table->string('cep',8)->nullable();
             $table->string('image_url',255)->nullable();

@@ -43,7 +43,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('transferir_produto', function(User $user){
-            return $user->group_id <= 1;
+            return $user->group_id <= 2;
         });
           
         Gate::define('gerenciar_cardapio', function(User $user){
