@@ -37,7 +37,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <label for="recipient-cnpj" class="col-form-label">CNPJ</label>
+                                    <label for="recipient-cnpj" id="label_cnpj" class="col-form-label">CNPJ</label>
                                     <input type="text" name="cnpj_bar" id="cnpj_bar" class="form-control">
                                     <div id="cnpjFeedback" class="invalid-feedback">
                                         Preencha o CNPJ.
@@ -57,16 +57,18 @@
                                 <div class="col-4">
                                     <label for="recipient-complement" class="col-form-label">Bairro</label>
                                     <input type="text" name="complement_address" id="complement_address" class="form-control">
-
+                                    <div id="complementFeedback" class="invalid-feedback">
+                                        Preencha o bairo.
+                                    </div>
                                 </div>
-                                <div class="col-1">
+                                <div class="col-2">
                                     <label for="recipient-number" class="col-form-label">Nº</label>
                                     <input type="text" name="number_address" id="number_address" class="form-control">
                                     <div id="numberAddressFeedback" class="invalid-feedback">
                                         Preencha o número!
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <label for="recipient-cep" class="col-form-label">CEP</label>
                                     <input type="text" name="cep_bar" id="cep_bar" class="form-control">
                                     <div id="cepFeedback" class="invalid-feedback">
@@ -78,7 +80,7 @@
 
 
                             <div class="form-group col-12 d-flex justify-content-between">
-                                 <div class="col-3">
+                                <div class="col-3">
                                     <label for="recipient-city_state" class="col-form-label">Cidadade/Estado</label>
                                     <input type="text" name="city_state" id="city_state" class="form-control">
                                 </div>
@@ -93,7 +95,7 @@
                                     <label for="recipient-end_at" class="col-form-label">Fechamento</label>
                                     <input type="time" name="end_at" id="end_at" class="form-control">
                                     <div id="endAtFeedback" class="invalid-feedback">
-                                        Preencha o  hora de fechamento.
+                                        Preencha o hora de fechamento.
                                     </div>
                                 </div>
 
@@ -106,8 +108,8 @@
                                 </div>
 
                                 <div class="col-3">
-                                    <label for="recipient-tokenBar_erp" class="col-form-label">Token Autenticação</label>
-                                    <input type="text" name="tokenBar_erp" id="tokenBar_erp" class="form-control">
+                                    <label for="recipient-erp_token" class="col-form-label">Token Autenticação</label>
+                                    <input type="text" name="erp_token" id="erp_token" class="form-control">
                                 </div>
                             </div>
 
@@ -159,14 +161,29 @@
         });
 
 
+
+
         window.barEvents = {
 
             'click #editBar': function(e, value, row, index) {
+
                 idBar = row.id;
                 $('#name_bar').val(row.name);
                 $('#short_name').val(row.short_name);
+                $('#cnpj_bar').val(row.cnpj);
                 $('#address_bar').val(row.address);
+                $('#complement_address').val(row.complement);
+                $('#number_address').val(row.number);
+                $('#cep_bar').val(row.cep);
+                $('#city_state').val(row.city_state);
+                $('#start_at').val(row.start_at);
+                $('#end_at').val(row.end_at);
+                $('#order_bar').val(row.order);
+                $('#erp_token').val(row.erp_token);
+
                 // $('#promoProduct').attr('disabled', 'disabled');
+                $('#cnpj_bar').attr('hidden', 'true');
+                $('#label_cnpj').attr('hidden', 'true');
                 $('#button_insert_bar').text('Salvar Bar')
                 $('#button_insert_bar').removeAttr('name', 'InsertPrice');
                 $("#button_insert_bar").attr('name', 'UpdateBar');
@@ -199,10 +216,17 @@
         }
 
         window.formaterImgBar = function(index, row, $detail) {
-            var html = '<div>';
-            html += '<img style="height:50px" src="' + row.image_url + '">';
-            html += '</div>';
-            return html;
+            if (row.image_url) {
+                var html = '<div>';
+                html += '<img style="height:50px" src="' + row.image_url + '">';
+                html += '</div>';
+                return html;
+            } else {
+                var html = '<div><p> SEM IMAGEM </p></div>';
+                return html;
+            }
+
+
 
         }
 
@@ -288,16 +312,16 @@
             $('#button_insert_bar').text('Cadastrar');
             $('#button_insert_bar').removeAttr('name', 'Salvar');
             $("#button_insert_bar").attr('name', 'InsertBar');
+            $('#cnpj_bar').removeAttr('hidden', 'true');
+            $('#label_cnpj').removeAttr('hidden', 'true');
             $('#modalbar_label').html('<b>Criar Bar</b>');
-
-
             $('#modal_bar').modal('show');
         }
 
 
 
 
-        function formValidator(name_bar, short_name, cnpj_bar, address_bar,complement_address,number_address,cep_bar,city_state,start_at,end_at,order_bar,tokenBar_erp) {
+        function formValidator(name_bar, short_name, cnpj_bar, address_bar, complement_address, number_address, cep_bar, city_state, start_at, end_at, order_bar, erp_token) {
 
             var validatedFields = false;
 
@@ -319,9 +343,9 @@
                 short_name.classList.remove("is-invalid");
                 short_name.classList.add("is-valid");
 
-            }    
-                // validatedFields = true;
-           
+            }
+            // validatedFields = true;
+
             if (cnpj_bar.value == '') {
                 cnpj_bar.classList.add("is-invalid");
                 return validatedFields = false;
@@ -329,8 +353,8 @@
             } else {
                 cnpj_bar.classList.remove("is-invalid");
                 cnpj_bar.classList.add("is-valid");
-                var cnpj_validator = cnpj_bar.value.replace(/\.|\-/g, '').replace('/','');
-         
+                var cnpj_validator = cnpj_bar.value.replace(/\.|\-/g, '').replace('/', '');
+
             }
             if (address_bar.value == '') {
                 address_bar.classList.add("is-invalid");
@@ -350,15 +374,77 @@
                 complement_address.classList.add("is-valid");
                 // validatedFields = true;
             }
+            if (number_address.value == '') {
+                number_address.classList.add("is-invalid");
+                return validatedFields = false;
+
+            } else {
+                number_address.classList.remove("is-invalid");
+                number_address.classList.add("is-valid");
+                // validatedFields = true;
+            }
+            if (cep_bar.value == '') {
+                cep_bar.classList.add("is-invalid");
+                return validatedFields = false;
+
+            } else {
+                cep_bar.classList.remove("is-invalid");
+                cep_bar.classList.add("is-valid");
+                var cep_validator = cep_bar.value.replace(/\.|\-/g, '');
+                // validatedFields = true;
+            }
+            if (city_state.value == '') {
+                city_state.classList.add("is-invalid");
+                return validatedFields = false;
+
+            } else {
+                city_state.classList.remove("is-invalid");
+                city_state.classList.add("is-valid");
+                // validatedFields = true;
+            }
+            if (start_at.value == '') {
+                start_at.classList.add("is-invalid");
+                return validatedFields = false;
+
+            } else {
+                start_at.classList.remove("is-invalid");
+                start_at.classList.add("is-valid");
+                // validatedFields = true;
+            }
+            if (end_at.value == '') {
+                end_at.classList.add("is-invalid");
+                return validatedFields = false;
+
+            } else {
+                end_at.classList.remove("is-invalid");
+                end_at.classList.add("is-valid");
+                // validatedFields = true;
+            }
+            if (order_bar.value == '') {
+                order_bar.classList.add("is-invalid");
+                return validatedFields = false;
+
+            } else {
+                order_bar.classList.remove("is-invalid");
+                order_bar.classList.add("is-valid");
+                // validatedFields = true;
+            }
 
 
             let fields = {
+                erp_token: erp_token.value,
+                cnpj: cnpj_validator,
                 name: name_bar.value,
                 short_name: short_name.value,
-                cnpj:cnpj_validator,
                 address: address_bar.value,
-                
-                
+                complement: complement_address.value,
+                number: number_address.value,
+                cep: cep_validator,
+                city_state: city_state.value,
+                start_at: start_at.value,
+                end_at: end_at.value,
+                order: order_bar.value,
+
             }
 
             return fields;
@@ -380,18 +466,17 @@
             var start_at = document.getElementById('start_at');
             var end_at = document.getElementById('end_at');
             var order_bar = document.getElementById('order_bar');
-            var tokenBar_erp = document.getElementById('tokenBar_erp');
+            var erp_token = document.getElementById('erp_token');
 
             var actionButtonSaveBar = event.target.name;
-            var resultValidation = formValidator(name_bar, short_name, cnpj_bar, address_bar,complement_address,number_address,cep_bar,city_state,start_at,end_at,order_bar,tokenBar_erp);
+            var resultValidation = formValidator(name_bar, short_name, cnpj_bar, address_bar, complement_address, number_address, cep_bar, city_state, start_at, end_at, order_bar, erp_token);
 
             if (actionButtonSaveBar == 'InsertBar' && resultValidation != false) {
-                // saveBar(resultValidation);
+                saveBar(resultValidation);
 
-                console.log( JSON.stringify(resultValidation));
+                console.log(JSON.stringify(resultValidation));
             } else {
                 if (actionButtonSaveBar == 'UpdateBar' && resultValidation != false) {
-
                     updateBar(resultValidation, idBar);
                 }
 
