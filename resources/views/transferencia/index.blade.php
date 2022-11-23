@@ -38,20 +38,14 @@
         // botton = ('#save_products');
 
 
-
-
-        window.addEventListener('click', (event) => {
-
-         
-
-            transferirProductApi = () => {
+        transferirProductApi = () => {
                 var fieldsProductsApi = JSON.stringify($tblProductsApi.bootstrapTable('getSelections'));
-                //  console.log(fieldsProductsApi);
+                //   console.log(fieldsProductsApi);
                  saveProductsCardapio(fieldsProductsApi);
+
+ 
             }
 
-
-        });
 
         function saveProductsCardapio(fields) {
 
@@ -240,7 +234,7 @@
                 html += '';
                 html += '<div class="bs-bars float-left">  <button type="button"  class="btn btn-sm btn-primary" role="button"  id="transferProductApi" title="Transferir Produto" aria-label="Transferir Produto" onclick="transferirProductApi();" ><i class="fas fa-random"></i> Trasnferir </button> <br> </br> <h3 align="center" id="headerTransferencia">Transferência de Produtos para o Cardápio</h3> </div>';
                 html += '@endif';
-                html +='@endcan'
+                html +='@endcan';
 
                 $('#productsApiToolbar').html(html);
 
