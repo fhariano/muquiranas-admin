@@ -158,21 +158,16 @@
                 {
                     field: 'id',
                     title: 'ID',
-                    visible: false,
+                    visible: true,
                 },
                 {
                     field: 'category_id',
                     title: 'ID CATEGORIA',
-                    visible: false,
+                    visible: true,
                 },
                 {
                     field: 'name',
                     title: 'Produto',
-                    visible: true,
-                },
-                {
-                    field: 'short_name',
-                    title: 'Nome Cardápio',
                     visible: true,
                 },
                 {
