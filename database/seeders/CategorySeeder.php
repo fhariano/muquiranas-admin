@@ -35,7 +35,7 @@ class CategorySeeder extends Seeder
         $categories->create([
             "bar_id" => 1,
             "name" => "Não Alcoólicos",
-            "erp_id" => 5360941,
+            "erp_id" => 536094,
             "icon_data" => "0xe6f1",
             "icon_name" => "wine_bar",
             "order" => 3,
@@ -89,7 +89,7 @@ class CategorySeeder extends Seeder
         $categories->create([
             "bar_id" => 2,
             "name" => "Não Alcoólicos",
-            "erp_id" => 5360941,
+            "erp_id" => 536094,
             "icon_data" => "0xe6f1",
             "icon_name" => "wine_bar",
             "order" => 3,
