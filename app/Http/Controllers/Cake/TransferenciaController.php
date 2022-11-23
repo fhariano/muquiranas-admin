@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Gate;
-
+use App\Models\BarsHistory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Nette\Utils\Json;
@@ -19,12 +19,8 @@ use Nette\Utils\Json;
 class TransferenciaController extends Controller
 {
    
-   
-
     public function index()
-    {
-        
-              
+    {          
       $statusBar = $this->getStatusBar($this->bar_id);
       if(Gate::allows('transferir_produto',$this->group_id)){
         return  view('transferencia.index')
@@ -33,8 +29,6 @@ class TransferenciaController extends Controller
       }else {
        return redirect()->route('home');
       }   
- 
-
     }
 
     public function consultaApi()
@@ -104,7 +98,7 @@ class TransferenciaController extends Controller
                  $resultExistCategory = $this->ifExistCategory($this->bar_id, $value->category_id, $value->name_category, $this->name_user);
                  $idCategory = json_decode($resultExistCategory);
             
-
+                $this->actionBar();
                 $productsFields = Products::updateOrCreate([
                     'erp_id' => $value->id,
                     'bar_id' => $this->bar_id,
@@ -280,5 +274,24 @@ class TransferenciaController extends Controller
             return $th;
         }
         return $categoryExist;
+    }
+
+    public function actionBar(){
+
+        $action = 'Tranferiu Products';
+           try {
+
+            $barsHistoryFilds = new BarsHistory();
+            $barsHistoryFilds->bar_id = Auth::user()->bar_id;
+            $barsHistoryFilds->user_id = Auth::user()->id;
+            $barsHistoryFilds->name = Auth::user()->name;
+            $barsHistoryFilds->inserted_for = Auth::user()->name;
+            $barsHistoryFilds->action = $action;
+            $barsHistoryFilds->save();
+
+        }catch(\Throwable $th){
+            return $th;
+        }
+
     }
 }

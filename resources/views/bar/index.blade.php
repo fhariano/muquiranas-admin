@@ -318,9 +318,6 @@
             $('#modal_bar').modal('show');
         }
 
-
-
-
         function formValidator(name_bar, short_name, cnpj_bar, address_bar, complement_address, number_address, cep_bar, city_state, start_at, end_at, order_bar, erp_token) {
 
             var validatedFields = false;
