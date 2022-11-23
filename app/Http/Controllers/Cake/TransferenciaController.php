@@ -59,7 +59,6 @@ class TransferenciaController extends Controller
                 $result_array['id'] = $value->id;
                 $result_array['ean_erp'] = $value->barcode_ean;
                 $result_array['name'] = $value->name;
-                $result_array['short_name'] = $value->observation;
                 $result_array['short_description'] = $value->technical_specifications;
                 $result_array['quantity'] = $value->stock;
                 $result_array['unity'] =  $value->model;
@@ -106,7 +105,6 @@ class TransferenciaController extends Controller
                     
                     'ean_erp' => $value->ean_erp,
                     'name' => $value->name,
-                    'short_name' => $value->short_name,
                     'category_id' => $idCategory->id,
                     'short_description' => $value->short_description,
                     'unity' => $value->unity,
@@ -215,7 +213,7 @@ class TransferenciaController extends Controller
                 'bar_id' => $this->bar_id,
                 'active' => 1])
              ->exists();
-                    // DB::table('products')->where('erp_id', $idProduct)->exists();
+               
         } catch (\Throwable $th) {
             return $th;
         };
