@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->integer('erp_id')->nullable();
             $table->string('ean_erp',255)->nullable();
             $table->string('name',255)->nullable();
-            $table->string('short_name',60)->default("")->nullable();
+            $table->string('short_name',60)->default("PRODUTO NOVO")->nullable();
             $table->string('short_description',45)->default("")->nullable();
             $table->string('marca',45)->default("")->nullable();
             $table->string('unity',20)->default("")->nullable();
