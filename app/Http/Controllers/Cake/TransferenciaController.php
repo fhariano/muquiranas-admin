@@ -59,7 +59,7 @@ class TransferenciaController extends Controller
                 $result_array['id'] = $value->id;
                 $result_array['ean_erp'] = $value->barcode_ean;
                 $result_array['name'] = $value->name;
-                $result_array['short_description'] = $value->technical_specifications;
+                $result_array['short_description'] = $value->observation;
                 $result_array['quantity'] = $value->stock;
                 $result_array['unity'] =  $value->model;
                 $result_array['price_cost_erp'] = $value->price_cost;
@@ -258,7 +258,7 @@ class TransferenciaController extends Controller
                 'bar_id' => $idBar,
                 'erp_id' => $idCategory,
                
-            ], [
+            ],[
 
                 'name' => $nameCategory,
                 'order' => 1 ,
@@ -266,6 +266,7 @@ class TransferenciaController extends Controller
                 'updated_for' => $nameUser,
 
             ]);
+            
             $categoryExist->save();
 
         } catch (\Throwable $th) {
