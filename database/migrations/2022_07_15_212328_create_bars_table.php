@@ -20,6 +20,7 @@ class CreateBarsTable extends Migration
             $table->string('cnpj',14);
             $table->string('name',120);
             $table->string('short_name',45);
+            $table->string('soft_descriptor',22)->nullable();
             $table->string('address',60);
             $table->string('number',5);
             $table->string('complement',120)->nullable();
