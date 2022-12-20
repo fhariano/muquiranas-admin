@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
 use App\Models\Bars;
 use App\Models\BarsHistory;
+use App\Models\Orders;
+use App\Models\OrdersItems;
+use App\Models\OrdersType;
+use App\Models\Products;
 
 
 class HomeController extends Controller
@@ -20,13 +24,39 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $group = Auth::user()->group_id; 
+        // $group = Auth::user()->group_id; 
         $idBar = Auth::user()->bar_id;
-       $statusBar = $this->getStatusBar($idBar);
-        return view('home.home')
-            ->with('statusBar', $statusBar)
-            ->with('group', $group);
+    //    $statusBar = $this->getStatusBar($idBar);
+       $resultConsolidado = $this->consolidadoDados($idBar);
+       dd($resultConsolidado);
+        // return view('home.home')
+        //     ->with('statusBar', $statusBar)
+        //     ->with('group', $group)
+        //     ->with('resultConsolidado', $resultConsolidado);
   
+    }
+
+
+    public function consolidadoDados($idBar)
+    {            
+        $consolidoDia = OrdersItems::select(
+            DB::raw( 'sum(orders_items.quantity) as qtd'),
+            DB::raw('sum(orders_items.price) as price'),
+            DB::raw('sum(orders_items.total) as total'),
+        )
+        ->join('products as p', 'p.id' ,'=' , 'product_id')
+        ->leftJoin('categories As ctg' , function($join){
+            $join->on('ctg.id', '=', 'p.category_id');
+        })
+        ->where('ctg.name', 'Cervejas')
+        ->where('ctg.bar_id',$idBar)
+        ->first();
+        $mediaConsolidadoDia = $consolidoDia->total / $consolidoDia->qtd; 
+        
+        
+
+        return $consolidoDia;
+
     }
 
     public function updateStatusBar(Request $request, Bars $Bars) 
