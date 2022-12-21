@@ -24,15 +24,17 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        // $group = Auth::user()->group_id; 
+        $group = Auth::user()->group_id; 
         $idBar = Auth::user()->bar_id;
-    //    $statusBar = $this->getStatusBar($idBar);
+        // $statusBar = $this->getStatusBar($idBar);
        $resultConsolidado = $this->consolidadoDados($idBar);
-       dd($resultConsolidado);
-        // return view('home.home')
-        //     ->with('statusBar', $statusBar)
-        //     ->with('group', $group)
-        //     ->with('resultConsolidado', $resultConsolidado);
+       
+        return view('home.home')
+            // ->with('statusBar', $statusBar)
+            ->with('group', $group)
+            ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
+            ->with('totalDia', $resultConsolidado['totalDia'])
+            ->with('mediaDia', $resultConsolidado['mediaDia']);
   
     }
 
@@ -48,69 +50,27 @@ class HomeController extends Controller
         ->leftJoin('categories As ctg' , function($join){
             $join->on('ctg.id', '=', 'p.category_id');
         })
+        ->leftJoin('orders As orders' , function($join){
+            $join->on('orders.id', '=', 'order_id');
+        })
         ->where('ctg.name', 'Cervejas')
         ->where('ctg.bar_id',$idBar)
+        ->where('orders.billed',0)
+        ->where('orders.active',1)
         ->first();
-        $mediaConsolidadoDia = $consolidoDia->total / $consolidoDia->qtd; 
-        
-        
 
-        return $consolidoDia;
-
-    }
-
-    public function updateStatusBar(Request $request, Bars $Bars) 
-    {
-        $idBar = Auth::user()->bar_id;
-
-        try {
-            $this->actionBar($request->status);
-            $barFields = Bars::find($idBar);
-            $barFields->status = $request->status;
-            $barFields->save();
-        
-          
-        }catch (\Throwable $th){
-            return $th;
-        }
-          return true; 
-    }
-
-    public function actionBar($action){
-
-        if($action === '1'){
-            $action = 'Abriu Bar';
-        }else{
-            $action = 'Fechou Bar';
-        }
-
-        try {
-
-            $barsHistoryFilds = new BarsHistory();
-            $barsHistoryFilds->bar_id = Auth::user()->bar_id;
-            $barsHistoryFilds->user_id = Auth::user()->id;
-            $barsHistoryFilds->name = Auth::user()->name;
-            $barsHistoryFilds->inserted_for = Auth::user()->name;
-            $barsHistoryFilds->action = $action;
-            $barsHistoryFilds->save();
-
-        }catch(\Throwable $th){
-            return $th;
-        }
+        $mediaConsolidadoDia = empty($consolidoDia->total) && empty($consolidoDia->qtd) ? '0' : number_format($consolidoDia->total / $consolidoDia->qtd, 2);
+        $resultConsolidadoDia = array(
+         
+            "qtdTotalDia" => empty($consolidoDia->qtd) ? '0'  : $consolidoDia->qtd ,
+            "totalDia" => empty($consolidoDia->total) ?  '0,00'  : str_replace('.',',',$consolidoDia->total),
+            "mediaDia" => str_replace('.',',',$mediaConsolidadoDia),
+          );
+        return $resultConsolidadoDia;
 
     }
 
-    public function getStatusBar($id)
+ 
 
-    {
-        try {
-            $bar = Bars::find($id);
-            $result = $bar->status;
-        } catch (\Throwable $th) {
-            return $th;
-        }
-
-        return $result;
-    }
 
 }
