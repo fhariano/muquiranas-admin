@@ -34,7 +34,8 @@ class HomeController extends Controller
             ->with('group', $group)
             ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
             ->with('totalDia', $resultConsolidado['totalDia'])
-            ->with('mediaDia', $resultConsolidado['mediaDia']);
+            ->with('mediaDia', $resultConsolidado['mediaDia'])
+            ->with('totalGeral', $resultConsolidado['totalGeral']);
   
     }
 
@@ -45,6 +46,7 @@ class HomeController extends Controller
             DB::raw( 'sum(orders_items.quantity) as qtd'),
             DB::raw('sum(orders_items.price) as price'),
             DB::raw('sum(orders_items.total) as total'),
+            DB::raw('sum(orders.total) as totalGeral'),
         )
         ->join('products as p', 'p.id' ,'=' , 'product_id')
         ->leftJoin('categories As ctg' , function($join){
@@ -65,6 +67,7 @@ class HomeController extends Controller
             "qtdTotalDia" => empty($consolidoDia->qtd) ? '0'  : $consolidoDia->qtd ,
             "totalDia" => empty($consolidoDia->total) ?  '0,00'  : str_replace('.',',',$consolidoDia->total),
             "mediaDia" => str_replace('.',',',$mediaConsolidadoDia),
+            "totalGeral" => empty($consolidoDia->totalGeral) ? '0'  : $consolidoDia->totalGeral ,
           );
         return $resultConsolidadoDia;
 
