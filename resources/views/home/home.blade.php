@@ -75,16 +75,22 @@
 
     <div class="card-body">
 
+        <!-- #Teste -->
+        <!-- ?= $resultConsolidado ->each(function($result){
+            echo $result;
+        }) ?>  -->
 
 
- <div class="card"> 
-        <div class="card-header">
+
+
+        <div class="card">
+            <div class="card-header">
                 <h3 class="card-title"><b> Consolidade por Categória <b> </h3>
             </div>
 
-        <!-- <div class="card-body"> -->
-        <!-- <div class="row"> -->
-        <!-- <div class="col-md-8">
+            <!-- <div class="card-body"> -->
+            <!-- <div class="row"> -->
+            <!-- <div class="col-md-8">
                         <div class="chart-responsive">
                             <div class="chartjs-size-monitor">
                                 <div class="chartjs-size-monitor-expand">
@@ -121,66 +127,66 @@
 
             </div>
             -->
-        <div class="card-footer p-0">
-            <ul class="nav nav-pills flex-column">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        Cervejas
-                        <span class="float-right text-success">
-
-                            22</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        Drinks e Doses
-                        <span class="float-right text-success">
-                            5
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                         Não Alcoólicos
-                          <span class="float-right text-success">
-                            15
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        Garrafas
-                          <span class="float-right text-success">
-                            15
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        Comidinhas
-                          <span class="float-right text-success">
-                            15
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        Combos e Pra Levar
-                          <span class="float-right text-success">
-                            15
-                        </span>
-                    </a>
-                </li>
-            </ul>
+            <div class="card-footer p-0">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                        <?= $name ?>
+                            <span class="float-right text-success">
+                            <?= $qtdTotalDia ?>
+                     </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            Drinks e Doses
+                            <span class="float-right text-success">
+                                5
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            Não Alcoólicos
+                            <span class="float-right text-success">
+                                15
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            Garrafas
+                            <span class="float-right text-success">
+                                15
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            Comidinhas
+                            <span class="float-right text-success">
+                                15
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            Combos e Pra Levar
+                            <span class="float-right text-success">
+                                15
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
- </div>
 
         <div class="row">
             <div class="chart-container" style="position: relative; height:30vw; width:60vw">
 
                 <canvas id="myChart"></canvas>
 
-            </div> 
+            </div>
         </div>
 
     </div>
