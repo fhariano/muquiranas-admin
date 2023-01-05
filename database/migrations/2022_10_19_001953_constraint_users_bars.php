@@ -13,9 +13,8 @@ class ConstraintUsersBars extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('users_bars', function (Blueprint $table) {
             $table->foreignId('group_id')->nullable()->after('id')->constrained('groups')->onDelete('cascade');
-            $table->foreignId('bar_id')->nullable()->after('id')->constrained('bars')->onDelete('cascade');
         });
     }
 
@@ -28,7 +27,6 @@ class ConstraintUsersBars extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['group_id']);
-            $table->dropForeign(['bar_id']);
         });
     }
 }
