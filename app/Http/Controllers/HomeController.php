@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
 use App\Models\Bars;
+use App\Models\Categories;
 use App\Models\BarsHistory;
 use App\Models\Orders;
 use App\Models\OrdersItems;
@@ -28,15 +29,25 @@ class HomeController extends Controller
         $idBar = Auth::user()->bar_id;
         // $statusBar = $this->getStatusBar($idBar);
        $resultConsolidado = $this->consolidadoDados($idBar);
-        // return view('home.home')
+       $barUser = Bars::where(['id' => $idBar,])->get();
+       
+       $barAll = Bars::all();
+       $categoriesAll = Categories::where(['bar_id' => $idBar])->get();
+
+        return view('home.home')
             // ->with('statusBar', $statusBar)
-            // ->with('group', $group)
-            // ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
-            // ->with('totalDia', $resultConsolidado['totalDia'])
-            // ->with('mediaDia', $resultConsolidado['mediaDia'])
-            // ->with('totalGeral', $resultConsolidado['totalGeral'])   
-            // ->with('name', $resultConsolidado['name']);          
+            ->with('group', $group)
+            ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
+            ->with('totalDia', $resultConsolidado['totalDia'])
+            ->with('mediaDia', $resultConsolidado['mediaDia'])
+            ->with('totalGeral', $resultConsolidado['totalGeral'])   
+            ->with('name', $resultConsolidado['name'])
+            ->with('barUser',$barUser)
+            ->with('barAll',$barAll)          
+            ->with('categoriesAll',$categoriesAll);          
     }
+
+  
 
     public function consolidadoDados($idBar)
     {
@@ -56,15 +67,15 @@ class HomeController extends Controller
             })
             //  ->where('ctg.name','Cervejas')
             ->where('ctg.bar_id', $idBar)
-            ->where('orders.billed', 0)
             ->where('orders.active', 1)
-             ->groupBy('nameCategoria')
+            ->whereNull('orders.erp_id')
+            ->groupBy('nameCategoria')
          ->get();
 
-       ;
-
-        $dados = json_decode($consolidoDia,true);
-        dd($dados);   
+       
+       
+        // $dados = json_decode($consolidoDia,true);
+        // dd($dados);   
 
         $mediaConsolidadoDia = empty($consolidoDia[0]->total) && empty($consolidoDia[0]->qtd) ? '0' : number_format($consolidoDia[0]->total / $consolidoDia[0]->qtd, 2);
         $resultConsolidadoDia = array(
@@ -73,13 +84,10 @@ class HomeController extends Controller
             "totalDia" => empty($consolidoDia[0]->total) ?  '0,00'  : str_replace('.',',',$consolidoDia[0]->total),
             "mediaDia" => str_replace('.',',',$mediaConsolidadoDia),
             "totalGeral" => empty($consolidoDia[0]->totalGeral) ? '0'  : $consolidoDia[0]->totalGeral ,
-            "name" => $consolidoDia[0]->nameCategoria,
+            "name" => empty($consolidoDia[0]->nameCategoria) ? 'SEM VENDA':$consolidoDia[0]->nameCategoria,
           );
-        // return $resultConsolidadoDia;
+         return $resultConsolidadoDia;
 
     }
-
- 
-
 
 }

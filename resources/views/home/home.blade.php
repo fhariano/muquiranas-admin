@@ -3,9 +3,36 @@
 @section('content')
 <div class="card card-default">
 
+    <div class="card-body">
+        <div class="row" align="center">
+            <!-- <select class="selectBar-basic-single form-control bg-primary d-flex justify-content-between" style="width:100%" id="selectBar" name="selectBar"> -->
+            <select class="js-selectBar-ajax form-control bg-primary d-flex justify-content-between" style="width:100%" id="selectBar" name="selectBar">
+                <option class="font-weight-bold" selected disabled value="" align="center">BARES</option>
+                @foreach($barAll as $key => $value)
+                <option value="{{$value['id'] }}">{{ $value['name'] }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="row" align="center">
+            <select  class="selectCategory-basic-single form-control bg-primary d-flex justify-content-between" style="width:100%" id="categoriesBar" name="categoriesBar">
+                <option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>
+                @foreach($categoriesAll as $key => $value)
+                <option value="{{$value['id'] }}">{{ $value['name'] }}</option>
+                @endforeach
+            </select>
+        </div>
+
+    </div>
+
+    <!-- <div class="card-body" >
+     
+
+    </div> -->
+
+
 
     <div class="container-fluid">
-
 
         <div class="row">
             <div class="col-12 col-sm-6 col-md-3">
@@ -73,20 +100,14 @@
         </div>
     </div>
 
-    <div class="card-body">
-
-        <!-- #Teste -->
-        <!-- ?= $resultConsolidado ->each(function($result){
-            echo $result;
-        }) ?>  -->
+    <!-- <div class="card-body"> -->
 
 
 
-
-        <div class="card">
+        <!-- <div class="card">
             <div class="card-header">
                 <h3 class="card-title"><b> Consolidade por Categória <b> </h3>
-            </div>
+            </div> -->
 
             <!-- <div class="card-body"> -->
             <!-- <div class="row"> -->
@@ -127,14 +148,14 @@
 
             </div>
             -->
-            <div class="card-footer p-0">
+            <!-- <div class="card-footer p-0">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                        <?= $name ?>
+                            <?= $name ?>
                             <span class="float-right text-success">
-                            <?= $qtdTotalDia ?>
-                     </span>
+                                <?= $qtdTotalDia ?>
+                            </span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -189,8 +210,8 @@
             </div>
         </div>
 
-    </div>
-</div>
+    </div> -->
+ </div> 
 @endsection
 
 @section('footer')
@@ -208,8 +229,19 @@
     $(function() {
 
         urlBase = window.location.origin;
-        // var urlController = '/updateStatusBar';
+        var urlController = '/resultBars';
         // const statusBar = document.getElementById('statusBar').value;
+        const $selectBar = $('#selectBar');
+
+        $('#selectBar').select2({
+        });
+        $('#categoriesBar').select2();
+        $selectBar.change(function(event) {
+            idBarSelecionado = $(this).val();
+            console.log('Id bar ' + idBarSelecionado);
+
+        });
+
 
         const ctx = document.getElementById('myChart');
 

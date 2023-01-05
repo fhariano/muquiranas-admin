@@ -110,7 +110,6 @@ class PromosListController extends Controller
             PromosLists::where('active',1)
             ->update(['active' => 0]);
 
-
             $fieldsListPromo = PromosLists::find($id);
             $fieldsListPromo->bar_id = $this->bar_id;
             $fieldsListPromo->active = $fieldsActive;
