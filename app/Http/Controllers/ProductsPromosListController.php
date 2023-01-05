@@ -276,23 +276,23 @@ class ProductsPromosListController extends Controller
         }
     }
 
-    public function checkRequestProduct($idList, $idProduct, $hourStart, $hourEnd, $price)
-    {
-        if (!$idList || $idList == '') {
-            return false;
-        }
-        if (!$idProduct || $idProduct == '') {
-            return false;
-        }
-        if (!$hourStart || $hourStart == '') {
-            return false;
-        }
-        if (!$hourEnd || $hourEnd == '' || $hourEnd < $hourStart) {
-            return false;
-        }
-        if (!$price || $price == '' || $price == 0) {
-            return false;
-        }
-        return true;
-    }
+    // public function checkRequestProduct($idList, $idProduct, $hourStart, $hourEnd, $price)
+    // {
+    //     if (!$idList || $idList == '') {
+    //         return false;
+    //     }
+    //     if (!$idProduct || $idProduct == '') {
+    //         return false;
+    //     }
+    //     if (!$hourStart || $hourStart == '') {
+    //         return false;
+    //     }
+    //     if (!$hourEnd || $hourEnd == '' || $hourEnd < $hourStart) {
+    //         return false;
+    //     }
+    //     if (!$price || $price == '' || $price == 0) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
 }

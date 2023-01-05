@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Blade;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
+|
 */
 
 Route::get('/', function () {
@@ -32,7 +33,7 @@ Auth::routes();
 
 
 Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
-Route::post('/updateStatusBar', [HomeController::class, 'updateStatusBar'])->name('updateStatusBar')->middleware('auth');
+// Route::post('/updateStatusBar', [HomeController::class, 'updateStatusBar'])->name('updateStatusBar')->middleware('auth');
 // Route::get('/categorias/create', [CategoriesController::class, 'create'])->name('categorias.create');
 
 Route::name('transferencia.')->middleware('auth')->prefix('/transferencia')->controller(App\Http\Controllers\Cake\TransferenciaController::class)->group(function () {
@@ -81,6 +82,7 @@ Route::name('bar.')->middleware('auth')->prefix('/bar')->controller(BarsControll
     Route::post('/store', 'store')->name('store');
     Route::put('/update','update')->name('update');
     Route::put('/destroy','destroy')->name('destroy');
+    Route::post('/updateStatusBar','updateStatusBar')->name('updateStatusBar');
 
 
 });

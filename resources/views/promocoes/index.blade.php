@@ -29,7 +29,6 @@
 
                         <form id="tblPricePromo" class="needs-validation" novalidate>
 
-
                             @csrf
                             <select class="promoProduct-basic-single form-control " style="width:100%" id="promoProduct" align="center" name="promoProduct" required>
                                 <option selected disabled value="" align="center"><b>PRODUTOS</b></option>

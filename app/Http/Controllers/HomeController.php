@@ -10,7 +10,12 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
 use App\Models\Bars;
+use App\Models\Categories;
 use App\Models\BarsHistory;
+use App\Models\Orders;
+use App\Models\OrdersItems;
+use App\Models\OrdersType;
+use App\Models\Products;
 
 
 class HomeController extends Controller
@@ -22,65 +27,67 @@ class HomeController extends Controller
     {
         $group = Auth::user()->group_id; 
         $idBar = Auth::user()->bar_id;
-       $statusBar = $this->getStatusBar($idBar);
+        // $statusBar = $this->getStatusBar($idBar);
+       $resultConsolidado = $this->consolidadoDados($idBar);
+       $barUser = Bars::where(['id' => $idBar,])->get();
+       
+       $barAll = Bars::all();
+       $categoriesAll = Categories::where(['bar_id' => $idBar])->get();
+
         return view('home.home')
-            ->with('statusBar', $statusBar)
-            ->with('group', $group);
+            // ->with('statusBar', $statusBar)
+            ->with('group', $group)
+            ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
+            ->with('totalDia', $resultConsolidado['totalDia'])
+            ->with('mediaDia', $resultConsolidado['mediaDia'])
+            ->with('totalGeral', $resultConsolidado['totalGeral'])   
+            ->with('name', $resultConsolidado['name'])
+            ->with('barUser',$barUser)
+            ->with('barAll',$barAll)          
+            ->with('categoriesAll',$categoriesAll);          
+    }
+
   
-    }
 
-    public function updateStatusBar(Request $request, Bars $Bars) 
+    public function consolidadoDados($idBar)
     {
-        $idBar = Auth::user()->bar_id;
+        $consolidoDia = OrdersItems::select(
+            DB::raw('sum(orders_items.quantity) as qtd'),
+            DB::raw('sum(orders_items.price) as price'),
+            DB::raw('sum(orders_items.total) as total'),
+            DB::raw('sum(orders.total) as totalGeral'),
+            DB::raw('ctg.name as nameCategoria'),
+        )
+            ->join('products as p', 'p.id', '=', 'product_id')
+            ->leftJoin('categories As ctg', function ($join) {
+                $join->on('ctg.id', '=', 'p.category_id');
+            })
+            ->leftJoin('orders As orders', function ($join) {
+                $join->on('orders.id', '=', 'order_id');
+            })
+            //  ->where('ctg.name','Cervejas')
+            ->where('ctg.bar_id', $idBar)
+            ->where('orders.active', 1)
+            ->whereNull('orders.erp_id')
+            ->groupBy('nameCategoria')
+         ->get();
 
-        try {
-            $this->actionBar($request->status);
-            $barFields = Bars::find($idBar);
-            $barFields->status = $request->status;
-            $barFields->save();
-        
-          
-        }catch (\Throwable $th){
-            return $th;
-        }
-          return true; 
-    }
+       
+       
+        // $dados = json_decode($consolidoDia,true);
+        // dd($dados);   
 
-    public function actionBar($action){
+        $mediaConsolidadoDia = empty($consolidoDia[0]->total) && empty($consolidoDia[0]->qtd) ? '0' : number_format($consolidoDia[0]->total / $consolidoDia[0]->qtd, 2);
+        $resultConsolidadoDia = array(
+         
+            "qtdTotalDia" => empty($consolidoDia[0]->qtd) ? '0'  : $consolidoDia[0]->qtd,
+            "totalDia" => empty($consolidoDia[0]->total) ?  '0,00'  : str_replace('.',',',$consolidoDia[0]->total),
+            "mediaDia" => str_replace('.',',',$mediaConsolidadoDia),
+            "totalGeral" => empty($consolidoDia[0]->totalGeral) ? '0'  : $consolidoDia[0]->totalGeral ,
+            "name" => empty($consolidoDia[0]->nameCategoria) ? 'SEM VENDA':$consolidoDia[0]->nameCategoria,
+          );
+         return $resultConsolidadoDia;
 
-        if($action === '1'){
-            $action = 'Abriu Bar';
-        }else{
-            $action = 'Fechou Bar';
-        }
-
-        try {
-
-            $barsHistoryFilds = new BarsHistory();
-            $barsHistoryFilds->bar_id = Auth::user()->bar_id;
-            $barsHistoryFilds->user_id = Auth::user()->id;
-            $barsHistoryFilds->name = Auth::user()->name;
-            $barsHistoryFilds->inserted_for = Auth::user()->name;
-            $barsHistoryFilds->action = $action;
-            $barsHistoryFilds->save();
-
-        }catch(\Throwable $th){
-            return $th;
-        }
-
-    }
-
-    public function getStatusBar($id)
-
-    {
-        try {
-            $bar = Bars::find($id);
-            $result = $bar->status;
-        } catch (\Throwable $th) {
-            return $th;
-        }
-
-        return $result;
     }
 
 }
