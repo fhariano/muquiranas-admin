@@ -27,7 +27,8 @@ class HomeController extends Controller
     {
         $group = Auth::user()->group_id; 
         $idBar = Auth::user()->bar_id;
-        // $statusBar = $this->getStatusBar($idBar);
+        //  $statusBar = $this->getStatusBar($idBar);
+        $statusBar = 1 ;
        $resultConsolidado = $this->consolidadoDados($idBar);
        $barUser = Bars::where(['id' => $idBar,])->get();
        
@@ -35,7 +36,7 @@ class HomeController extends Controller
        $categoriesAll = Categories::where(['bar_id' => $idBar])->get();
 
         return view('home.home')
-            // ->with('statusBar', $statusBar)
+             ->with('statusBar', $statusBar)
             ->with('group', $group)
             ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
             ->with('totalDia', $resultConsolidado['totalDia'])

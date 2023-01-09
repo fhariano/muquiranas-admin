@@ -3,9 +3,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Bars;
 
 $idBar = Auth::user()->bar_id;
-$result = getStatusBar($idBar);
-$statusBar = $result['status'];
-$name = $result['name'];
+// $result = getStatusBar($idBar);
+// $statusBar = $result['status'];
+$statusBar = 1;
+// $name = $result['name'];
+$name ='Muquiranas Bar';
 
 
 function getStatusBar($id)

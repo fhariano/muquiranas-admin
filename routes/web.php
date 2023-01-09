@@ -36,6 +36,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware(
 // Route::post('/updateStatusBar', [HomeController::class, 'updateStatusBar'])->name('updateStatusBar')->middleware('auth');
 // Route::get('/categorias/create', [CategoriesController::class, 'create'])->name('categorias.create');
 
+
 Route::name('transferencia.')->middleware('auth')->prefix('/transferencia')->controller(App\Http\Controllers\Cake\TransferenciaController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/consultaApi', 'consultaApi');

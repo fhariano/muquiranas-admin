@@ -143,8 +143,7 @@ class ProductsController extends Controller
 
     public function getProductsCategory($id, Products $products)
     {
-
-        
+       
         $fields = $products
             ->where('active', 1)
             ->where('category_id', $id)

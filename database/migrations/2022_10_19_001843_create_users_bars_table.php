@@ -15,8 +15,7 @@ class CreateUsersBarsTable extends Migration
     {
         Schema::create('users_bars', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('bar_id');
-            $table->bigInteger('user_id');
+            $table->boolean('is_owner')->default(false);
             $table->string('inserted_for',45);
             $table->string('updated_for',45)->nullable();
             $table->timestamp('created_at')->useCurrent();

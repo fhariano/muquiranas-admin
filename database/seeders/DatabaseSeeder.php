@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ResourcesSeeder::class,
             GroupsSeeder::class,
             UsersSeeder::class,
+            UsersBarsSeeder::class,
             PermissionsGroupsSeeder::class,
         ]);
     }

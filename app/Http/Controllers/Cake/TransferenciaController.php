@@ -21,7 +21,8 @@ class TransferenciaController extends Controller
    
     public function index()
     {          
-      $statusBar = $this->getStatusBar($this->bar_id);
+    //   $statusBar = $this->getStatusBar($this->bar_id);
+      $statusBar = 1;
       if(Gate::allows('transferir_produto',$this->group_id)){
         return  view('transferencia.index')
             ->with('statusBar', $statusBar)

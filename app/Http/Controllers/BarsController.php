@@ -21,7 +21,8 @@ class BarsController extends Controller
     {
         $group = Auth::user()->group_id; 
         $idBar = Auth::user()->bar_id;
-        $statusBar = $this->getStatusBar($idBar);
+        // $statusBar = $this->getStatusBar($idBar);
+        $statusBar = 1;
 
         if (Gate::allows('visualizar_bar', $this->group_id)) {
             return view('bar.index')
