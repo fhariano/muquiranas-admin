@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
 use App\Models\Bars;
+use App\Models\UsersBar;
 use App\Models\Categories;
 use App\Models\BarsHistory;
 use App\Models\Orders;
@@ -25,30 +26,120 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $group = Auth::user()->group_id; 
-        $idBar = Auth::user()->bar_id;
-        //  $statusBar = $this->getStatusBar($idBar);
-        $statusBar = 1 ;
-       $resultConsolidado = $this->consolidadoDados($idBar);
-       $barUser = Bars::where(['id' => $idBar,])->get();
+        $idUser = Auth::user()->id;     
+        $qtdBar = count($this->UserIsOwnerOfBar(Auth::user()->id));
+        if ( !empty($this->UserIsOwnerOfBar(Auth::user()->id)  && $qtdBar >1)){
+            
+           print_r('TESTE' );
+            $this->UserIsOwnerOfBar($idUser);
+        }else {
+            print_r('TESTE2' );
+            dd($this->UserMultAdmin(Auth::user()->id)) ;
+            // dd($this->UserMultAdmin(Auth::user()->id));
+           
+        }
        
-       $barAll = Bars::all();
-       $categoriesAll = Categories::where(['bar_id' => $idBar])->get();
+        $idBar = Auth::user()->bar_id;
+        $user = Auth::user()->bar_id;
+    // 
+        //  $statusBar = $this->getStatusBar($idBar);
+    //     $statusBar = 1 ;
+    //    $resultConsolidado = $this->consolidadoDados($idBar);
+    //    $barUser = Bars::where(['id' => $idBar,])->get();
+       
+    //    $barAll = Bars::all();
+    //    $categoriesAll = Categories::where(['bar_id' => $idBar])->get();
 
-        return view('home.home')
-             ->with('statusBar', $statusBar)
-            ->with('group', $group)
-            ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
-            ->with('totalDia', $resultConsolidado['totalDia'])
-            ->with('mediaDia', $resultConsolidado['mediaDia'])
-            ->with('totalGeral', $resultConsolidado['totalGeral'])   
-            ->with('name', $resultConsolidado['name'])
-            ->with('barUser',$barUser)
-            ->with('barAll',$barAll)          
-            ->with('categoriesAll',$categoriesAll);          
+    //     return view('home.home')
+    //          ->with('statusBar', $statusBar)
+    //         ->with('group', $group)
+    //         ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
+    //         ->with('totalDia', $resultConsolidado['totalDia'])
+    //         ->with('mediaDia', $resultConsolidado['mediaDia'])
+    //         ->with('totalGeral', $resultConsolidado['totalGeral'])   
+    //         ->with('name', $resultConsolidado['name'])
+    //         ->with('barUser',$   )
+    //         ->with('barAll',$barAll)          
+    //         ->with('categoriesAll',$categoriesAll);          
     }
 
   
+    // public function verificacaoDoUsario($id){
+
+    //     // $resultIsOwnerOfBar = UsersBar::where([
+    //     //     'user_id' => $id,
+    //     //     'is_owner' =>'1'
+    //     // ])->get();
+
+    //     // $tam = count($this->UserIsOwnerOfBar($id));
+        
+    //     if ( !empty($this->UserIsOwnerOfBar($id))){
+    //         //redirecionar o cara com mais de um usuário para view de pergutar qual bar escolher. 
+    //         return $this->UserIsOwnerOfBar($id);
+    //     }else {
+
+    //         dd($this->UserMultAdmin($id));
+           
+        // }
+        
+        
+
+        // return $resultIsOwnerOfBar = UsersBar::select(
+        //     DB::raw('users_bars.bar_id as bar_id'),
+        //     DB::raw('users_bars.group_id as group_id'),
+        //     DB::raw('bars.status as statusBar'),
+        //     DB::raw('bars.short_name as nameBar'),
+        // )
+        //     ->join('bars as bars', 'bars.id', '=', 'bar_id')
+        //     ->where([
+        //         'user_id' => $id,
+        //         'is_owner' => '1'
+        //     ])
+        //     ->get();
+
+    // }
+
+
+    public function UserIsOwnerOfBar($idUser)
+    {
+         $resultIsOwnerOfBar = UsersBar::select(
+            DB::raw('users_bars.bar_id as bar_id'),
+            DB::raw('users_bars.group_id as group_id'),
+            DB::raw('bars.status as statusBar'),
+            DB::raw('bars.short_name as nameBar'),
+            
+        )
+            ->join('bars as bars', 'bars.id', '=', 'bar_id')
+            ->where([
+                'user_id' => $idUser,
+                'is_owner' => '1',   
+                'group_id' => '1',   
+            ])
+             ->get();
+
+        return json_decode($resultIsOwnerOfBar);
+    }
+
+    public  function UserMultAdmin($idUser){
+
+        $resultMultAdmin = UsersBar::select(
+            DB::raw('users_bars.bar_id as bar_id'),
+            DB::raw('users_bars.group_id as group_id'),
+            DB::raw('bars.status as statusBar'),
+            DB::raw('bars.short_name as nameBar'),
+            
+        )
+            ->join('bars as bars', 'bars.id', '=', 'bar_id')
+            ->where([
+                'user_id' => $idUser,
+                'is_owner' => '1',   
+                'group_id' => '2',   
+            ])
+             ->get();
+
+        return json_decode($resultMultAdmin);
+
+    }
 
     public function consolidadoDados($idBar)
     {
