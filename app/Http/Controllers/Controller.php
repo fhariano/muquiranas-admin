@@ -22,11 +22,10 @@ class Controller extends BaseController
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->bar_id = Auth::user()->bar_id;
-            $this->group_id = Auth::user()->group_id;
+            $fieldsUser = session()->all(); 
+            $this->bar_id = $fieldsUser['bar_id'] ;
+            $this->group_id = $fieldsUser['group_id'];
             $this->name_user = Auth::user()->name;
-           
-
             return $next($request);
         });
     }

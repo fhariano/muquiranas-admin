@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use App\Models\BarsHistory;
+use JeroenNoten\LaravelAdminLte\View\Components\Form\Select;
+use Laravel\Sail\Console\PublishCommand;
 
 class BarsController extends Controller
 {
@@ -19,17 +21,27 @@ class BarsController extends Controller
      */
     public function index()
     {
-        $group = Auth::user()->group_id; 
-        $idBar = Auth::user()->bar_id;
-        // $statusBar = $this->getStatusBar($idBar);
-        $statusBar = 1;
 
-        if (Gate::allows('visualizar_bar', $this->group_id)) {
+    
+  
+         $fieldsUser = session()->all();  
+
+        $group_id = $fieldsUser['group_id']; 
+        $idBar =  $fieldsUser['bar_id'] ;
+        $statusBar = $fieldsUser['statusBar'];
+     
+
+        if (Gate::allows('visualizar_bar', $group_id)) {
             return view('bar.index')
-                ->with('group_id', $this->group_id)
+                ->with('group_id', $group_id)
                 ->with('statusBar', $statusBar)
-                ->with('group', $group);
+                ->with('group', $group_id);
         }
+    }
+
+    public function selectBar()
+    {
+        return view('bar.selectBar');
     }
 
     /**

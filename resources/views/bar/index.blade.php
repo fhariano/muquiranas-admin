@@ -156,9 +156,9 @@
                 </div>
             </div>
         </div>
+   
         <div class="row">
-            <div id="barToolbar">
-            </div>
+            <div id="barToolbar"></div>
 
             <div id="adminBar" class="col-12 table-responsive pt-1">
                 <table id="tbl_adminBar" class="table table table-bordered table-hover"> </table>
@@ -167,6 +167,7 @@
     </div>
 
 </div>
+
 @endsection
 
 @section('footer')

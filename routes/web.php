@@ -33,6 +33,7 @@ Auth::routes();
 
 
 Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+
 // Route::post('/updateStatusBar', [HomeController::class, 'updateStatusBar'])->name('updateStatusBar')->middleware('auth');
 // Route::get('/categorias/create', [CategoriesController::class, 'create'])->name('categorias.create');
 
@@ -77,6 +78,7 @@ Route::name('listas.')->middleware('auth')->prefix('/listas')->controller(Promos
 
 Route::name('bar.')->middleware('auth')->prefix('/bar')->controller(BarsController::class)->group(function() {
 
+    Route::any('/selectBar/{$dadosBar}', 'selectBar')->name('selectBar');
     Route::get('/', 'index')->name('index');
     Route::post('/create', 'create')->name('create');
     Route::get('/show', 'show')->name('show');

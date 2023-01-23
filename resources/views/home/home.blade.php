@@ -8,7 +8,7 @@
             <!-- <select class="selectBar-basic-single form-control bg-primary d-flex justify-content-between" style="width:100%" id="selectBar" name="selectBar"> -->
             <select class="js-selectBar-ajax form-control bg-primary d-flex justify-content-between" style="width:100%" id="selectBar" name="selectBar">
                 <option class="font-weight-bold" selected disabled value="" align="center">BARES</option>
-                @foreach($barAll as $key => $value)
+                @foreach($fieldsBar as $key => $value)
                 <option value="{{$value['id'] }}">{{ $value['name'] }}</option>
                 @endforeach
             </select>
@@ -210,8 +210,9 @@
             </div>
         </div>
 
-    </div> -->
+        </div> -->
  </div> 
+
 @endsection
 
 @section('footer')

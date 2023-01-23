@@ -17,13 +17,14 @@ use Illuminate\Support\Arr;
 use Nette\Utils\Json;
 
 class TransferenciaController extends Controller
-{
+{ 
    
+
     public function index()
     {          
-    //   $statusBar = $this->getStatusBar($this->bar_id);
-      $statusBar = 1;
-      if(Gate::allows('transferir_produto',$this->group_id)){
+     $statusBar = $this->getStatusBar($this->bar_id);
+    
+    if(Gate::allows('transferir_produto',$this->group_id)){
         return  view('transferencia.index')
             ->with('statusBar', $statusBar)
             ->with('group_id', $this->group_id);
@@ -41,8 +42,6 @@ class TransferenciaController extends Controller
                 'x-cake-token' => '04d1be2fd17ba6769bbf',
                 'Accept' => 'application/json'
             ])->get('https://app.cakeerp.com/api/product/all?active=1')['list'];
-
-
 
             $products = json_decode($response);
             $result = array();
@@ -95,13 +94,13 @@ class TransferenciaController extends Controller
                 return 3;
             } else if ($value->category_id  != '') {
             
-                 $resultExistCategory = $this->ifExistCategory($this->bar_id, $value->category_id, $value->name_category, $this->name_user);
+                 $resultExistCategory = $this->ifExistCategory($this->idBar, $value->category_id, $value->name_category, $this->name_user);
                  $idCategory = json_decode($resultExistCategory);
             
                 $this->actionBar();
                 $productsFields = Products::updateOrCreate([
                     'erp_id' => $value->id,
-                    'bar_id' => $this->bar_id,
+                    'bar_id' => $this->idBar,
                 ], [
                     
                     'ean_erp' => $value->ean_erp,
@@ -116,8 +115,8 @@ class TransferenciaController extends Controller
                     'image_url'     => $value->image_url,
                     'order' => 1,
                     'active' => 1,
-                    'inserted_for' => $this->name_user,
-                    'updated_for'  => $this->name_user,
+                    'inserted_for' => Auth::user()->name,
+                    'updated_for'  => Auth::user()->name,
 
                 ]);
                 $productsFields->save();
@@ -211,7 +210,7 @@ class TransferenciaController extends Controller
         try {
             $productExist = Products::where([
                 'erp_id' => $idProduct,
-                'bar_id' => $this->bar_id,
+                'bar_id' => $this->idBar,
                 'active' => 1])
              ->exists();
                
@@ -282,7 +281,7 @@ class TransferenciaController extends Controller
            try {
 
             $barsHistoryFilds = new BarsHistory();
-            $barsHistoryFilds->bar_id = Auth::user()->bar_id;
+            $barsHistoryFilds->bar_id = $this->idBar ;
             $barsHistoryFilds->user_id = Auth::user()->id;
             $barsHistoryFilds->name = Auth::user()->name;
             $barsHistoryFilds->inserted_for = Auth::user()->name;

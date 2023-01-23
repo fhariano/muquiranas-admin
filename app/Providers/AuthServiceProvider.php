@@ -30,43 +30,46 @@ class AuthServiceProvider extends ServiceProvider
     {
         //TESTES GATE
         $this->registerPolicies();
-        Gate::define('gerenciar_bar', function(User $user){
-            return $user->group_id == 1;
+
+        Gate::define('gerenciar_bar', function(){
+          
+            return  session('group_id') == 1;
+
         });
 
-        Gate::define('visualizar_bar', function(User $user){
-            return $user->group_id <= 5;
+        Gate::define('visualizar_bar', function(){
+            return session('group_id') <= 5;
         });
 
-        Gate::define('editar_bar', function(User $user){
-            return $user->group_id <= 2;
+        Gate::define('editar_bar', function(){
+            return session('group_id') <= 2;
         });
 
-        Gate::define('transferir_produto', function(User $user){
-            return $user->group_id <= 2;
+        Gate::define('transferir_produto', function(){
+            return session('group_id') <= 2;
         });
           
-        Gate::define('gerenciar_cardapio', function(User $user){
+        Gate::define('gerenciar_cardapio', function(){
             
-            return $user->group_id <= 3;
+            return session('group_id') <= 3;
         });
 
-        Gate::define('gerenciar_listas', function(User $user){
+        Gate::define('gerenciar_listas', function(){
             
-            return $user->group_id <= 4;
+            return session('group_id') <= 4;
         });
-        Gate::define('gerenciar_categoria', function(User $user){
+        Gate::define('gerenciar_categoria', function(){
             
-            return $user->group_id <= 4;
+            return session('group_id') <= 4;
         });
-        Gate::define('gerenciar_promocoes', function(User $user){
+        Gate::define('gerenciar_promocoes', function(){
             
-            return $user->group_id <= 3;
+            return session('group_id') <= 3;
         });
 
         Gate::define('visualizar_cardapio_bar', function(User $user, Products $products){
             
-            return $user->bar_id == $products->bar_id;
+            return session('bar_id') == $products->bar_id;
         });
 
         // Gate::define('gerenciar_listas', function(User $user)){
