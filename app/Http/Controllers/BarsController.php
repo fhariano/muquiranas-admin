@@ -22,20 +22,15 @@ class BarsController extends Controller
     public function index()
     {
 
-    
+       
   
-         $fieldsUser = session()->all();  
 
-        $group_id = $fieldsUser['group_id']; 
-        $idBar =  $fieldsUser['bar_id'] ;
-        $statusBar = $fieldsUser['statusBar'];
-     
-
-        if (Gate::allows('visualizar_bar', $group_id)) {
+        if (Gate::allows('visualizar_bar', $this->group_id)) {
             return view('bar.index')
-                ->with('group_id', $group_id)
-                ->with('statusBar', $statusBar)
-                ->with('group', $group_id);
+                ->with('group_id', $this->group_id)
+                // ->with('statusBar', $this->getStatusBar($this->bar_id))
+                ->with('statusBar', $this->statusBar)
+                ->with('group', $this->group_id);
         }
     }
 
@@ -95,10 +90,11 @@ class BarsController extends Controller
      */
     public function show()
     {
+        //MELHORAR A FUNÇ
         if ($this->group_id === 1) {
 
             try {
-                $barAll = Bars::where(['active' => 1])->get();
+                $barAll = Bars::where(['active' => 1])->where(['id' => $this->bar_id])->get();
 
                 if ($barAll) {
                     $data['rows'] = $barAll;
@@ -192,12 +188,14 @@ class BarsController extends Controller
     }
     public function updateStatusBar(Request $request, Bars $Bars) 
     {
-        $idBar = Auth::user()->bar_id;
+        // $idBar = Auth::user()->bar_id;
 
+       
         try {
             $this->actionBar($request->status);
-            $barFields = Bars::find($idBar);
+            $barFields = Bars::find($this->bar_id);
             $barFields->status = $request->status;
+          
             $barFields->save();
         
           
@@ -218,7 +216,7 @@ class BarsController extends Controller
         try {
 
             $barsHistoryFilds = new BarsHistory();
-            $barsHistoryFilds->bar_id = Auth::user()->bar_id;
+            $barsHistoryFilds->bar_id = $this->bar_id;
             $barsHistoryFilds->user_id = Auth::user()->id;
             $barsHistoryFilds->name = Auth::user()->name;
             $barsHistoryFilds->inserted_for = Auth::user()->name;

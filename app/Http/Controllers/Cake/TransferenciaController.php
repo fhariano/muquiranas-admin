@@ -94,13 +94,13 @@ class TransferenciaController extends Controller
                 return 3;
             } else if ($value->category_id  != '') {
             
-                 $resultExistCategory = $this->ifExistCategory($this->idBar, $value->category_id, $value->name_category, $this->name_user);
+                 $resultExistCategory = $this->ifExistCategory($this->bar_id, $value->category_id, $value->name_category, $this->name_user);
                  $idCategory = json_decode($resultExistCategory);
             
                 $this->actionBar();
                 $productsFields = Products::updateOrCreate([
                     'erp_id' => $value->id,
-                    'bar_id' => $this->idBar,
+                    'bar_id' => $this->bar_id,
                 ], [
                     
                     'ean_erp' => $value->ean_erp,
@@ -210,7 +210,7 @@ class TransferenciaController extends Controller
         try {
             $productExist = Products::where([
                 'erp_id' => $idProduct,
-                'bar_id' => $this->idBar,
+                'bar_id' => $this->bar_id,
                 'active' => 1])
              ->exists();
                
@@ -281,7 +281,7 @@ class TransferenciaController extends Controller
            try {
 
             $barsHistoryFilds = new BarsHistory();
-            $barsHistoryFilds->bar_id = $this->idBar ;
+            $barsHistoryFilds->bar_id = $this->bar_id ;
             $barsHistoryFilds->user_id = Auth::user()->id;
             $barsHistoryFilds->name = Auth::user()->name;
             $barsHistoryFilds->inserted_for = Auth::user()->name;

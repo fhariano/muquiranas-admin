@@ -188,6 +188,7 @@
         var urlControllerBar = 'updateStatusBar/';
         const statusBar = document.getElementById('statusBar').value;
 
+        console.log('Status Bar atual ' + statusBar);
         if (statusBar == 1) {
             document.getElementById("abrirBar").disabled = true;
             $("#abrirBar").addClass("btn-secondary");

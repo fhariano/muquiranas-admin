@@ -28,11 +28,13 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         //TESTES GATE
         $this->registerPolicies();
 
-        Gate::define('gerenciar_bar', function(){
-          
+        Gate::define('gerenciar_bar', function () {
+
+           
             return  session('group_id') == 1;
 
         });
