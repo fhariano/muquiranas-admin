@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\Auth;
 use App\Models\Bars;
 
-$idBar = Auth::user()->bar_id;
+$idBar = Auth::user()->bar_id; //mudar
 // $result = getStatusBar($idBar);
 // $statusBar = $result['status'];
 $statusBar = 1;

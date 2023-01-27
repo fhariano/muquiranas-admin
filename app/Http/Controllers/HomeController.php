@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
 use App\Models\Bars;
-use App\Models\UsersBar;
+use App\Models\UsersBar; //apagar
 use App\Models\Categories;
 use App\Models\BarsHistory;
 use App\Models\Orders;
@@ -30,18 +30,19 @@ class HomeController extends Controller
         $idUser = Auth::user()->id;
         // $qtdBar = count($this->UserIsOwnerOfBar(Auth::user()->id));
 
-        $fieldUserAtual = $this->fieldUser(Auth::user()->id);
+        // $fieldUserAtual = $this->fieldUser(Auth::user()->id);
 
 
-        if ($fieldUserAtual[0]->group_id != 6) {
-            $idBar = $fieldUserAtual[0]->bar_id;
-            $statusBar = $fieldUserAtual[0]->statusBar;
+       
+            $idBar = $this->bar_id;
+            $statusBar = $this->statusBar;
             $resultConsolidado = $this->consolidadoDados($idBar);
-            $nameBar = $fieldUserAtual[0]->nameBar;
+            $nameBar = $this->nameBar;
             $fieldsBar = Bars::where(['id' => $idBar])->get();
-            $group = $fieldUserAtual[0]->group_id;
+            $group = $this->group_id;
             $categoriesAll = Categories::where(['bar_id' => $idBar])->get();
-            $this->atualizaSession($fieldUserAtual);
+
+            // $this->atualizaSession($fieldUserAtual);
 
             return view('home.home')
                 ->with('statusBar', $statusBar)
@@ -55,7 +56,10 @@ class HomeController extends Controller
                 ->with('fieldsBar', $fieldsBar)
                 ->with('categoriesAll', $categoriesAll);
 
-        }
+     
+            // $this->UserIsOwnerOfBar(Auth::user()->id);
+            // return $this->selectBar($this->UserIsOwnerOfBar(Auth::user()->id));
+
 
         // if ( !empty($this->UserIsOwnerOfBar(Auth::user()->id)  && $qtdBar > 1)){
 
@@ -76,15 +80,15 @@ class HomeController extends Controller
         // 
     }
 
-    public function atualizaSession($fields)
-    {
-        return session([
-            'bar_id' => $fields[0]->bar_id,
-            'nameBar' => $fields[0]->nameBar,
-            'group_id' => $fields[0]->group_id,
-            'statusBar' => $fields[0]->statusBar,
-        ]);
-    }
+    // public function atualizaSession($fields)
+    // {
+    //     return session([
+    //         'bar_id' => $fields[0]->bar_id,
+    //         'nameBar' => $fields[0]->nameBar,
+    //         'group_id' => $fields[0]->group_id,
+    //         'statusBar' => $fields[0]->statusBar,
+    //     ]);
+    // }
     public function selectBar($infoBars)
     {
         // return redirect(Session::get($infoBars));

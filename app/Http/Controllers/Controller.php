@@ -23,6 +23,9 @@ class Controller extends BaseController
     protected  $statusBar;
     protected  $nameBar;
     
+
+
+    
     public function __construct()
     {
         

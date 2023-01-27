@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bars;
+use App\Models\UsersBar;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -22,9 +23,6 @@ class BarsController extends Controller
     public function index()
     {
 
-       
-  
-
         if (Gate::allows('visualizar_bar', $this->group_id)) {
             return view('bar.index')
                 ->with('group_id', $this->group_id)
@@ -36,7 +34,17 @@ class BarsController extends Controller
 
     public function selectBar()
     {
-        return view('bar.selectBar');
+        $fieldUserAtual = $this->fieldUser(Auth::user()->id);
+
+        if($fieldUserAtual[0]->group_id != 2){
+            $this->atualizaSession($fieldUserAtual);
+            return redirect(route('home'));
+        }else{
+            $this->atualizaSession($fieldUserAtual);
+             return view('bar.selectBar');
+        }
+
+   
     }
 
     /**
@@ -241,4 +249,40 @@ class BarsController extends Controller
 
         return $result;
     }
+
+    public function fieldUser($idUser)
+    {
+        try{
+
+            $resultFieldUser = UsersBar::select(
+                DB::raw('users_bars.bar_id as bar_id'),
+                DB::raw('users_bars.group_id as group_id'),
+                DB::raw('bars.status as statusBar'),
+                DB::raw('bars.short_name as nameBar'),
+                DB::raw('users_bars.is_owner as is_owner'),
+            )
+                ->join('bars as bars', 'bars.id', '=', 'bar_id')
+                ->where([
+                    'user_id' => $idUser,
+                ])
+                ->get();
+
+        }catch(\Throwable $th){
+            return $th;
+        }
+        return json_decode($resultFieldUser);
+    }
+
+    public function atualizaSession($fields)
+    {
+        return session([
+            'bar_id' => $fields[0]->bar_id,
+            'nameBar' => $fields[0]->nameBar,
+            'group_id' => $fields[0]->group_id,
+            'statusBar' => $fields[0]->statusBar,
+        ]);
+    }
+
 }
+
+
