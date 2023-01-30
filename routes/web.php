@@ -83,6 +83,7 @@ Route::name('listas.')->middleware('auth')->prefix('/listas')->controller(Promos
 Route::name('bar.')->middleware('auth')->prefix('/bar')->controller(BarsController::class)->group(function() {
 
     Route::any('/selectBar', 'selectBar')->name('selectBar');
+    Route::post('/requestSelectBar','requestSelectBar')->name('requestSelectBar');
     Route::get('/', 'index')->name('index');
     Route::post('/create', 'create')->name('create');
     Route::get('/show', 'show')->name('show');
@@ -90,6 +91,7 @@ Route::name('bar.')->middleware('auth')->prefix('/bar')->controller(BarsControll
     Route::put('/update','update')->name('update');
     Route::put('/destroy','destroy')->name('destroy');
     Route::post('/updateStatusBar','updateStatusBar')->name('updateStatusBar');
+
 
 
 });

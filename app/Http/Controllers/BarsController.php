@@ -21,7 +21,7 @@ class BarsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         
         if($this->autenticacaoBar($this->bar_id) == false){
@@ -40,10 +40,18 @@ class BarsController extends Controller
        
     }
 
-    public function selectBar()
+    public function requestSelectBar(Request $request) 
+    {
+        $fildsBarSelected = $this->UserIsOwnerOfBarSelected(Auth::user()->id, $request['idBarSelecionado']);
+        $this->atualizaSession($fildsBarSelected);
+        return route('home');
+    }
+
+
+    public function selectBar(Request $request)
     {
 
-              
+                     
         $fieldUserAtual = $this->fieldUser(Auth::user()->id);
       
         if($fieldUserAtual[0]->group_id !=6){
@@ -307,6 +315,27 @@ class BarsController extends Controller
             ->get();
 
         return json_decode($resultIsOwnerOfBar);
+    }
+    public function UserIsOwnerOfBarSelected($idUser, $idBar)
+    {
+        $resultIsOwnerOfBarSelected = UsersBar::select(
+            DB::raw('users_bars.bar_id as bar_id'),
+            DB::raw('users_bars.group_id as group_id'),
+            DB::raw('bars.status as statusBar'),
+            DB::raw('bars.short_name as nameBar'),
+            DB::raw('users_bars.is_owner as DonoBar'),
+
+        )
+            ->join('bars as bars', 'bars.id', '=', 'bar_id')
+            ->where([
+                'user_id' => $idUser,
+                'is_owner' => '1',
+                'bar_id' => $idBar,
+               
+            ])
+            ->get();
+
+        return json_decode($resultIsOwnerOfBarSelected);
     }
 
 

@@ -654,7 +654,7 @@
             if (actionButtonSaveBar == 'InsertBar' && resultValidation != false) {
                 saveBar(resultValidation);
 
-                console.log(JSON.stringify(resultValidation));
+               
             } else {
                 if (actionButtonSaveBar == 'UpdateBar' && resultValidation != false) {
                     updateBar(resultValidation, idBar);
@@ -737,7 +737,7 @@
                 },
                 success: function(success) {
 
-                    console.log("Result Sucesso:" + success);
+                    
                     $tbl_adminBar.bootstrapTable('refresh');
                     Swal.fire({
                         icon: 'success',
@@ -795,7 +795,7 @@
 
                 },
                 success: function(success) {
-                    console.log("Result Sucesso:" + success);
+              
                     $tbl_adminBar.bootstrapTable('refresh');
                     Swal.fire({
                         icon: 'success',
