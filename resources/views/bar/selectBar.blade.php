@@ -6,10 +6,9 @@
     
 
     <div class="list-group">
-
-    <a href="#" class="list-group-item list-group-item-action list-group-item-primary"> Muquiranas Santo André </a>
-    <a href="#" class="list-group-item list-group-item-action list-group-item-primary"> Muquiranas Ribeirão Preto </a>
-
+    @foreach($fieldsBarsUser as $key => $value)
+    <a href="{{$value->bar_id}}" class="list-group-item list-group-item-action list-group-item-primary"> {{$value->nameBar}} </a>
+    @endforeach
 
     </div>
 

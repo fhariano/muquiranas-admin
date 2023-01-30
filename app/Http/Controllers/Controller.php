@@ -35,6 +35,7 @@ class Controller extends BaseController
             $this->nameBar = session()->get('nameBar');
             $this->statusBar = $this->getStatusBar($this->bar_id);
             $this->name_user = Auth::user()->name;
+          
             return $next($request);
         });
     }
@@ -49,6 +50,10 @@ class Controller extends BaseController
         }
 
         return $result;
+    }
+
+    public function autenticacaoBar($idBar){
+        return isset($idBar);
     }
 
 }

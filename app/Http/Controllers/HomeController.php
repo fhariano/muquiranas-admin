@@ -27,34 +27,42 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $idUser = Auth::user()->id;
-        // $qtdBar = count($this->UserIsOwnerOfBar(Auth::user()->id));
 
-        // $fieldUserAtual = $this->fieldUser(Auth::user()->id);
+        if($this->autenticacaoBar($this->bar_id) == false){
+            return redirect(route('bar.selectBar'));
+        } else {
+
+            $idUser = Auth::user()->id;
+            // $qtdBar = count($this->UserIsOwnerOfBar(Auth::user()->id));
+    
+            // $fieldUserAtual = $this->fieldUser(Auth::user()->id);
+    
+        
+           
+                $idBar = $this->bar_id;
+                $statusBar = $this->statusBar;
+                $resultConsolidado = $this->consolidadoDados($idBar);
+                $nameBar = $this->nameBar;
+                $fieldsBar = Bars::where(['id' => $idBar])->get(); //corrigir
+                $group = $this->group_id;
+                $categoriesAll = Categories::where(['bar_id' => $idBar])->get();
+    
+                // $this->atualizaSession($fieldUserAtual);
+    
+                return view('home.home')
+                    ->with('statusBar', $statusBar)
+                    ->with('group', $group)
+                    ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
+                    ->with('totalDia', $resultConsolidado['totalDia'])
+                    ->with('mediaDia', $resultConsolidado['mediaDia'])
+                    ->with('totalGeral', $resultConsolidado['totalGeral'])
+                    ->with('name', $resultConsolidado['name'])
+                    ->with('nameBar', $nameBar)
+                    ->with('fieldsBar', $fieldsBar)
+                    ->with('categoriesAll', $categoriesAll);
+        }
 
 
-       
-            $idBar = $this->bar_id;
-            $statusBar = $this->statusBar;
-            $resultConsolidado = $this->consolidadoDados($idBar);
-            $nameBar = $this->nameBar;
-            $fieldsBar = Bars::where(['id' => $idBar])->get();
-            $group = $this->group_id;
-            $categoriesAll = Categories::where(['bar_id' => $idBar])->get();
-
-            // $this->atualizaSession($fieldUserAtual);
-
-            return view('home.home')
-                ->with('statusBar', $statusBar)
-                ->with('group', $group)
-                ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
-                ->with('totalDia', $resultConsolidado['totalDia'])
-                ->with('mediaDia', $resultConsolidado['mediaDia'])
-                ->with('totalGeral', $resultConsolidado['totalGeral'])
-                ->with('name', $resultConsolidado['name'])
-                ->with('nameBar', $nameBar)
-                ->with('fieldsBar', $fieldsBar)
-                ->with('categoriesAll', $categoriesAll);
 
      
             // $this->UserIsOwnerOfBar(Auth::user()->id);
@@ -80,15 +88,6 @@ class HomeController extends Controller
         // 
     }
 
-    // public function atualizaSession($fields)
-    // {
-    //     return session([
-    //         'bar_id' => $fields[0]->bar_id,
-    //         'nameBar' => $fields[0]->nameBar,
-    //         'group_id' => $fields[0]->group_id,
-    //         'statusBar' => $fields[0]->statusBar,
-    //     ]);
-    // }
     public function selectBar($infoBars)
     {
         // return redirect(Session::get($infoBars));
@@ -116,21 +115,7 @@ class HomeController extends Controller
 
 
 
-    // return $resultIsOwnerOfBar = UsersBar::select(
-    //     DB::raw('users_bars.bar_id as bar_id'),
-    //     DB::raw('users_bars.group_id as group_id'),
-    //     DB::raw('bars.status as statusBar'),
-    //     DB::raw('bars.short_name as nameBar'),
-    // )
-    //     ->join('bars as bars', 'bars.id', '=', 'bar_id')
-    //     ->where([
-    //         'user_id' => $id,
-    //         'is_owner' => '1'
-    //     ])
-    //     ->get();
-
-    // }
-
+ 
 
     public function UserIsOwnerOfBar($idUser)
     {

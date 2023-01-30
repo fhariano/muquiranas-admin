@@ -17,10 +17,14 @@ class ProductsController extends Controller
     
     public function index()
     {
-        
-        return view('cardapio.index')
+        if($this->autenticacaoBar($this->bar_id) == false){
+            return redirect(route('bar.selectBar'));
+        }else{
+            return view('cardapio.index')
             ->with('group_id',   $this->group_id );
             // ->with('bar_id', $this->bar_id);
+        } 
+   
     }
 
     /**

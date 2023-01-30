@@ -15,8 +15,13 @@ class PromosListController extends Controller
 
     public function index()
     {
-        return view('listas.index')
-        ->with('group_id', $this->group_id);
+        if($this->autenticacaoBar($this->bar_id) == false){
+            return redirect(route('bar.selectBar'));
+        }else{
+            return view('listas.index')
+            ->with('group_id', $this->group_id);
+        }
+
     }
 
 

@@ -26,14 +26,19 @@ class ProductsPromosListController extends Controller
 
     public function index()
     {
-        $resultPromoList = PromosLists::where(['bar_id' => $this->bar_id,])->get();
-        $resultProduct = Products::where(['bar_id' => $this->bar_id,])->get();
-        return view('promocoes.index', 
-        [
-            'resultPromoList' => $resultPromoList, 
-            'resultProducts' => $resultProduct, 
-            'group_id' => $this->group_id
-        ]);
+        if($this->autenticacaoBar($this->bar_id) == false){
+            return redirect(route('bar.selectBar'));
+        }else{
+            $resultPromoList = PromosLists::where(['bar_id' => $this->bar_id,])->get();
+            $resultProduct = Products::where(['bar_id' => $this->bar_id,])->get();
+            return view('promocoes.index', 
+            [
+                'resultPromoList' => $resultPromoList, 
+                'resultProducts' => $resultProduct, 
+                'group_id' => $this->group_id
+            ]);
+        } 
+
     }
 
     /**

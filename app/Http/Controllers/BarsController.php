@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bars;
 use App\Models\UsersBar;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -22,26 +23,40 @@ class BarsController extends Controller
      */
     public function index()
     {
-
-        if (Gate::allows('visualizar_bar', $this->group_id)) {
-            return view('bar.index')
-                ->with('group_id', $this->group_id)
-                // ->with('statusBar', $this->getStatusBar($this->bar_id))
-                ->with('statusBar', $this->statusBar)
-                ->with('group', $this->group_id);
+        
+        if($this->autenticacaoBar($this->bar_id) == false){
+            return redirect(route('bar.selectBar'));
+        }else{
+        
+            if (Gate::allows('visualizar_bar', $this->group_id)) {
+                return view('bar.index')
+                    ->with('group_id', $this->group_id)
+                    // ->with('statusBar', $this->getStatusBar($this->bar_id))
+                    ->with('statusBar', $this->statusBar)
+                    ->with('group', $this->group_id);
+            }
         }
+
+       
     }
 
     public function selectBar()
     {
-        $fieldUserAtual = $this->fieldUser(Auth::user()->id);
 
-        if($fieldUserAtual[0]->group_id != 2){
+              
+        $fieldUserAtual = $this->fieldUser(Auth::user()->id);
+      
+        if($fieldUserAtual[0]->group_id !=6){
             $this->atualizaSession($fieldUserAtual);
             return redirect(route('home'));
         }else{
-            $this->atualizaSession($fieldUserAtual);
-             return view('bar.selectBar');
+
+           $fieldsBarsUser = $this->UserIsOwnerOfBar(Auth::user()->id);
+          
+           return view('bar.selectBar')
+           ->with('fieldsBarsUser', $fieldsBarsUser);
+
+           // $this->atualizaSession($fieldUserAtual);
         }
 
    
@@ -272,6 +287,28 @@ class BarsController extends Controller
         }
         return json_decode($resultFieldUser);
     }
+
+    public function UserIsOwnerOfBar($idUser)
+    {
+        $resultIsOwnerOfBar = UsersBar::select(
+            DB::raw('users_bars.bar_id as bar_id'),
+            DB::raw('users_bars.group_id as group_id'),
+            DB::raw('bars.status as statusBar'),
+            DB::raw('bars.short_name as nameBar'),
+            DB::raw('users_bars.is_owner as DonoBar'),
+
+        )
+            ->join('bars as bars', 'bars.id', '=', 'bar_id')
+            ->where([
+                'user_id' => $idUser,
+                'is_owner' => '1',
+               
+            ])
+            ->get();
+
+        return json_decode($resultIsOwnerOfBar);
+    }
+
 
     public function atualizaSession($fields)
     {

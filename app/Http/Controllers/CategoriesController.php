@@ -14,8 +14,13 @@ class CategoriesController extends Controller
 
     public function index()
     {
-        return view('categorias.index')
-        ->with ('group_id', $this->group_id);
+        //Verifica se o usuário tem a variavel bar associada ao perfil. 
+        if($this->autenticacaoBar($this->bar_id) == false){
+            return redirect(route('bar.selectBar'));
+        }else{
+            return view('categorias.index')
+            ->with ('group_id', $this->group_id);
+        }
     }
 
  

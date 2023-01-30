@@ -25,12 +25,16 @@ use Illuminate\Support\Facades\Blade;
 */
 
 Route::get('/', function () {
-    return redirect('home');
+    $idbarSelecionado = session()->get('bar_id');
+    if(autenticacaoBar($idbarSelecionado) == false){
+        return redirect(route('bar.selectBar'));
+    }else{
+        return redirect('/home');
+    }  
+    
 })->middleware('auth');
 
 Auth::routes();
-
-
 
 Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
@@ -100,3 +104,8 @@ Route::name('promocoes.')->middleware('auth')->prefix('/promocoes')->controller(
     Route::put('/delete', 'destroy')->name('delete');
     Route::get('/list/{idList}/product/{idProduct}', 'getProductsList')->name('getProductsList');
 });
+
+
+function autenticacaoBar($idBar){
+    return isset($idBar);   
+}

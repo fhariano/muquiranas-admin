@@ -30,8 +30,8 @@ class LoginController extends Controller
      */
        
 
-     protected $redirectTo = RouteServiceProvider::SELECTBAR;
-
+     protected $redirectTo = RouteServiceProvider::SELECTBAR; 
+                
     /**
      * Create a new controller instance.
      *

@@ -2,12 +2,11 @@
 use Illuminate\Support\Facades\Auth;
 use App\Models\Bars;
 
-$idBar = Auth::user()->bar_id; //mudar
-// $result = getStatusBar($idBar);
-// $statusBar = $result['status'];
-$statusBar = 1;
-// $name = $result['name'];
-$name ='Muquiranas Bar';
+// $idBar = Auth::user()->bar_id; //mudar
+$idBar = session()->get('bar_id'); //mudar
+$result = getStatusBar($idBar);
+$statusBar = $result['status'];
+$name = $result['name'];
 
 
 function getStatusBar($id)
@@ -20,9 +19,6 @@ function getStatusBar($id)
     } catch (\Throwable $th) {
         return $th;
     }
-
-  
-
     return $result;
 }
 

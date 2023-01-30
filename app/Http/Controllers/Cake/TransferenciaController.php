@@ -21,16 +21,20 @@ class TransferenciaController extends Controller
    
 
     public function index()
-    {          
-     $statusBar = $this->getStatusBar($this->bar_id);
-    
-    if(Gate::allows('transferir_produto',$this->group_id)){
-        return  view('transferencia.index')
-            ->with('statusBar', $statusBar)
-            ->with('group_id', $this->group_id);
-      }else {
-       return redirect()->route('home');
-      }   
+    { 
+        if($this->autenticacaoBar($this->bar_id) == false){
+            return redirect(route('bar.selectBar'));
+        } else {
+            $statusBar = $this->getStatusBar($this->bar_id);
+
+            if (Gate::allows('transferir_produto', $this->group_id)) {
+                return view('transferencia.index')
+                    ->with('statusBar', $statusBar)
+                    ->with('group_id', $this->group_id);
+            } else {
+                return redirect()->route('home');
+            }
+        }
     }
 
     public function consultaApi()
