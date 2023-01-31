@@ -43,7 +43,7 @@ class HomeController extends Controller
                 $statusBar = $this->statusBar;
                 $resultConsolidado = $this->consolidadoDados($idBar);
                 $nameBar = $this->nameBar;
-                $fieldsBar = Bars::where(['id' => $idBar])->get(); //corrigir
+                $fieldsBar = Bars::all(); //corrigir fazer consula que mostrará todos os bares do user logado.
                 $group = $this->group_id;
                 $categoriesAll = Categories::where(['bar_id' => $idBar])->get();
     

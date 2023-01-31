@@ -34,13 +34,12 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('gerenciar_bar', function () {
 
-           
-            return  session('group_id') == 1;
+            return  session('group_id') == 1 || session('group_id') == 7;
 
         });
 
         Gate::define('visualizar_bar', function(){
-            return session('group_id') <= 5;
+            return session('group_id') != 6;
         });
 
         Gate::define('editar_bar', function(){
@@ -48,7 +47,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('transferir_produto', function(){
-            return session('group_id') <= 2;
+            return session('group_id') <= 2 || session('group_id') == 7;
         });
           
         Gate::define('gerenciar_cardapio', function(){
@@ -72,6 +71,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('visualizar_cardapio_bar', function(User $user, Products $products){
             
             return session('bar_id') == $products->bar_id;
+        });
+
+        Gate::define('bloquearDono_view', function () {
+            return session('group_id') != 6;
         });
 
         // Gate::define('gerenciar_listas', function(User $user)){

@@ -257,7 +257,7 @@ return [
             'icon_color' => 'green',
             'url'        => 'bar',
             'icon'       => 'fas fa-fw fa-share',
-            //  'can'        => 'gerenciar_bar',
+             'can'        => 'bloquearDono_view',
         ],
 
         [
@@ -265,7 +265,7 @@ return [
             'icon_color' => 'green',
             'url'        => 'cardapio',
             'icon'       => 'fas fa-fw fa-share',
-            // 'can'        => 'gerenciar_cardapio',
+            'can'        => 'bloquearDono_view',
         ],
 
         [
@@ -273,6 +273,7 @@ return [
             'icon_color' => 'green',
             'url'        => 'categorias',
             'icon'       => 'fas fa-fw fa-share',
+            'can'        => 'bloquearDono_view',
         ],
 
         [
@@ -280,13 +281,14 @@ return [
             'icon_color' => 'green',
             'url'        => 'listas',
             'icon'       => 'fas fa-fw fa-share',
+            'can'        => 'bloquearDono_view',
         ],
         [
             'text'       => 'Preços/Promoções',
             'icon_color' => 'green',
             'url'        => 'promocoes',
             'icon'       => 'fas fa-fw fa-share',
-            // 'can'        => 'preços' //esconder do menu
+            'can'        => 'bloquearDono_view' //esconder do menu
         ],
 
 

@@ -34,7 +34,7 @@ class BarsController extends Controller
                     // ->with('statusBar', $this->getStatusBar($this->bar_id))
                     ->with('statusBar', $this->statusBar)
                     ->with('group', $this->group_id);
-            }
+            } 
         }
 
        
@@ -54,7 +54,7 @@ class BarsController extends Controller
                      
         $fieldUserAtual = $this->fieldUser(Auth::user()->id);
       
-        if($fieldUserAtual[0]->group_id !=6){
+        if($fieldUserAtual[0]->group_id !=6 && $fieldUserAtual[0]->group_id !=7){
             $this->atualizaSession($fieldUserAtual);
             return redirect(route('home'));
         }else{
