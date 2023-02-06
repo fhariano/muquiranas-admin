@@ -14,14 +14,15 @@
             </select>
         </div>
 
-        <div class="row" align="center">
-            <select  class="selectCategory-basic-single form-control bg-primary d-flex justify-content-between" style="width:100%" id="categoriesBar" name="categoriesBar">
-                <option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>
+         <div class="row sr-only" id="selectCategories"  align="center">
+            <!-- <select  class="selectCategory-basic-single form-control bg-primary d-flex justify-content-between" style="width:100%" id="categoriesBar" name="categoriesBar" style="display:none"> -->
+            <select id="categoriesBar" style="width:100%;display:none">
+                <!-- <option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>
                 @foreach($categoriesAll as $key => $value)
                 <option value="{{$value['id'] }}">{{ $value['name'] }}</option>
-                @endforeach
+                @endforeach -->
             </select>
-        </div>
+        </div> 
 
     </div>
 
@@ -37,8 +38,8 @@
         <div class="row">
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box">
-                    <!-- <span class="info-box-icon  bg-success elevation-1"> <i class="fas fa-box-usd"></i> </span> -->
-                    <span class="info-box-icon  bg-success elevation-1"> <i class="fas fa-box"></i> </span>
+                    <!-- <span class="info-box-icon  bg-success elevation-1"> <i class="fa fa-barcode-usd"></i> </span> -->
+                    <span class="info-box-icon  bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>
                     <div class="info-box-content">
                         <span class="info-box-text"><b> TOTAL GERAL </b></span>
                         <span class="info-box-number">
@@ -54,7 +55,7 @@
 
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box mb-3">
-                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-box"></i></span>
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-qrcode"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text"><b>QTD TOTAL</b></span>
                         <span class="info-box-number">
@@ -69,7 +70,7 @@
             <div class="clearfix hidden-md-up"></div>
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box mb-3">
-                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-box"></i></span>
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-qrcode"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text"><b>TOTAL</b></span>
                         <span class="info-box-number">
@@ -84,7 +85,7 @@
 
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box mb-3">
-                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-box"></i></span>
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-qrcode"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text"><b>MÉDIA</b></span>
                         <span class="info-box-number">
@@ -231,18 +232,86 @@
 
         urlBase = window.location.origin;
         var urlController = '/resultBars';
+        var rotaHome = '/categorias/';
         // const statusBar = document.getElementById('statusBar').value;
         const $selectBar = $('#selectBar');
+        const $selectCategories = $('#categoriesBar');
+        let $idBarSelecionado = 1;
 
-        $('#selectBar').select2({
-        });
+        $('#selectBar').select2();
         $('#categoriesBar').select2();
 
         $selectBar.change(function(event) {
             idBarSelecionado = $(this).val();
-            console.log('Id bar ' + idBarSelecionado);
+            $('#categoriesBar').empty();
+
+            if(idBarSelecionado){
+                $("#categoriesBar").show();
+                $.ajax({
+                    type:"POST",
+                    url: urlBase + rotaHome + 'getCategories',
+                    data: {
+                       'idBarSelecionado':idBarSelecionado,
+                    },
+                    headers: {
+                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType:"json",
+                    success:function(categories){
+                        $("#categoriesBar").append('<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>')
+                        
+                        $.each(categories,function(key,value){
+                            $("#selectCategories").removeClass("sr-only");
+                            
+                        $("#categoriesBar").append('<option value="'+key['id'] +'">' +value['name'] +'<option>');
+                    
+                            
+                        });
+                        
+                        $("#categoriesBar").trigger("change");
+                    }
+                });
+            }else{
+                $("categoriesBar").hide();
+            }
+           
 
         });
+
+        //Fazendo
+
+        selectCategories.change(function(event){
+            $idCategories = $this.val();
+
+            if(idCategories){
+
+                $.ajax({
+                    type:"POST",
+                    url: urlBase + rotaHome + 'getCategories',
+                    data: {
+                       'idBarSelecionado':idBarSelecionado,
+                    },
+                    headers: {
+                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType:"json",
+                    success:function(categories){
+                        $("#categoriesBar").append('<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>')
+                        
+                        $.each(categories,function(key,value){
+                            $("#selectCategories").removeClass("sr-only");
+                            
+                        $("#categoriesBar").append('<option value="'+key['id'] +'">' +value['name'] +'<option>');
+                    
+                            
+                        });
+                        
+                        $("#categoriesBar").trigger("change");
+                    }
+                });
+
+            }
+        })
 
 
         const ctx = document.getElementById('myChart');

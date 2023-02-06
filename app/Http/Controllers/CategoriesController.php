@@ -111,4 +111,31 @@ class CategoriesController extends Controller
     {
         //
     }
+
+    // public function getCategories( Request $request)
+    // {
+    //     return Categories::where('bar_id',1)->get();
+    //     # code...
+    // }
+
+    public function getCategories(Request $request, Categories $categories)
+    {
+        
+        // $result = $categories
+        //     ->select(['id,name'])
+        //     ->where('bar_id', 1)
+        //     ->orderBy('name')->get();
+        // $data['rows'] = $result;
+        // $fields_categories = json_encode($data);
+        // return $fields_categories;
+
+        $result = Categories::select(['id', 'name'])->where('bar_id', $request['idBarSelecionado'])->orderBy('name')->get();
+        // if(!isset($fields_categories) = json_encode($result)));
+        if(!isset($fields_categories)){
+            $fields_categories = json_encode($result);
+            return $fields_categories;
+        };
+    
+        # code...
+    }
 }

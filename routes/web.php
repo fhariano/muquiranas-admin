@@ -66,6 +66,7 @@ Route::name('categorias.')->middleware('auth')->prefix('/categorias')->controlle
     Route::get('/show', 'show')->name('show');
     Route::put('/update', 'update')->name('update');
     Route::put('/disableCategory', 'disableCategory')->name('disableCategory');
+    Route::post('/getCategories', 'getCategories')->name('getCategories');
 });
 
 Route::name('listas.')->middleware('auth')->prefix('/listas')->controller(PromosListController::class)->group(function () {
@@ -104,7 +105,7 @@ Route::name('promocoes.')->middleware('auth')->prefix('/promocoes')->controller(
     Route::post('/edit/{id}', 'edit')->name('edit');
     Route::put('/update', 'update')->name('update');
     Route::put('/delete', 'destroy')->name('delete');
-    Route::get('/list/{idList}/product/{idProduct}', 'getProductsList')->name('getProductsList');
+    Route::put('/list/{idList}/product/{idProduct}', 'getProductsList')->name('getProductsList');
 });
 
 
