@@ -11,4 +11,6 @@ class OtherPayments extends Model
 
     protected $table ="other_payments";
 
+    protected $fillable = ['gateway','label', 'detail', 'img_url', 'api_sufix', 'order', 'inserted_for','created_at'];
+
 }
