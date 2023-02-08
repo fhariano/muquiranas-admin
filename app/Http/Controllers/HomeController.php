@@ -39,14 +39,14 @@ class HomeController extends Controller
     
         
            
-                $idBar = $this->bar_id;
+                $idBar = 2;
                 $statusBar = $this->statusBar;
                 $resultConsolidado = $this->consolidadoDados($idBar);
                 $nameBar = $this->nameBar;
                 $fieldsBar = Bars::all(); //corrigir fazer consula que mostrará todos os bares do user logado.
                 $group = $this->group_id;
-                $categoriesAll = Categories::where(['bar_id' => $idBar])->get();
-    
+                $categoriesAll = Categories::whereIn('bar_id',[$idBar])->get();
+                
                 // $this->atualizaSession($fieldUserAtual);
     
                 return view('home.home')
@@ -87,6 +87,8 @@ class HomeController extends Controller
 
         // 
     }
+
+ 
 
     public function selectBar($infoBars)
     {
@@ -180,13 +182,66 @@ class HomeController extends Controller
 
     }
 
+    // public function consolidadoDados($idBar)
+    // {
+    //     $consolidoDia = OrdersItems::select(
+    //         DB::raw('sum(orders_items.quantity) as qtd'),
+    //         DB::raw('sum(orders_items.price) as price'),
+    //         DB::raw('sum(orders_items.total) as total'),
+    //         DB::raw('sum(orders.total) as totalGeral'),
+    //         DB::raw('ctg.name as nameCategoria'),
+    //     )
+    //         ->join('products as p', 'p.id', '=', 'product_id')
+    //         ->leftJoin('categories As ctg', function ($join) {
+    //             $join->on('ctg.id', '=', 'p.category_id');
+    //         })
+    //         ->leftJoin('orders As orders', function ($join) {
+    //             $join->on('orders.id', '=', 'order_id');
+    //         })
+    //         //  ->where('ctg.name','Cervejas')
+    //         ->where('ctg.bar_id', $idBar)
+    //         ->where('orders.active', 1)
+    //         ->where('ctg.id', 6)
+    //         ->whereNotNull('orders.erp_id')
+    //         ->groupBy('nameCategoria')
+    //         ->get();
+
+
+
+    //     // $dados = json_decode($consolidoDia,true);
+    //     // dd($dados);   
+
+    //     $mediaConsolidadoDia = empty($consolidoDia[0]->total) && empty($consolidoDia[0]->qtd) ? '0' : number_format($consolidoDia[0]->total / $consolidoDia[0]->qtd, 2);
+    //     $resultConsolidadoDia = array(
+
+    //         "qtdTotalDia" => empty($consolidoDia[0]->qtd) ? '0' : $consolidoDia[0]->qtd,
+    //         "totalDia" => empty($consolidoDia[0]->total) ? '0,00' : str_replace('.', ',', $consolidoDia[0]->total),
+    //         "mediaDia" => str_replace('.', ',', $mediaConsolidadoDia),
+    //         "totalGeral" => empty($consolidoDia[0]->totalGeral) ? '0' : $consolidoDia[0]->totalGeral,
+    //         "name" => empty($consolidoDia[0]->nameCategoria) ? 'SEM VENDA' : $consolidoDia[0]->nameCategoria,
+    //     );
+    //     return $resultConsolidadoDia;
+
+    // }
+
+    public function TotalGeralBar($idBar)
+    {
+        $totalBar = Orders::select(
+            DB::raw('sum(total) as totalBar'),
+        )
+            ->where('bar_id', $idBar)
+            ->get();  
+        return $totalBar[0]->totalBar;
+    }
+
+
     public function consolidadoDados($idBar)
     {
         $consolidoDia = OrdersItems::select(
             DB::raw('sum(orders_items.quantity) as qtd'),
             DB::raw('sum(orders_items.price) as price'),
             DB::raw('sum(orders_items.total) as total'),
-            DB::raw('sum(orders.total) as totalGeral'),
+            // DB::raw('sum(orders.total) as totalGeral'),
             DB::raw('ctg.name as nameCategoria'),
         )
             ->join('products as p', 'p.id', '=', 'product_id')
@@ -196,29 +251,35 @@ class HomeController extends Controller
             ->leftJoin('orders As orders', function ($join) {
                 $join->on('orders.id', '=', 'order_id');
             })
-            //  ->where('ctg.name','Cervejas')
-            ->where('ctg.bar_id', $idBar)
+            ->where('orders.bar_id', $idBar)
             ->where('orders.active', 1)
-            ->whereNull('orders.erp_id')
+            // ->where('ctg.id', 1) //idCategoria
+            ->whereNotNull('orders.erp_id')
             ->groupBy('nameCategoria')
             ->get();
 
+       
 
+        if ($consolidoDia->count() == 0) {
+            return [
+                "qtdTotalDia" => 0,
+                "totalDia" => 0,
+                "mediaDia" => 0,
+                "totalGeral" => 0,
+                "name" => 'SEM VENDA',
+            ];
+        }
 
-        // $dados = json_decode($consolidoDia,true);
-        // dd($dados);   
-
-        $mediaConsolidadoDia = empty($consolidoDia[0]->total) && empty($consolidoDia[0]->qtd) ? '0' : number_format($consolidoDia[0]->total / $consolidoDia[0]->qtd, 2);
-        $resultConsolidadoDia = array(
-
-            "qtdTotalDia" => empty($consolidoDia[0]->qtd) ? '0' : $consolidoDia[0]->qtd,
-            "totalDia" => empty($consolidoDia[0]->total) ? '0,00' : str_replace('.', ',', $consolidoDia[0]->total),
-            "mediaDia" => str_replace('.', ',', $mediaConsolidadoDia),
-            "totalGeral" => empty($consolidoDia[0]->totalGeral) ? '0' : $consolidoDia[0]->totalGeral,
-            "name" => empty($consolidoDia[0]->nameCategoria) ? 'SEM VENDA' : $consolidoDia[0]->nameCategoria,
-        );
-        return $resultConsolidadoDia;
-
+        $mediaConsolidadoDia = number_format($consolidoDia[0]->total / $consolidoDia[0]->qtd,2,'.','');
+        return [
+            "qtdTotalDia" => $consolidoDia[0]->qtd,
+            "totalDia" => $consolidoDia[0]->total,
+             "mediaDia" => str_replace('.', ',', $mediaConsolidadoDia),
+            //  "totalGeral" => $consolidoDia->totalGeral,
+             "totalGeral" => $this->TotalGeralBar($idBar),
+            "name" => $consolidoDia[0]->nameCategoria,
+            ];
     }
-
+ 
+    
 }
