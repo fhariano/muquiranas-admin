@@ -243,6 +243,7 @@
 
         $selectBar.change(function(event) {
             idBarSelecionado = $(this).val();
+           
             $('#categoriesBar').empty();
 
             if(idBarSelecionado){
@@ -263,7 +264,7 @@
                         $.each(categories,function(key,value){
                             $("#selectCategories").removeClass("sr-only");
                             
-                        $("#categoriesBar").append('<option value="'+key['id'] +'">' +value['name'] +'<option>');
+                        $("#categoriesBar").append('<option value="'+value['id'] +'">' +value['name'] +'<option>');
                     
                             
                         });
@@ -280,35 +281,36 @@
 
         //Fazendo
 
-        selectCategories.change(function(event){
-            $idCategories = $this.val();
+        $selectCategories.change(function(event){
+            idCategories = $(this).val();
+      
 
             if(idCategories){
-
-                $.ajax({
-                    type:"POST",
-                    url: urlBase + rotaHome + 'getCategories',
-                    data: {
-                       'idBarSelecionado':idBarSelecionado,
-                    },
-                    headers: {
-                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    dataType:"json",
-                    success:function(categories){
-                        $("#categoriesBar").append('<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>')
+                console.log('ID categoria selecionada' + idCategories);
+                // $.ajax({
+                //     type:"POST",
+                //     url: urlBase + rotaHome + 'getCategories',
+                //     data: {
+                //        'idBarSelecionado':idBarSelecionado,
+                //     },
+                //     headers: {
+                //          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                //     },
+                //     dataType:"json",
+                //     success:function(categories){
+                //         $("#categoriesBar").append('<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>')
                         
-                        $.each(categories,function(key,value){
-                            $("#selectCategories").removeClass("sr-only");
+                //         $.each(categories,function(key,value){
+                //             $("#selectCategories").removeClass("sr-only");
                             
-                        $("#categoriesBar").append('<option value="'+key['id'] +'">' +value['name'] +'<option>');
+                //         $("#categoriesBar").append('<option value="'+key['id'] +'">' +value['name'] +'<option>');
                     
                             
-                        });
+                //         });
                         
-                        $("#categoriesBar").trigger("change");
-                    }
-                });
+                //         $("#categoriesBar").trigger("change");
+                //     }
+                // });
 
             }
         })

@@ -39,7 +39,7 @@ class HomeController extends Controller
     
         
            
-                $idBar = $this->bar_id;
+                $idBar = 2;
                 $statusBar = $this->statusBar;
                 $resultConsolidado = $this->consolidadoDados($idBar);
                 $nameBar = $this->nameBar;
@@ -224,6 +224,15 @@ class HomeController extends Controller
 
     // }
 
+    public function TotalGeralBar($idBar)
+    {
+        $totalBar = Orders::select(
+            DB::raw('sum(total) as totalBar'),
+        )
+            ->where('bar_id', $idBar)
+            ->get();  
+        return $totalBar[0]->totalBar;
+    }
 
 
     public function consolidadoDados($idBar)
@@ -232,7 +241,7 @@ class HomeController extends Controller
             DB::raw('sum(orders_items.quantity) as qtd'),
             DB::raw('sum(orders_items.price) as price'),
             DB::raw('sum(orders_items.total) as total'),
-            DB::raw('sum(orders.total) as totalGeral'),
+            // DB::raw('sum(orders.total) as totalGeral'),
             DB::raw('ctg.name as nameCategoria'),
         )
             ->join('products as p', 'p.id', '=', 'product_id')
@@ -242,12 +251,14 @@ class HomeController extends Controller
             ->leftJoin('orders As orders', function ($join) {
                 $join->on('orders.id', '=', 'order_id');
             })
-            ->where('ctg.bar_id', $idBar)
+            ->where('orders.bar_id', $idBar)
             ->where('orders.active', 1)
-            ->where('ctg.id', 6)
+            // ->where('ctg.id', 1) //idCategoria
             ->whereNotNull('orders.erp_id')
             ->groupBy('nameCategoria')
             ->get();
+
+       
 
         if ($consolidoDia->count() == 0) {
             return [
@@ -259,12 +270,13 @@ class HomeController extends Controller
             ];
         }
 
-        $mediaConsolidadoDia = $consolidoDia[0]->total / $consolidoDia[0]->qtd;
+        $mediaConsolidadoDia = number_format($consolidoDia[0]->total / $consolidoDia[0]->qtd,2,'.','');
         return [
             "qtdTotalDia" => $consolidoDia[0]->qtd,
             "totalDia" => $consolidoDia[0]->total,
              "mediaDia" => str_replace('.', ',', $mediaConsolidadoDia),
-             "totalGeral" => $consolidoDia[0]->totalGeral,
+            //  "totalGeral" => $consolidoDia->totalGeral,
+             "totalGeral" => $this->TotalGeralBar($idBar),
             "name" => $consolidoDia[0]->nameCategoria,
             ];
     }
