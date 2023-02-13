@@ -8,7 +8,7 @@
             <!-- <select class="selectBar-basic-single form-control bg-primary d-flex justify-content-between" style="width:100%" id="selectBar" name="selectBar"> -->
             <select class="js-selectBar-ajax form-control bg-primary d-flex justify-content-between" style="width:100%"
                 id="selectBar" name="selectBar">
-                <option class="font-weight-bold" selected disabled value="" align="center">BARES</option>
+                <option class="font-weight-bold sr-only" selected disabled value="" align="center">TODOS</option>
                 @foreach($fieldsBar as $key => $value)
                 <option value="{{$value['id'] }}">{{ $value['name'] }}</option>
                 @endforeach
@@ -37,22 +37,7 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box">
-                    <!-- <span class="info-box-icon  bg-success elevation-1"> <i class="fa fa-barcode-usd"></i> </span> -->
-                    <span class="info-box-icon  bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>
-                    <div class="info-box-content">
-                        <span class="info-box-text"><b> TOTAL GERAL </b></span>
-                        <span class="info-box-number">
-                            $
-                            <?= $totalGeral ?>,00
-
-                        </span>
-                    </div>
-
-                </div>
-
-            </div>
+            <div class="col-12 col-sm-6 col-md-3" id='clsCardReceita'></div>
 
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardITotaltens'></div>
             <div class="clearfix hidden-md-up"></div>
@@ -78,6 +63,7 @@
                         <thead>
                             <tr>
                                 <th>Produto</th>
+                                <th>Quantidade</th>
                                 <th>Preço</th>
                                 <th>Média</th>
                             
@@ -92,6 +78,7 @@
                                         class="img-circle img-size-32 mr-2">
                                         STELLA ARTOIS
                                 </td>
+                                <td>3 <td>
                                 <td>$7,00</td>
                                 <td>
                                     <!-- <small class="text-success mr-1">
@@ -102,12 +89,16 @@
                                 </td>
                               
                             </tr>
+                          
+                                
+                          
                             <tr>
                                 <td>
                                     <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689807/47477094-2cea-4d34-bf7a-a0d1024ed1f4.png" alt="Product 1"
                                         class="img-circle img-size-32 mr-2">
                                         BRAHMA EXTRA WEISS
                                 </td>
+                                <td>2 <td>
                                 <td>$5,00</td>
                                 <td>
                                     <!-- <small class="text-warning mr-1">
@@ -124,6 +115,7 @@
                                         class="img-circle img-size-32 mr-2">
                                    SKOL
                                 </td>
+                                <td>4 <td>
                                 <td>$6,00</td>
                                 <td>
                                     <!-- <small class="text-danger mr-1">
@@ -141,6 +133,7 @@
                                         CERVEJA BECKS
                                     <!-- <span class="badge bg-danger">NEW</span> -->
                                 </td>
+                                <td>6<td>
                                 <td>$8,00</td>
                                 <td>
                                     <!-- <small class="text-success mr-1">
@@ -296,14 +289,47 @@ $(function() {
     const $selectBar = $('#selectBar');
     const $selectCategories = $('#categoriesBar');
     let $idBarSelecionado = 1;
-
     $('#selectBar').select2();
     $('#categoriesBar').select2();
 
+
+valorReceita = '250,00';
+text = 'RECEITAS';
+
+cardReceita(valorReceita, text);
+    
+        function cardReceita(valor,text){
+            console.log(valorReceita);
+         let cardReceita = '';
+                cardReceita += '<div class="info-box">';
+                    cardReceita += '<span class="info-box-icon  bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>';
+                    cardReceita += '<div class="info-box-content">';
+                        cardReceita += '<span class="info-box-text"><b> RECEITAS </b></span>';
+                        cardReceita += '<span class="info-box-number">';
+                        cardReceita +=  '$'+ valor ;
+
+                        cardReceita += '</span>';
+                    cardReceita += '</div>';
+                cardReceita += '</div>';
+                $('#clsCardReceita').append(cardReceita);
+
+        } 
+
+    function updateValueCardReceita(newValue) {
+        $('.info-box-number').text(newValue);
+        $('.info-box-text').text('RECEITA');
+
+    } 
+
+
+
+       
+
     $selectBar.change(function(event) {
         idBarSelecionado = $(this).val();
+        updateValueCardReceita('170');
 
-        $('#categoriesBar').empty();
+              $('#categoriesBar').empty();
 
         if (idBarSelecionado) {
             $("#categoriesBar").show();
@@ -338,25 +364,26 @@ $(function() {
             $("categoriesBar").hide();
         }
 
-
     });
+
 
     //Fazendo
 
     $selectCategories.change(function(event) {
         idCategories = $(this).val();
-
+        $( "div" ).remove( ".divBox" );
 
         if (idCategories) {
-
+            $(event.target).parent("#divBoxTotalItens").remove(); 
+                     
             console.log('ID categoria selecionada' + idCategories);
 
             let cardTotalItens = '';
-            cardTotalItens += '<div class="info-box mb-3">';
+            cardTotalItens += '<div class="info-box mb-3" divBox>';
             cardTotalItens +=
                 '     <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-qrcode"></i></span>';
             cardTotalItens += '      <div class="info-box-content">';
-            cardTotalItens += '             <span class="info-box-text"><b>TOTAL ITENS</b></span>';
+            cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
             cardTotalItens += '             <span class="info-box-number">';
             cardTotalItens += '                 <?= $qtdTotalDia ?>';
             cardTotalItens += '             </span>';
