@@ -90,12 +90,12 @@ class HomeController extends Controller
 
  
 
-    public function selectBar($infoBars)
-    {
-        // return redirect(Session::get($infoBars));
+    // public function selectBar($infoBars)
+    // {
+    //     // return redirect(Session::get($infoBars));
 
-        return redirect(route('bar.selectBar', ['infoBars' => $infoBars]));
-    }
+    //     return redirect(route('bar.selectBar', ['infoBars' => $infoBars]));
+    // }
 
     // public function verificacaoDoUsario($id){
 

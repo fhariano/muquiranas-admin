@@ -46,109 +46,109 @@
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardMedia'>
 
             </div>
-     <div class="card-body" >
-     
-
-  
-            <div class="card sr-only" id='tabelaProdutos'>
-                <div class="card-header border-0">
-                    <h3 class="card-title">TABELA DE PRODUTOS</h3>
-                    <div class="card-tools">
+            <div class="card-body">
 
 
+
+                <div class="card sr-only" id='tabelaProdutos'>
+                    <div class="card-header border-0">
+                        <h3 class="card-title">TABELA DE PRODUTOS</h3>
+                        <div class="card-tools">
+
+
+                        </div>
                     </div>
-                </div>
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-striped table-valign-middle">
-                        <thead>
-                            <tr>
-                                <th>Produto</th>
-                                <th>Quantidade</th>
-                                <th>Preço</th>
-                                <th>Média</th>
-                            
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-striped table-valign-middle">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Quantidade</th>
+                                    <th>Preço</th>
+                                    <th>Média</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
 
 
-                                    <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7583007/thumb/d7e95e59-3e56-49d6-8f4c-809a597499f6.png" alt="Product 1"
-                                        class="img-circle img-size-32 mr-2">
+                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7583007/thumb/d7e95e59-3e56-49d6-8f4c-809a597499f6.png"
+                                            alt="Product 1" class="img-circle img-size-32 mr-2">
                                         STELLA ARTOIS
-                                </td>
-                                <td>3 <td>
-                                <td>$7,00</td>
-                                <td>
-                                    <!-- <small class="text-success mr-1">
+                                    </td>
+                                    <td>3 </td>
+                                    <td>$7,00</td>
+                                    <td>
+                                        <!-- <small class="text-success mr-1">
                                         <i class="fas fa-arrow-up"></i>
                                         12%
                                     </small> -->
-                                    12,00
-                                </td>
-                              
-                            </tr>
-                          
-                                
-                          
-                            <tr>
-                                <td>
-                                    <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689807/47477094-2cea-4d34-bf7a-a0d1024ed1f4.png" alt="Product 1"
-                                        class="img-circle img-size-32 mr-2">
+                                        12,00
+                                    </td>
+
+                                </tr>
+
+
+
+                                <tr>
+                                    <td>
+                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689807/47477094-2cea-4d34-bf7a-a0d1024ed1f4.png"
+                                            alt="Product 1" class="img-circle img-size-32 mr-2">
                                         BRAHMA EXTRA WEISS
-                                </td>
-                                <td>2 <td>
-                                <td>$5,00</td>
-                                <td>
-                                    <!-- <small class="text-warning mr-1">
+                                    </td>
+                                    <td>2 </td>
+                                    <td>$5,00</td>
+                                    <td>
+                                        <!-- <small class="text-warning mr-1">
                                         <i class="fas fa-arrow-down"></i>
                                         0.5%
                                     </small> -->
-                                    10,00
-                                </td>
-                              
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7543657/aa1bf253-1bae-4272-bc1e-4486c66115bc.png" alt="Product 1"
-                                        class="img-circle img-size-32 mr-2">
-                                   SKOL
-                                </td>
-                                <td>4 <td>
-                                <td>$6,00</td>
-                                <td>
-                                    <!-- <small class="text-danger mr-1">
+                                        10,00
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7543657/aa1bf253-1bae-4272-bc1e-4486c66115bc.png"
+                                            alt="Product 1" class="img-circle img-size-32 mr-2">
+                                        SKOL
+                                    </td>
+                                    <td>4 </td>
+                                    <td>$6,00</td>
+                                    <td>
+                                        <!-- <small class="text-danger mr-1">
                                         <i class="fas fa-arrow-down"></i>
                                         3%
                                     </small> -->
-                                    9,00
-                                </td>
-                              
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689812/45d81c9f-d6e7-46f4-8a9a-9b791ca3178c.png" alt="Product 1"
-                                        class="img-circle img-size-32 mr-2">
+                                        9,00
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689812/45d81c9f-d6e7-46f4-8a9a-9b791ca3178c.png"
+                                            alt="Product 1" class="img-circle img-size-32 mr-2">
                                         CERVEJA BECKS
-                                    <!-- <span class="badge bg-danger">NEW</span> -->
-                                </td>
-                                <td>6<td>
-                                <td>$8,00</td>
-                                <td>
-                                    <!-- <small class="text-success mr-1">
+                                        <!-- <span class="badge bg-danger">NEW</span> -->
+                                    </td>
+                                    <td>6</td>
+                                    <td>$8,00</td>
+                                    <td>
+                                        <!-- <small class="text-success mr-1">
                                         <i class="fas fa-arrow-up"></i>
                                         63%
                                     </small> -->
-                                  11,00
-                                </td>
-                              
-                            </tr>
-                        </tbody>
-                    </table>
+                                        11,00
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
         </div>
     </div>
@@ -291,45 +291,109 @@ $(function() {
     let $idBarSelecionado = 1;
     $('#selectBar').select2();
     $('#categoriesBar').select2();
+    var qtdTotalDia = '30,00';
+    var totalDia = '180,00';
+    var media = '70,00';
+    var control = 0;
+
+    valorReceita = '250,00';
+    text = 'RECEITAS';
+
+    cardReceita(valorReceita, text);
+    //CARDS 
+    function cardReceita(valor, text) {
+
+        let cardReceita = '';
+        cardReceita += '<div class="info-box">';
+        cardReceita +=
+            '<span class="info-box-icon  bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>';
+        cardReceita += '<div class="info-box-content">';
+        cardReceita += '<span class="info-box-text-receita"><b> RECEITAS </b></span>';
+        cardReceita += '<span class="info-box-number-receita">';
+        cardReceita += '$' + valor;
+
+        cardReceita += '</span>';
+        cardReceita += '</div>';
+        cardReceita += '</div>';
+        $('#clsCardReceita').append(cardReceita);
+
+    }
 
 
-valorReceita = '250,00';
-text = 'RECEITAS';
 
-cardReceita(valorReceita, text);
-    
-        function cardReceita(valor,text){
-            console.log(valorReceita);
-         let cardReceita = '';
-                cardReceita += '<div class="info-box">';
-                    cardReceita += '<span class="info-box-icon  bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>';
-                    cardReceita += '<div class="info-box-content">';
-                        cardReceita += '<span class="info-box-text"><b> RECEITAS </b></span>';
-                        cardReceita += '<span class="info-box-number">';
-                        cardReceita +=  '$'+ valor ;
-
-                        cardReceita += '</span>';
-                    cardReceita += '</div>';
-                cardReceita += '</div>';
-                $('#clsCardReceita').append(cardReceita);
-
-        } 
+    function cardItens (valor) {
+        let cardTotalItens = '';
+        cardTotalItens += '<div class="info-box mb-3" divBox>';
+        cardTotalItens +=
+            '     <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-qrcode"></i></span>';
+        cardTotalItens += '      <div class="info-box-content">';
+        cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
+        cardTotalItens += '             <span class="info-box-number-itens">';
+        cardTotalItens += '              $' + valor;
+        cardTotalItens += '             </span>';
+        cardTotalItens += '       </div>';
+        cardTotalItens += '       </div>';
+        cardTotalItens += '       </div>';
+        $('#clsCardITotaltens').append(cardTotalItens);
+        $("#clsCardITotaltens").removeClass("sr-only");
+    }
 
     function updateValueCardReceita(newValue) {
-        $('.info-box-number').text(newValue);
-        $('.info-box-text').text('RECEITA');
+        $('.info-box-number-receita').text(newValue);
+        $('.info-box-text-receita').text('RECEITA');
+    }
+    
+    function updateValueCardItens(newValue) {
+        $('.info-box-number-itens').text(newValue);
+   
+    }
+    function updateValueCardTotal(newValue) {
+        $('.info-box-number-total').text(newValue);
+   
+    }
+    function updateValueCardMedia(newValue) {
+        $('.info-box-number-media').text(newValue);
+   
+    }
 
-    } 
+    function cardTotal (valor){
+        let cardTotal = '';
+            cardTotal += '<div class="info-box mb-3">';
+            cardTotal +=
+                '<span class="info-box-icon bg-info elevation-1"><i class="fas fa-qrcode"></i></span>';
+            cardTotal += '<div class="info-box-content">';
+            cardTotal += '<span class="info-box-text"><b>TOTAL</b></span>';
+            cardTotal += '<span class="info-box-number-total">';
+            cardTotal += '$' + valor;
+            cardTotal += '</span>';
+            cardTotal += '</div>';
+            cardTotal += '</div>';
+
+            $('#clsCardTotal').append(cardTotal);
+            $("#clsCardTotal").removeClass("sr-only");
+    }
+
+    function cardMedia (valor){
+
+        $('#clsCardMedia').append(
+                '<div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fas fa-qrcode"></i></span> <div class="info-box-content"> <span class="info-box-text"><b>MÉDIA</b></span> <span class="info-box-number-media">$' + valor + '  </span> </div></div> '
+            )
+           $("#clsCardMedia").removeClass("sr-only");
+
+    }
 
 
 
-       
+
 
     $selectBar.change(function(event) {
+        
+        //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
         idBarSelecionado = $(this).val();
+
         updateValueCardReceita('170');
 
-              $('#categoriesBar').empty();
+        $('#categoriesBar').empty();
 
         if (idBarSelecionado) {
             $("#categoriesBar").show();
@@ -346,7 +410,7 @@ cardReceita(valorReceita, text);
                 success: function(categories) {
                     $("#categoriesBar").append(
                         '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
-                        )
+                    )
 
                     $.each(categories, function(key, value) {
                         $("#selectCategories").removeClass("sr-only");
@@ -370,53 +434,35 @@ cardReceita(valorReceita, text);
     //Fazendo
 
     $selectCategories.change(function(event) {
+        
         idCategories = $(this).val();
-        $( "div" ).remove( ".divBox" );
+        $("div").remove(".divBox");
 
         if (idCategories) {
-            $(event.target).parent("#divBoxTotalItens").remove(); 
-                     
-            console.log('ID categoria selecionada' + idCategories);
+        
+            if(control !=1){
 
-            let cardTotalItens = '';
-            cardTotalItens += '<div class="info-box mb-3" divBox>';
-            cardTotalItens +=
-                '     <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-qrcode"></i></span>';
-            cardTotalItens += '      <div class="info-box-content">';
-            cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
-            cardTotalItens += '             <span class="info-box-number">';
-            cardTotalItens += '                 <?= $qtdTotalDia ?>';
-            cardTotalItens += '             </span>';
-            cardTotalItens += '       </div>';
-            cardTotalItens += '       </div>';
-            cardTotalItens += '       </div>';
+                $(event.target).parent("#divBoxTotalItens").remove();
+                cardItens(qtdTotalDia);
+                cardTotal(totalDia);
+                cardMedia(media);   
+                $("#tabelaProdutos").removeClass("sr-only");
+                control = 1; 
+            }else{
+                qtdIten = '177';
+                qtdTotal ='277';
+                qtdmedia = '377';
+                updateValueCardItens(qtdIten);
+                updateValueCardTotal(qtdTotal);
+                updateValueCardMedia(qtdmedia);
 
+                //criar a função que mudará a informações da tabela 
 
-            let cardTotal = '';
-            cardTotal += '<div class="info-box mb-3">';
-            cardTotal +=
-                '<span class="info-box-icon bg-info elevation-1"><i class="fas fa-qrcode"></i></span>';
-            cardTotal += '<div class="info-box-content">';
-            cardTotal += '<span class="info-box-text"><b>TOTAL</b></span>';
-            cardTotal += '<span class="info-box-number">';
-            cardTotal += '$ <?= $totalDia ?>,00';
-            cardTotal += '</span>';
-            cardTotal += '</div>';
-            cardTotal += '</div>';
+            }
 
-            $("#tabelaProdutos").removeClass("sr-only");
+      
+        
 
-            $('#clsCardITotaltens').append(cardTotalItens);
-            $("#clsCardITotaltens").removeClass("sr-only");
-
-            $('#clsCardTotal').append(cardTotal);
-            $("#clsCardTotal").removeClass("sr-only");
-
-
-            $('#clsCardMedia').append(
-                '<div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fas fa-qrcode"></i></span> <div class="info-box-content"> <span class="info-box-text"><b>MÉDIA</b></span> <span class="info-box-number">$<?= $mediaDia?> </span> </div></div> '
-                )
-            $("#clsCardMedia").removeClass("sr-only");
 
 
             // $.ajax({

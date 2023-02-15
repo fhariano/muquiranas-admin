@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
+use App\Models\Orders;
 use App\Models\BarsHistory;
 use JeroenNoten\LaravelAdminLte\View\Components\Form\Select;
 use Laravel\Sail\Console\PublishCommand;
@@ -60,15 +61,36 @@ class BarsController extends Controller
         }else{
 
            $fieldsBarsUser = $this->UserIsOwnerOfBar(Auth::user()->id);
+       
+             $resultBars = $this->getBarIds($fieldsBarsUser);
+            // dd($resultBars);
+          
+         
           
            return view('bar.selectBar')
            ->with('fieldsBarsUser', $fieldsBarsUser);
-
-           // $this->atualizaSession($fieldUserAtual);
+           $this->atualizaSession($fieldUserAtual);
         }
 
    
     }
+
+    public function getBarIds($bars) {
+        $barIds = array();
+        foreach ($bars as $bar) {
+          $barIds[] = $bar->bar_id;
+        }
+        return $barIds;
+      }
+
+      public function consolidadoReceitas($idBar){
+        $totalBar = Orders::select(
+            DB::raw('sum(total) as totalBar'),
+        )
+            ->where('bar_id', $idBar)
+            ->get();  
+        return $totalBar[0]->totalBar;
+      }
 
     /**
      * Show the form for creating a new resource.
