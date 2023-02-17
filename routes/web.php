@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Blade;
 
 Route::get('/', function () {
     $idbarSelecionado = session()->get('bar_id');
-    if(autenticacaoBar($idbarSelecionado) == false){
+    if(autenticacaoBar($idbarSelecionado) == false & session()->get('group_id') != 6 ){
         return redirect(route('bar.selectBar'));
     }else{
         return redirect('/home');

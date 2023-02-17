@@ -53,9 +53,10 @@ class HomeController extends Controller
                     ->with('statusBar', $statusBar)
                     ->with('group', $group)
                     ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
+                    ->with('receitas', $this->receitasBar)
                     ->with('totalDia', $resultConsolidado['totalDia'])
                     ->with('mediaDia', $resultConsolidado['mediaDia'])
-                    ->with('totalGeral', $resultConsolidado['totalGeral'])
+                    // ->with('totalGeral', $resultConsolidado['totalGeral'])
                     ->with('name', $resultConsolidado['name'])
                     ->with('nameBar', $nameBar)
                     ->with('fieldsBar', $fieldsBar)
@@ -254,7 +255,7 @@ class HomeController extends Controller
             ->where('orders.bar_id', $idBar)
             ->where('orders.active', 1)
             // ->where('ctg.id', 1) //idCategoria
-            ->whereNotNull('orders.erp_id')
+            ->whereNull('orders.erp_id')
             ->groupBy('nameCategoria')
             ->get();
 
@@ -271,10 +272,12 @@ class HomeController extends Controller
         }
 
         $mediaConsolidadoDia = number_format($consolidoDia[0]->total / $consolidoDia[0]->qtd,2,'.','');
+       
         return [
             "qtdTotalDia" => $consolidoDia[0]->qtd,
             "totalDia" => $consolidoDia[0]->total,
-             "mediaDia" => str_replace('.', ',', $mediaConsolidadoDia),
+            //  "mediaDia" => str_replace('.', ',', $mediaConsolidadoDia),
+             "mediaDia" => $mediaConsolidadoDia,
             //  "totalGeral" => $consolidoDia->totalGeral,
              "totalGeral" => $this->TotalGeralBar($idBar),
             "name" => $consolidoDia[0]->nameCategoria,

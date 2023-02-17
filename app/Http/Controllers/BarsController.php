@@ -22,6 +22,9 @@ class BarsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    protected $receitasBares;
+    
     public function index(Request $request)
     {
         
@@ -41,6 +44,10 @@ class BarsController extends Controller
        
     }
 
+    /**
+     * Função chamado via Ajax na view selectBar, onde vai buscar informações do usuário e do bar no qual ele selecionou. 
+     * e atualizar a session. 
+     */
     public function requestSelectBar(Request $request) 
     {
         $fildsBarSelected = $this->UserIsOwnerOfBarSelected(Auth::user()->id, $request['idBarSelecionado']);
@@ -52,8 +59,14 @@ class BarsController extends Controller
     public function selectBar(Request $request)
     {
 
-                     
+        /***
+            Pega o id o usuário e verifica o group. 
+            Atualiza os dados da session se for diferente de 6 e 7  e redireciona para home. 
+            se não, tras informações dos bares que estão associados ao usuário, redireciona o mesmo para o 
+            selecionar um bar . 
+        */            
         $fieldUserAtual = $this->fieldUser(Auth::user()->id);
+        
       
         if($fieldUserAtual[0]->group_id !=6 && $fieldUserAtual[0]->group_id !=7){
             $this->atualizaSession($fieldUserAtual);
@@ -61,12 +74,9 @@ class BarsController extends Controller
         }else{
 
            $fieldsBarsUser = $this->UserIsOwnerOfBar(Auth::user()->id);
-       
-             $resultBars = $this->getBarIds($fieldsBarsUser);
-            // dd($resultBars);
-          
-         
-          
+        //    $this->receitasBares = $this->getReceitaBar($fieldsBarsUser);
+          $this->atualizaReceitasSession($this->getReceitaBar($fieldsBarsUser));
+   
            return view('bar.selectBar')
            ->with('fieldsBarsUser', $fieldsBarsUser);
            $this->atualizaSession($fieldUserAtual);
@@ -75,23 +85,25 @@ class BarsController extends Controller
    
     }
 
-    public function getBarIds($bars) {
-        $barIds = array();
+    public function getReceitaBar($bars) {
+        $resultReceitaBar = 0;
         foreach ($bars as $bar) {
-          $barIds[] = $bar->bar_id;
+        $resultReceitaBar += $this->consolidadoReceitas($bar->bar_id);
         }
-        return $barIds;
-      }
+        return $resultReceitaBar;
+    }
 
-      public function consolidadoReceitas($idBar){
+    public function consolidadoReceitas($idBar){
         $totalBar = Orders::select(
             DB::raw('sum(total) as totalBar'),
         )
             ->where('bar_id', $idBar)
+            ->where('active', 1)
+            ->whereNull('erp_id')
             ->get();  
         return $totalBar[0]->totalBar;
-      }
-
+    }
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -143,7 +155,7 @@ class BarsController extends Controller
      */
     public function show()
     {
-        //MELHORAR A FUNÇ
+        //MELHORAR A FUNÇÃO
         if ($this->group_id === 1) {
 
             try {
@@ -305,6 +317,7 @@ class BarsController extends Controller
                 DB::raw('bars.status as statusBar'),
                 DB::raw('bars.short_name as nameBar'),
                 DB::raw('users_bars.is_owner as is_owner'),
+               
             )
                 ->join('bars as bars', 'bars.id', '=', 'bar_id')
                 ->where([
@@ -332,7 +345,7 @@ class BarsController extends Controller
             ->where([
                 'user_id' => $idUser,
                 'is_owner' => '1',
-               
+                'group_id' => '6'
             ])
             ->get();
 
@@ -360,15 +373,21 @@ class BarsController extends Controller
         return json_decode($resultIsOwnerOfBarSelected);
     }
 
-
+//Atualizar dados da sessão ;
     public function atualizaSession($fields)
     {
-        return session([
+               return session([
             'bar_id' => $fields[0]->bar_id,
             'nameBar' => $fields[0]->nameBar,
             'group_id' => $fields[0]->group_id,
             'statusBar' => $fields[0]->statusBar,
+         
         ]);
+    }
+
+    public function atualizaReceitasSession($valor)
+    {
+        return session(['receitasBar' =>  $valor]);
     }
 
 }

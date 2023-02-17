@@ -43,9 +43,7 @@
             <div class="clearfix hidden-md-up"></div>
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardTotal'></div>
 
-            <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardMedia'>
-
-            </div>
+            <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardMedia'></div>
             <div class="card-body">
 
 
@@ -207,7 +205,7 @@
                         <a href="#" class="nav-link">
                             <?= $name ?>
                             <span class="float-right text-success">
-                                <?= $qtdTotalDia ?>
+                                ?= $qtdTotalDia ?>
                             </span>
                         </a>
                     </li>
@@ -291,26 +289,26 @@ $(function() {
     let $idBarSelecionado = 1;
     $('#selectBar').select2();
     $('#categoriesBar').select2();
-    var qtdTotalDia = '30,00';
-    var totalDia = '180,00';
-    var media = '70,00';
+    // var qtdTotalDia = '30,00';
+    // var totalDia = '180,00';
+    // var media = '70,00';
     var control = 0;
 
     valorReceita = '250,00';
-    text = 'RECEITAS';
+    // text = 'RECEITAS';
 
-    cardReceita(valorReceita, text);
-    //CARDS 
-    function cardReceita(valor, text) {
+    cardReceita(valorReceita);
+    //CARDS mudar $receitas por valor
+    function cardReceita(valor) {
 
         let cardReceita = '';
         cardReceita += '<div class="info-box">';
         cardReceita +=
-            '<span class="info-box-icon  bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>';
+            '<span class="info-box-icon bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>';
         cardReceita += '<div class="info-box-content">';
         cardReceita += '<span class="info-box-text-receita"><b> RECEITAS </b></span>';
         cardReceita += '<span class="info-box-number-receita">';
-        cardReceita += '$' + valor;
+        cardReceita += '$' + <?=$receitas?>;
 
         cardReceita += '</span>';
         cardReceita += '</div>';
@@ -321,11 +319,11 @@ $(function() {
 
 
 
-    function cardItens (valor) {
+    function cardItens (valor,icon) {
         let cardTotalItens = '';
         cardTotalItens += '<div class="info-box mb-3" divBox>';
         cardTotalItens +=
-            '     <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-qrcode"></i></span>';
+            '     <span class="info-box-icon cardCategoria bg-danger elevation-1 material-icons">'+icon+'</span>';
         cardTotalItens += '      <div class="info-box-content">';
         cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
         cardTotalItens += '             <span class="info-box-number-itens">';
@@ -339,47 +337,59 @@ $(function() {
     }
 
     function updateValueCardReceita(newValue) {
-        $('.info-box-number-receita').text(newValue);
+        $('.info-box-number-receita').text('$'+ newValue);
         $('.info-box-text-receita').text('RECEITA');
     }
     
     function updateValueCardItens(newValue) {
         $('.info-box-number-itens').text(newValue);
+
    
     }
-    function updateValueCardTotal(newValue) {
-        $('.info-box-number-total').text(newValue);
+    function updateValueCardTotal(newValue,iconCard) {
+        $('.info-box-number-total').text('$' + newValue);
+        $('.cardCategoria').text(iconCard);
    
     }
     function updateValueCardMedia(newValue) {
-        $('.info-box-number-media').text(newValue);
+        $('.info-box-number-media').text('$'+ newValue);
    
     }
 
-    function cardTotal (valor){
-        let cardTotal = '';
-            cardTotal += '<div class="info-box mb-3">';
-            cardTotal +=
-                '<span class="info-box-icon bg-info elevation-1"><i class="fas fa-qrcode"></i></span>';
-            cardTotal += '<div class="info-box-content">';
-            cardTotal += '<span class="info-box-text"><b>TOTAL</b></span>';
-            cardTotal += '<span class="info-box-number-total">';
-            cardTotal += '$' + valor;
-            cardTotal += '</span>';
-            cardTotal += '</div>';
-            cardTotal += '</div>';
+    function cardTotal (valor,icon){
+ 
+        let cardTotalp = '';
+            cardTotalp += '<div class="info-box mb-3" divBox>';
+            cardTotalp +=  '<span class="info-box-icon cardCategoria bg-info elevation-1 material-icons">'+icon+'</span>';
+            cardTotalp += '<div class="info-box-content">';
+            cardTotalp += '<span class="info-box-text"><b>TOTAL</b></span>';
+            cardTotalp += '<span class="info-box-number-total">';
+            cardTotalp += '$' + valor;
+            cardTotalp += '</span>';
+            cardTotalp += '</div>';
+            cardTotalp += '</div>';
 
-            $('#clsCardTotal').append(cardTotal);
+            $('#clsCardTotal').append(cardTotalp);
             $("#clsCardTotal").removeClass("sr-only");
     }
 
-    function cardMedia (valor){
+    function cardMedia (valor,icon){
+     
+        let cardMedia = '';
+            cardMedia += '<div class="info-box mb-3" divBox>';
+            cardMedia += '<span class="info-box-icon cardCategoria bg-warning elevation-1 material-icons">'+icon+'</span>';
+            cardMedia += '<div class="info-box-content">';
+            cardMedia += '<span class="info-box-text"><b>MÉDIA</b></span>';
+            cardMedia += '<span class="info-box-number-media">';
+            cardMedia += '<span class="info-box-number-media">';
+            cardMedia += '$' + valor +'';
+            cardMedia += '</span>';
+            cardMedia += '</div>';
+            cardMedia += '</div>';
 
-        $('#clsCardMedia').append(
-                '<div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fas fa-qrcode"></i></span> <div class="info-box-content"> <span class="info-box-text"><b>MÉDIA</b></span> <span class="info-box-number-media">$' + valor + '  </span> </div></div> '
-            )
-           $("#clsCardMedia").removeClass("sr-only");
-
+            $('#clsCardMedia').append(cardMedia); 
+            $("#clsCardMedia").removeClass("sr-only");
+   
     }
 
 
@@ -391,7 +401,7 @@ $(function() {
         //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
         idBarSelecionado = $(this).val();
 
-        updateValueCardReceita('170');
+        updateValueCardReceita('170');//função ajax para atualizar o valor da receita baseado no is do bar selecionado.
 
         $('#categoriesBar').empty();
 
@@ -441,19 +451,20 @@ $(function() {
         if (idCategories) {
         
             if(control !=1){
-
+                icon = 'sports_bar';
                 $(event.target).parent("#divBoxTotalItens").remove();
-                cardItens(qtdTotalDia);
-                cardTotal(totalDia);
-                cardMedia(media);   
+                cardItens(<?=$qtdTotalDia?>,icon); 
+                cardMedia(<?=$mediaDia?>,icon);   
+                cardTotal(<?=$totalDia?>,icon);
                 $("#tabelaProdutos").removeClass("sr-only");
                 control = 1; 
             }else{
                 qtdIten = '177';
                 qtdTotal ='277';
                 qtdmedia = '377';
+                icon = 'delivery_dining';
                 updateValueCardItens(qtdIten);
-                updateValueCardTotal(qtdTotal);
+                updateValueCardTotal(qtdTotal,icon);
                 updateValueCardMedia(qtdmedia);
 
                 //criar a função que mudará a informações da tabela 
