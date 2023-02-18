@@ -85,8 +85,22 @@ class BarsController extends Controller
    
     }
 
-    public function getReceitaBar($bars) {
+    public function requestValorReceita(Request $request){
+
         $resultReceitaBar = 0;
+       
+        try {
+            $resultReceitaBar = $this->consolidadoReceitas($request->idBar);
+        } catch (\Throwable $th) {
+            return $th;
+        }
+
+        return $resultReceitaBar;
+    }
+
+    public function getReceitaBar($bars) {    
+        $resultReceitaBar = 0;
+
         foreach ($bars as $bar) {
         $resultReceitaBar += $this->consolidadoReceitas($bar->bar_id);
         }
@@ -254,7 +268,7 @@ class BarsController extends Controller
     public function updateStatusBar(Request $request, Bars $Bars) 
     {
         // $idBar = Auth::user()->bar_id;
-
+        
        
         try {
             $this->actionBar($request->status);

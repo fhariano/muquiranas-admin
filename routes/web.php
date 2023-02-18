@@ -38,7 +38,7 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
-// Route::post('/updateStatusBar', [HomeController::class, 'updateStatusBar'])->name('updateStatusBar')->middleware('auth');
+ Route::post('/requestConsolidadoDados', [HomeController::class, 'requestConsolidadoDados'])->name('requestConsolidadoDados')->middleware('auth');
 // Route::get('/categorias/create', [CategoriesController::class, 'create'])->name('categorias.create');
 
 
@@ -92,6 +92,7 @@ Route::name('bar.')->middleware('auth')->prefix('/bar')->controller(BarsControll
     Route::put('/update','update')->name('update');
     Route::put('/destroy','destroy')->name('destroy');
     Route::post('/updateStatusBar','updateStatusBar')->name('updateStatusBar');
+    Route::post('/requestValorReceita','requestValorReceita')->name('requestValorReceita'); 
 
 
 

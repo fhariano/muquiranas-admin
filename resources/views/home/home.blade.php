@@ -283,6 +283,7 @@ $(function() {
     urlBase = window.location.origin;
     var urlController = '/resultBars';
     var rotaHome = '/categorias/';
+    var rotaBar = '/bar/';
     // const statusBar = document.getElementById('statusBar').value;
     const $selectBar = $('#selectBar');
     const $selectCategories = $('#categoriesBar');
@@ -292,6 +293,7 @@ $(function() {
     // var qtdTotalDia = '30,00';
     // var totalDia = '180,00';
     // var media = '70,00';
+    var barUser = 0;
     var control = 0;
 
     valorReceita = '250,00';
@@ -319,11 +321,12 @@ $(function() {
 
 
 
-    function cardItens (valor,icon) {
+    function cardItens(valor, icon) {
         let cardTotalItens = '';
         cardTotalItens += '<div class="info-box mb-3" divBox>';
         cardTotalItens +=
-            '     <span class="info-box-icon cardCategoria bg-danger elevation-1 material-icons">'+icon+'</span>';
+            '     <span class="info-box-icon cardCategoria bg-danger elevation-1 material-icons">' + icon +
+            '</span>';
         cardTotalItens += '      <div class="info-box-content">';
         cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
         cardTotalItens += '             <span class="info-box-number-itens">';
@@ -337,59 +340,67 @@ $(function() {
     }
 
     function updateValueCardReceita(newValue) {
-        $('.info-box-number-receita').text('$'+ newValue);
+        $("#clsCardReceita").removeClass("sr-only");
+        $('.info-box-number-receita').text('$' + newValue);
         $('.info-box-text-receita').text('RECEITA');
     }
-    
+
     function updateValueCardItens(newValue) {
+        $("#clsCardITotaltens").removeClass("sr-only");         
         $('.info-box-number-itens').text(newValue);
 
-   
+
     }
-    function updateValueCardTotal(newValue,iconCard) {
+
+    function updateValueCardTotal(newValue, iconCard) {
+        $("#clsCardTotal").removeClass("sr-only");
         $('.info-box-number-total').text('$' + newValue);
         $('.cardCategoria').text(iconCard);
-   
+
     }
+
     function updateValueCardMedia(newValue) {
-        $('.info-box-number-media').text('$'+ newValue);
-   
+        $("#clsCardMedia").removeClass("sr-only");
+        $('.info-box-number-media').text('$' + newValue);
+
     }
 
-    function cardTotal (valor,icon){
- 
+    function cardTotal(valor, icon) {
+
         let cardTotalp = '';
-            cardTotalp += '<div class="info-box mb-3" divBox>';
-            cardTotalp +=  '<span class="info-box-icon cardCategoria bg-info elevation-1 material-icons">'+icon+'</span>';
-            cardTotalp += '<div class="info-box-content">';
-            cardTotalp += '<span class="info-box-text"><b>TOTAL</b></span>';
-            cardTotalp += '<span class="info-box-number-total">';
-            cardTotalp += '$' + valor;
-            cardTotalp += '</span>';
-            cardTotalp += '</div>';
-            cardTotalp += '</div>';
+        cardTotalp += '<div class="info-box mb-3" divBox>';
+        cardTotalp += '<span class="info-box-icon cardCategoria bg-info elevation-1 material-icons">' + icon +
+            '</span>';
+        cardTotalp += '<div class="info-box-content">';
+        cardTotalp += '<span class="info-box-text"><b>TOTAL</b></span>';
+        cardTotalp += '<span class="info-box-number-total">';
+        cardTotalp += '$' + valor;
+        cardTotalp += '</span>';
+        cardTotalp += '</div>';
+        cardTotalp += '</div>';
 
-            $('#clsCardTotal').append(cardTotalp);
-            $("#clsCardTotal").removeClass("sr-only");
+        $('#clsCardTotal').append(cardTotalp);
+        $("#clsCardTotal").removeClass("sr-only");
     }
 
-    function cardMedia (valor,icon){
-     
-        let cardMedia = '';
-            cardMedia += '<div class="info-box mb-3" divBox>';
-            cardMedia += '<span class="info-box-icon cardCategoria bg-warning elevation-1 material-icons">'+icon+'</span>';
-            cardMedia += '<div class="info-box-content">';
-            cardMedia += '<span class="info-box-text"><b>MÉDIA</b></span>';
-            cardMedia += '<span class="info-box-number-media">';
-            cardMedia += '<span class="info-box-number-media">';
-            cardMedia += '$' + valor +'';
-            cardMedia += '</span>';
-            cardMedia += '</div>';
-            cardMedia += '</div>';
+    function cardMedia(valor, icon) {
 
-            $('#clsCardMedia').append(cardMedia); 
-            $("#clsCardMedia").removeClass("sr-only");
-   
+        let cardMedia = '';
+        cardMedia += '<div class="info-box mb-3" divBox>';
+        cardMedia += '<span class="info-box-icon cardCategoria bg-warning elevation-1 material-icons">' + icon +
+            '</span>';
+        cardMedia += '<div class="info-box-content">';
+        cardMedia += '<span class="info-box-text"><b>MÉDIA</b></span>';
+        cardMedia += '<span class="info-box-number-media">';
+        cardMedia += '<span class="info-box-number-media">';
+        cardMedia += '$' + valor + '';
+        cardMedia += '</span>';
+        cardMedia += '</div>';
+        cardMedia += '</div>';
+
+        $('#clsCardMedia').append(cardMedia);
+        $("#clsCardMedia").removeClass("sr-only");
+
     }
 
 
@@ -397,13 +408,46 @@ $(function() {
 
 
     $selectBar.change(function(event) {
-        
-        //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
-        idBarSelecionado = $(this).val();
 
-        updateValueCardReceita('170');//função ajax para atualizar o valor da receita baseado no is do bar selecionado.
+        //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
+        barUser = $(this).val();
+
+     //função ajax para atualizar o valor da receita baseado no is do bar selecionado.
 
         $('#categoriesBar').empty();
+        $("#clsCardReceita").addClass("sr-only");
+        $("#clsCardITotaltens").addClass("sr-only");
+        $("#clsCardTotal").addClass("sr-only"); 
+        $("#clsCardMedia").addClass("sr-only");
+        getReceitaBarForCard(barUser);
+        getCategoriesForSelect(barUser);
+
+    });
+
+    function getReceitaBarForCard(idBar) {
+
+            $.ajax({
+                type: "POST",
+                url: urlBase + rotaBar + 'requestValorReceita',
+                data: {
+                    'idBar': idBar,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: "json",
+                success: function(success) {
+
+                 
+                    updateValueCardReceita(success); 
+              
+                }
+            });
+      
+
+    }
+
+    function getCategoriesForSelect(idBar) {
 
         if (idBarSelecionado) {
             $("#categoriesBar").show();
@@ -418,17 +462,17 @@ $(function() {
                 },
                 dataType: "json",
                 success: function(categories) {
+
+               
                     $("#categoriesBar").append(
                         '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
                     )
 
                     $.each(categories, function(key, value) {
                         $("#selectCategories").removeClass("sr-only");
-
+                  
                         $("#categoriesBar").append('<option value="' + value['id'] +
                             '">' + value['name'] + '<option>');
-
-
                     });
 
                     $("#categoriesBar").trigger("change");
@@ -438,71 +482,105 @@ $(function() {
             $("categoriesBar").hide();
         }
 
-    });
+    }
 
+    function getCategoriesForSelect(idBar) {
 
-    //Fazendo
+        if (idBarSelecionado) {
+            $("#categoriesBar").show();
+            $.ajax({
+                type: "POST",
+                url: urlBase + rotaHome + 'getCategories',
+                data: {
+                    'idBarSelecionado': idBarSelecionado,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: "json",
+                success: function(categories) {
+
+                    console.log('categorias' + categories);
+                    $("#categoriesBar").append(
+                        '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
+                    )
+
+                    $.each(categories, function(key, value) {
+                        $("#selectCategories").removeClass("sr-only");
+
+                        $("#categoriesBar").append('<option value="' + value['id'] +
+                            '">' + value['name'] + '<option>');
+                    });
+
+                    $("#categoriesBar").trigger("change");
+                }
+            });
+        } else {
+            $("categoriesBar").hide();
+        }
+
+    }
 
     $selectCategories.change(function(event) {
-        
+
         idCategories = $(this).val();
         $("div").remove(".divBox");
 
         if (idCategories) {
-        
-            if(control !=1){
+
+            if (control != 1) {
                 icon = 'sports_bar';
                 $(event.target).parent("#divBoxTotalItens").remove();
-                cardItens(<?=$qtdTotalDia?>,icon); 
-                cardMedia(<?=$mediaDia?>,icon);   
-                cardTotal(<?=$totalDia?>,icon);
+                consolidadoFields = getConsolidadoDados(idBar, idCategories);
+                cardItens(<?=$qtdTotalDia?>, icon);
+                cardMedia(<?=$mediaDia?>, icon);
+                cardTotal(<?=$totalDia?>, icon);
                 $("#tabelaProdutos").removeClass("sr-only");
-                control = 1; 
-            }else{
+                control = 1;
+            } else {
                 qtdIten = '177';
-                qtdTotal ='277';
+                qtdTotal = '277';
                 qtdmedia = '377';
                 icon = 'delivery_dining';
+                consolidadoFields = getConsolidadoDados(idBar, idCategories);
                 updateValueCardItens(qtdIten);
-                updateValueCardTotal(qtdTotal,icon);
+                updateValueCardTotal(qtdTotal, icon);
                 updateValueCardMedia(qtdmedia);
 
                 //criar a função que mudará a informações da tabela 
 
             }
 
-      
-        
 
 
 
-            // $.ajax({
-            //     type:"POST",
-            //     url: urlBase + rotaHome + 'getCategories',
-            //     data: {
-            //        'idBarSelecionado':idBarSelecionado,
-            //     },
-            //     headers: {
-            //          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //     },
-            //     dataType:"json",
-            //     success:function(categories){
-            //         $("#categoriesBar").append('<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>')
-
-            //         $.each(categories,function(key,value){
-            //             $("#selectCategories").removeClass("sr-only");
-
-            //         $("#categoriesBar").append('<option value="'+key['id'] +'">' +value['name'] +'<option>');
 
 
-            //         });
-
-            //         $("#categoriesBar").trigger("change");
-            //     }
-            // });
+   
 
         }
     })
+
+
+    function getConsolidadoDados(idBar, categoria){
+
+                 $.ajax({
+                type:"POST",
+                url: urlBase + rotaHome + 'requestConsolidadoDados',
+                data: {
+                   'idBar':idBar,
+                   'categoria':categoria,
+                },
+                headers: {
+                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType:"json",
+                success:function(success){
+                    console.log('Dados do consolidado' + success);
+                    return success;
+                }
+            });
+    }
 
 
     const ctx = document.getElementById('myChart');

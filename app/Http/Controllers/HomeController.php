@@ -180,6 +180,12 @@ class HomeController extends Controller
             ->get();
 
         return json_decode($resultMultAdmin);
+      
+    }
+
+    public function requestConsolidadoDados(Request $request){
+
+        return $this->consolidadoDados($request->idBar);
 
     }
 
@@ -236,7 +242,7 @@ class HomeController extends Controller
     }
 
 
-    public function consolidadoDados($idBar)
+    public function consolidadoDados($idBar)  //colocar $categoriaBar
     {
         $consolidoDia = OrdersItems::select(
             DB::raw('sum(orders_items.quantity) as qtd'),
@@ -244,6 +250,7 @@ class HomeController extends Controller
             DB::raw('sum(orders_items.total) as total'),
             // DB::raw('sum(orders.total) as totalGeral'),
             DB::raw('ctg.name as nameCategoria'),
+            DB::raw('ctg.icon_name as iconCategoria')
         )
             ->join('products as p', 'p.id', '=', 'product_id')
             ->leftJoin('categories As ctg', function ($join) {
@@ -254,7 +261,7 @@ class HomeController extends Controller
             })
             ->where('orders.bar_id', $idBar)
             ->where('orders.active', 1)
-            // ->where('ctg.id', 1) //idCategoria
+            ->where('ctg.id', 1) //idCategoria
             ->whereNull('orders.erp_id')
             ->groupBy('nameCategoria')
             ->get();
@@ -281,6 +288,7 @@ class HomeController extends Controller
             //  "totalGeral" => $consolidoDia->totalGeral,
              "totalGeral" => $this->TotalGeralBar($idBar),
             "name" => $consolidoDia[0]->nameCategoria,
+            "iconCategoria" => $consolidoDia[0]->iconCategoria,
             ];
     }
  

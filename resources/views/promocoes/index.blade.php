@@ -671,7 +671,6 @@
                                 }).format(field.price),
                                 'promos_list_id': field.idList
                                 
-
                             });
 
                         })
@@ -679,10 +678,8 @@
 
                     }).then(() => {
 
-
                         indexDetailsRow = index;
                         $("#detail-product" + index).bootstrapTable('load', dataJson[index]);
-
 
                     });
 
