@@ -38,7 +38,7 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
- Route::post('/requestConsolidadoDados', [HomeController::class, 'requestConsolidadoDados'])->name('requestConsolidadoDados')->middleware('auth');
+ Route::post('/home/requestConsolidadoDados', [HomeController::class, 'requestConsolidadoDados'])->name('requestConsolidadoDados');
 // Route::get('/categorias/create', [CategoriesController::class, 'create'])->name('categorias.create');
 
 

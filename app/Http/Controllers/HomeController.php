@@ -20,7 +20,7 @@ use App\Models\OrdersItems;
 use App\Models\OrdersType;
 use App\Models\Products;
 use Illuminate\Support\Facades\Redirect;
-
+use PhpParser\ErrorHandler\Throwing;
 
 class HomeController extends Controller
 {
@@ -185,7 +185,13 @@ class HomeController extends Controller
 
     public function requestConsolidadoDados(Request $request){
 
-        return $this->consolidadoDados($request->idBar);
+       
+        try{
+             return $this->consolidadoDados($request->idBar);
+        }catch(\Throwable $th){
+            return $th;
+        }
+        
 
     }
 
@@ -250,7 +256,7 @@ class HomeController extends Controller
             DB::raw('sum(orders_items.total) as total'),
             // DB::raw('sum(orders.total) as totalGeral'),
             DB::raw('ctg.name as nameCategoria'),
-            DB::raw('ctg.icon_name as iconCategoria')
+             DB::raw('ctg.icon_name as iconCategoria'),
         )
             ->join('products as p', 'p.id', '=', 'product_id')
             ->leftJoin('categories As ctg', function ($join) {
@@ -263,11 +269,11 @@ class HomeController extends Controller
             ->where('orders.active', 1)
             ->where('ctg.id', 1) //idCategoria
             ->whereNull('orders.erp_id')
-            ->groupBy('nameCategoria')
+            ->groupBy('nameCategoria', 'iconCategoria')
             ->get();
 
        
-
+       
         if ($consolidoDia->count() == 0) {
             return [
                 "qtdTotalDia" => 0,

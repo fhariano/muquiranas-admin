@@ -6,8 +6,7 @@
     <div class="card-body">
         <div class="row" align="center">
             <!-- <select class="selectBar-basic-single form-control bg-primary d-flex justify-content-between" style="width:100%" id="selectBar" name="selectBar"> -->
-            <select class="js-selectBar-ajax form-control bg-primary d-flex justify-content-between" style="width:100%"
-                id="selectBar" name="selectBar">
+            <select class="js-selectBar-ajax form-control bg-primary d-flex justify-content-between" style="width:100%" id="selectBar" name="selectBar">
                 <option class="font-weight-bold sr-only" selected disabled value="" align="center">TODOS</option>
                 @foreach($fieldsBar as $key => $value)
                 <option value="{{$value['id'] }}">{{ $value['name'] }}</option>
@@ -28,7 +27,7 @@
     </div>
 
     <!-- <div class="card-body" >
-     
+
 
     </div> -->
 
@@ -72,8 +71,7 @@
                                     <td>
 
 
-                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7583007/thumb/d7e95e59-3e56-49d6-8f4c-809a597499f6.png"
-                                            alt="Product 1" class="img-circle img-size-32 mr-2">
+                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7583007/thumb/d7e95e59-3e56-49d6-8f4c-809a597499f6.png" alt="Product 1" class="img-circle img-size-32 mr-2">
                                         STELLA ARTOIS
                                     </td>
                                     <td>3 </td>
@@ -92,8 +90,7 @@
 
                                 <tr>
                                     <td>
-                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689807/47477094-2cea-4d34-bf7a-a0d1024ed1f4.png"
-                                            alt="Product 1" class="img-circle img-size-32 mr-2">
+                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689807/47477094-2cea-4d34-bf7a-a0d1024ed1f4.png" alt="Product 1" class="img-circle img-size-32 mr-2">
                                         BRAHMA EXTRA WEISS
                                     </td>
                                     <td>2 </td>
@@ -109,8 +106,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7543657/aa1bf253-1bae-4272-bc1e-4486c66115bc.png"
-                                            alt="Product 1" class="img-circle img-size-32 mr-2">
+                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7543657/aa1bf253-1bae-4272-bc1e-4486c66115bc.png" alt="Product 1" class="img-circle img-size-32 mr-2">
                                         SKOL
                                     </td>
                                     <td>4 </td>
@@ -126,8 +122,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689812/45d81c9f-d6e7-46f4-8a9a-9b791ca3178c.png"
-                                            alt="Product 1" class="img-circle img-size-32 mr-2">
+                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689812/45d81c9f-d6e7-46f4-8a9a-9b791ca3178c.png" alt="Product 1" class="img-circle img-size-32 mr-2">
                                         CERVEJA BECKS
                                         <!-- <span class="badge bg-danger">NEW</span> -->
                                     </td>
@@ -203,7 +198,7 @@
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <?= $name ?>
+                            <?=$name?>
                             <span class="float-right text-success">
                                 ?= $qtdTotalDia ?>
                             </span>
@@ -278,484 +273,507 @@
 @section('js')
 
 <script>
-$(function() {
+    $(function() {
 
-    urlBase = window.location.origin;
-    var urlController = '/resultBars';
-    var rotaHome = '/categorias/';
-    var rotaBar = '/bar/';
-    // const statusBar = document.getElementById('statusBar').value;
-    const $selectBar = $('#selectBar');
-    const $selectCategories = $('#categoriesBar');
-    let $idBarSelecionado = 1;
-    $('#selectBar').select2();
-    $('#categoriesBar').select2();
-    // var qtdTotalDia = '30,00';
-    // var totalDia = '180,00';
-    // var media = '70,00';
-    var barUser = 0;
-    var control = 0;
+        const URL_BASE = window.location.origin;
+        const ROTA_CATEGORIES = '/categorias/';
+        const ROTA_HOME = '/home/';
+        const ROTA_BAR = '/bar/';
+        const URL_CONTROLLER = '/resultBars';
+        valorReceita = '250,00';
 
-    valorReceita = '250,00';
-    // text = 'RECEITAS';
+        let barUser = 0;
+        let idBarSelecionado = 1;
+        let control = 0;
 
-    cardReceita(valorReceita);
-    //CARDS mudar $receitas por valor
-    function cardReceita(valor) {
+        $('#selectBar').select2();
+        $('#categoriesBar').select2();
 
-        let cardReceita = '';
-        cardReceita += '<div class="info-box">';
-        cardReceita +=
-            '<span class="info-box-icon bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>';
-        cardReceita += '<div class="info-box-content">';
-        cardReceita += '<span class="info-box-text-receita"><b> RECEITAS </b></span>';
-        cardReceita += '<span class="info-box-number-receita">';
-        cardReceita += '$' + <?=$receitas?>;
+        const selectBar = $('#selectBar');
+        const selectCategories = $('#categoriesBar');
 
-        cardReceita += '</span>';
-        cardReceita += '</div>';
-        cardReceita += '</div>';
-        $('#clsCardReceita').append(cardReceita);
+        cardReceita(valorReceita);
 
-    }
+        // Funções para criação dos cards
 
+        function cardReceita(valor) {
 
+            let cardReceita = '';
+            cardReceita += '<div class="info-box">';
+            cardReceita +=
+                '<span class="info-box-icon bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>';
+            cardReceita += '<div class="info-box-content">';
+            cardReceita += '<span class="info-box-text-receita"><b> RECEITAS </b></span>';
+            cardReceita += '<span class="info-box-number-receita">';
+            cardReceita += '$' + <?=$receitas?>;
 
-    function cardItens(valor, icon) {
-        let cardTotalItens = '';
-        cardTotalItens += '<div class="info-box mb-3" divBox>';
-        cardTotalItens +=
-            '     <span class="info-box-icon cardCategoria bg-danger elevation-1 material-icons">' + icon +
-            '</span>';
-        cardTotalItens += '      <div class="info-box-content">';
-        cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
-        cardTotalItens += '             <span class="info-box-number-itens">';
-        cardTotalItens += '              $' + valor;
-        cardTotalItens += '             </span>';
-        cardTotalItens += '       </div>';
-        cardTotalItens += '       </div>';
-        cardTotalItens += '       </div>';
-        $('#clsCardITotaltens').append(cardTotalItens);
-        $("#clsCardITotaltens").removeClass("sr-only");
-    }
+            cardReceita += '</span>';
+            cardReceita += '</div>';
+            cardReceita += '</div>';
+            $('#clsCardReceita').append(cardReceita);
 
-    function updateValueCardReceita(newValue) {
-        $("#clsCardReceita").removeClass("sr-only");
-        $('.info-box-number-receita').text('$' + newValue);
-        $('.info-box-text-receita').text('RECEITA');
-    }
-
-    function updateValueCardItens(newValue) {
-        $("#clsCardITotaltens").removeClass("sr-only");         
-        $('.info-box-number-itens').text(newValue);
-
-
-    }
-
-    function updateValueCardTotal(newValue, iconCard) {
-        $("#clsCardTotal").removeClass("sr-only");
-        $('.info-box-number-total').text('$' + newValue);
-        $('.cardCategoria').text(iconCard);
-
-    }
-
-    function updateValueCardMedia(newValue) {
-        $("#clsCardMedia").removeClass("sr-only");
-        $('.info-box-number-media').text('$' + newValue);
-
-    }
-
-    function cardTotal(valor, icon) {
-
-        let cardTotalp = '';
-        cardTotalp += '<div class="info-box mb-3" divBox>';
-        cardTotalp += '<span class="info-box-icon cardCategoria bg-info elevation-1 material-icons">' + icon +
-            '</span>';
-        cardTotalp += '<div class="info-box-content">';
-        cardTotalp += '<span class="info-box-text"><b>TOTAL</b></span>';
-        cardTotalp += '<span class="info-box-number-total">';
-        cardTotalp += '$' + valor;
-        cardTotalp += '</span>';
-        cardTotalp += '</div>';
-        cardTotalp += '</div>';
-
-        $('#clsCardTotal').append(cardTotalp);
-        $("#clsCardTotal").removeClass("sr-only");
-    }
-
-    function cardMedia(valor, icon) {
-
-        let cardMedia = '';
-        cardMedia += '<div class="info-box mb-3" divBox>';
-        cardMedia += '<span class="info-box-icon cardCategoria bg-warning elevation-1 material-icons">' + icon +
-            '</span>';
-        cardMedia += '<div class="info-box-content">';
-        cardMedia += '<span class="info-box-text"><b>MÉDIA</b></span>';
-        cardMedia += '<span class="info-box-number-media">';
-        cardMedia += '<span class="info-box-number-media">';
-        cardMedia += '$' + valor + '';
-        cardMedia += '</span>';
-        cardMedia += '</div>';
-        cardMedia += '</div>';
-
-        $('#clsCardMedia').append(cardMedia);
-        $("#clsCardMedia").removeClass("sr-only");
-
-    }
-
-
-
-
-
-    $selectBar.change(function(event) {
-
-        //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
-        barUser = $(this).val();
-
-     //função ajax para atualizar o valor da receita baseado no is do bar selecionado.
-
-        $('#categoriesBar').empty();
-        $("#clsCardReceita").addClass("sr-only");
-        $("#clsCardITotaltens").addClass("sr-only");
-        $("#clsCardTotal").addClass("sr-only"); 
-        $("#clsCardMedia").addClass("sr-only");
-        getReceitaBarForCard(barUser);
-        getCategoriesForSelect(barUser);
-
-    });
-
-    function getReceitaBarForCard(idBar) {
-
-            $.ajax({
-                type: "POST",
-                url: urlBase + rotaBar + 'requestValorReceita',
-                data: {
-                    'idBar': idBar,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: "json",
-                success: function(success) {
-
-                 
-                    updateValueCardReceita(success); 
-              
-                }
-            });
-      
-
-    }
-
-    function getCategoriesForSelect(idBar) {
-
-        if (idBarSelecionado) {
-            $("#categoriesBar").show();
-            $.ajax({
-                type: "POST",
-                url: urlBase + rotaHome + 'getCategories',
-                data: {
-                    'idBarSelecionado': idBarSelecionado,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: "json",
-                success: function(categories) {
-
-               
-                    $("#categoriesBar").append(
-                        '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
-                    )
-
-                    $.each(categories, function(key, value) {
-                        $("#selectCategories").removeClass("sr-only");
-                  
-                        $("#categoriesBar").append('<option value="' + value['id'] +
-                            '">' + value['name'] + '<option>');
-                    });
-
-                    $("#categoriesBar").trigger("change");
-                }
-            });
-        } else {
-            $("categoriesBar").hide();
         }
 
-    }
 
-    function getCategoriesForSelect(idBar) {
 
-        if (idBarSelecionado) {
-            $("#categoriesBar").show();
-            $.ajax({
-                type: "POST",
-                url: urlBase + rotaHome + 'getCategories',
-                data: {
-                    'idBarSelecionado': idBarSelecionado,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: "json",
-                success: function(categories) {
-
-                    console.log('categorias' + categories);
-                    $("#categoriesBar").append(
-                        '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
-                    )
-
-                    $.each(categories, function(key, value) {
-                        $("#selectCategories").removeClass("sr-only");
-
-                        $("#categoriesBar").append('<option value="' + value['id'] +
-                            '">' + value['name'] + '<option>');
-                    });
-
-                    $("#categoriesBar").trigger("change");
-                }
-            });
-        } else {
-            $("categoriesBar").hide();
+        function cardItens(valor, icon) {
+            let cardTotalItens = '';
+            cardTotalItens += '<div class="info-box mb-3" divBox>';
+            cardTotalItens +=
+                '     <span class="info-box-icon cardCategoria bg-danger elevation-1 material-icons">' + icon +
+                '</span>';
+            cardTotalItens += '      <div class="info-box-content">';
+            cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
+            cardTotalItens += '             <span class="info-box-number-itens">';
+            cardTotalItens += '              $' + valor;
+            cardTotalItens += '             </span>';
+            cardTotalItens += '       </div>';
+            cardTotalItens += '       </div>';
+            cardTotalItens += '       </div>';
+            $('#clsCardITotaltens').append(cardTotalItens);
+            $("#clsCardITotaltens").removeClass("sr-only");
         }
 
-    }
+        function cardTotal(valor, icon) {
 
-    $selectCategories.change(function(event) {
+            let cardTotalp = '';
+            cardTotalp += '<div class="info-box mb-3" divBox>';
+            cardTotalp += '<span class="info-box-icon cardCategoria bg-info elevation-1 material-icons">' + icon +
+                '</span>';
+            cardTotalp += '<div class="info-box-content">';
+            cardTotalp += '<span class="info-box-text"><b>TOTAL</b></span>';
+            cardTotalp += '<span class="info-box-number-total">';
+            cardTotalp += '$' + valor;
+            cardTotalp += '</span>';
+            cardTotalp += '</div>';
+            cardTotalp += '</div>';
 
-        idCategories = $(this).val();
-        $("div").remove(".divBox");
-
-        if (idCategories) {
-
-            if (control != 1) {
-                icon = 'sports_bar';
-                $(event.target).parent("#divBoxTotalItens").remove();
-                consolidadoFields = getConsolidadoDados(idBar, idCategories);
-                cardItens(<?=$qtdTotalDia?>, icon);
-                cardMedia(<?=$mediaDia?>, icon);
-                cardTotal(<?=$totalDia?>, icon);
-                $("#tabelaProdutos").removeClass("sr-only");
-                control = 1;
-            } else {
-                qtdIten = '177';
-                qtdTotal = '277';
-                qtdmedia = '377';
-                icon = 'delivery_dining';
-                consolidadoFields = getConsolidadoDados(idBar, idCategories);
-                updateValueCardItens(qtdIten);
-                updateValueCardTotal(qtdTotal, icon);
-                updateValueCardMedia(qtdmedia);
-
-                //criar a função que mudará a informações da tabela 
-
-            }
-
-
-
-
-
-
+            $('#clsCardTotal').append(cardTotalp);
+            $("#clsCardTotal").removeClass("sr-only");
+        } 
    
+        function cardMedia(valor, icon) {
+
+            let cardMedia = '';
+            cardMedia += '<div class="info-box mb-3" divBox>';
+            cardMedia += '<span class="info-box-icon cardCategoria bg-warning elevation-1 material-icons">' + icon +
+                '</span>';
+            cardMedia += '<div class="info-box-content">';
+            cardMedia += '<span class="info-box-text"><b>MÉDIA</b></span>';
+            cardMedia += '<span class="info-box-number-media">';
+            cardMedia += '<span class="info-box-number-media">';
+            cardMedia += '$' + valor + '';
+            cardMedia += '</span>';
+            cardMedia += '</div>';
+            cardMedia += '</div>';
+
+            $('#clsCardMedia').append(cardMedia);
+            $("#clsCardMedia").removeClass("sr-only");
 
         }
-    })
+
+        function updateValueCardReceita(newValue) {
+            $("#clsCardReceita").removeClass("sr-only");
+            $('.info-box-number-receita').text('$' + newValue);
+            $('.info-box-text-receita').text('RECEITA');
+        }
+
+        function updateValueCardItens(newValue) {
+            $("#clsCardITotaltens").removeClass("sr-only");
+            $('.info-box-number-itens').text(newValue);
 
 
-    function getConsolidadoDados(idBar, categoria){
+        }
 
-                 $.ajax({
-                type:"POST",
-                url: urlBase + rotaHome + 'requestConsolidadoDados',
-                data: {
-                   'idBar':idBar,
-                   'categoria':categoria,
-                },
-                headers: {
-                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType:"json",
-                success:function(success){
-                    console.log('Dados do consolidado' + success);
-                    return success;
-                }
+        function updateValueCardTotal(newValue, iconCard) {
+            $("#clsCardTotal").removeClass("sr-only");
+            $('.info-box-number-total').text('$' + newValue);
+            $('.cardCategoria').text(iconCard);
+
+        }
+
+        function updateValueCardMedia(newValue) {
+            $("#clsCardMedia").removeClass("sr-only");
+            $('.info-box-number-media').text('$' + newValue);
+
+        }
+
+
+
+
+
+
+        selectBar.change(function(event) {
+
+            //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
+            barUser = $(this).val();
+
+            //função ajax para atualizar o valor da receita baseado no is do bar selecionado.
+
+            $('#categoriesBar').empty();
+            $("#clsCardReceita").addClass("sr-only");
+            $("#clsCardITotaltens").addClass("sr-only");
+            $("#clsCardTotal").addClass("sr-only");
+            $("#clsCardMedia").addClass("sr-only");
+            getReceitaBarForCard(barUser);
+            getCategoriesForSelect(barUser);
+
+        });
+
+        function getReceitaBarForCard(idBar) {
+
+            $.ajax({
+                type: "POST",
+                url: URL_BASE + ROTA_BAR + 'requestValorReceita',
+                    data: {
+                        'idBar': idBar,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "json",
+                    success: function(success) {
+
+
+                        updateValueCardReceita(success);
+
+                    }
             });
-    }
 
 
-    const ctx = document.getElementById('myChart');
+        }
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Cervejas', 'Drinks e Doses', 'Não Alcoólicos', 'Garrafas', 'Comidinhas',
-                'Combos e Pra Levar'
-            ],
-            datasets: [{
-                label: 'Dezembro',
-                data: [22, 12, 3, 7, 9, 3],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        function getCategoriesForSelect(idBar) {
+
+            if (idBarSelecionado) {
+                $("#categoriesBar").show();
+                $.ajax({
+                    type: "POST",
+                    url: URL_BASE + ROTA_CATEGORIES + 'getCategories',
+                        data: {
+                            'idBarSelecionado': idBarSelecionado,
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        dataType: "json",
+                        success: function(categories) {
+
+
+                            $("#categoriesBar").append(
+                                '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
+                            )
+
+                            $.each(categories, function(key, value) {
+                                $("#selectCategories").removeClass("sr-only");
+
+                                $("#categoriesBar").append('<option value="' + value['id'] +
+                                    '">' + value['name'] + '<option>');
+                            });
+
+                            $("#categoriesBar").trigger("change");
+                        }
+                });
+            } else {
+                $("categoriesBar").hide();
             }
 
         }
+
+        // function getCategoriesForSelect(idBar) {
+
+        //     if (idBarSelecionado) {
+        //         $("#categoriesBar").show();
+        //         $.ajax({
+        //             type: "POST",
+        //             url: URL_BASE + ROTA_HOME + 'getCategories',
+        //                 data: {
+        //                     'idBarSelecionado': idBarSelecionado,
+        //                 },
+        //                 headers: {
+        //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //                 },
+        //                 dataType: "json",
+        //                 success: function(categories) {
+
+        //                     console.log('categorias' + categories);
+        //                     $("#categoriesBar").append(
+        //                         '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
+        //                     )
+
+        //                     $.each(categories, function(key, value) {
+        //                         $("#selectCategories").removeClass("sr-only");
+
+        //                         $("#categoriesBar").append('<option value="' + value['id'] +
+        //                             '">' + value['name'] + '<option>');
+        //                     });
+
+        //                     $("#categoriesBar").trigger("change");
+        //                 }
+        //         });
+        //     } else {
+        //         $("categoriesBar").hide();
+        //     }
+
+        // }
+
+        selectCategories.change(function(event) {
+
+            idCategories = $(this).val();
+            $("div").remove(".divBox");
+
+            if (idCategories) {
+
+                if (control != 1) {
+                    icon = 'sports_bar';
+                    $(event.target).parent("#divBoxTotalItens").remove();
+                    consolidadoFields = getConsolidadoDados(idBarSelecionado, idCategories);
+                    cardItens(<?=$qtdTotalDia?>, icon);
+                    cardMedia(<?=$mediaDia?>, icon);
+                    cardTotal(<?=$totalDia?>, icon);
+                    $("#tabelaProdutos").removeClass("sr-only");
+                    control = 1;
+                } else {
+                    qtdIten = '177';
+                    qtdTotal = '277';
+                    qtdmedia = '377';
+                    icon = 'delivery_dining';
+                    consolidadoFields = getConsolidadoDados(barUser, idCategories);
+                    updateValueCardItens(qtdIten);
+                    updateValueCardTotal(qtdTotal, icon);
+                    updateValueCardMedia(qtdmedia);
+
+                    //criar a função que mudará a informações da tabela
+
+                }
+
+            }
+        })
+
+
+        // function getConsolidadoDados(idBar, categoria) {
+
+        //     $.ajax({
+        //         type: "POST",
+        //         url: URL_BASE + ROTA_HOME + 'requestConsolidadoDados',
+        //             data: {
+        //                 'idBar': idBar,
+        //                 'categoria': categoria,
+        //             },
+        //             headers: {
+        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //             },
+        //             dataType: "json",
+        //             success: function(success) {
+        //                 console.log('Dados do consolidado' + success);
+        //                 // return success;
+        //             }
+        //     });
+        // }
+
+
+        function getConsolidadoDados(idBar,idCategoria){
+
+            // Validar as entradas do usuário
+            idBar = parseInt(idBar) || 0;
+            idCategoria = parseInt(idCategoria) || 0;
+
+            var dados = {
+                idBar:idBar,
+                categoria:idCategoria,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            };
+
+            $.ajax({
+                type:"POST",
+                url: URL_BASE + ROTA_HOME + 'requestConsolidadoDados',
+                data: dados,
+                dataType:"json",
+                success:function(response){
+                    console.log('Dados Consolidados: ', response.iconCategoria);
+                },
+                error:function(xhr,textStatus,errorThrown){
+                    console.log('Erro na chamada ajax: ', xhr.responseText);
+                }
+            })
+
+
+        }
+
+
+        const ctx = document.getElementById('myChart');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Cervejas', 'Drinks e Doses', 'Não Alcoólicos', 'Garrafas', 'Comidinhas',
+                    'Combos e Pra Levar'
+                ],
+                datasets: [{
+                    label: 'Dezembro',
+                    data: [22, 12, 3, 7, 9, 3],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+
+            }
+        });
+
+
+        // if (statusBar == 1) {
+        //     document.getElementById("abrirBar").disabled = true;
+        //     $("#abrirBar").addClass("btn-secondary");
+        //     $("#fecharBar").addClass("btn-danger");
+        // } else {
+        //     document.getElementById("fecharBar").disabled = true;
+        //     $("#fecharBar").addClass("btn-secondary");
+        //     $("#abrirBar").addClass("btn-success");
+        // }
+
+        //desabilita o botão no início
+
+        // $("#abrirBar").click(function () {
+        //     Swal.fire({
+        //         position: 'center',
+        //         icon: 'warning',
+        //         title: 'Abrir bar?',
+        //         html: 'Deseja realmente abrir esse bar?',
+        //         allowOutsideClick: false,
+        //         showCloseButton: true,
+        //         showCancelButton: true,
+        //         focusConfirm: false,
+        //         confirmButtonText: '<i class="fa fa-thumbs-up pr-1 pl-1"></i> SIM ',
+        //         cancelButtonText: '<i class="fa fa-thumbs-down pr-1 pl-1"></i> CANCELAR',
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+
+        //             document.getElementById("abrirBar").disabled = true;
+        //             document.getElementById("fecharBar").disabled = false;
+        //             // $( "#abrirBar" ).removeClass( "btn-success" ).addClass( "btn-secondary" );
+        //             statusBarAtualizado = 1;
+        //             updateStatusBar(statusBarAtualizado).then((result) => {
+
+        //                 Swal.fire({
+        //                     icon: 'success',
+        //                     title: 'BAR ABERTO!',
+        //                     html: 'O bar foi aberto com sucesso!',
+        //                 });
+
+        //                 location.reload();
+        //             });
+
+        //         }
+        //     });
+
+
+        // });
+
+        // $('#fecharBar').click(function () {
+
+        //     Swal.fire({
+        //         position: 'center',
+        //         icon: 'warning',
+        //         title: 'Fechar bar?',
+        //         html: 'Deseja realmente fechar esse bar?',
+        //         allowOutsideClick: false,
+        //         showCloseButton: true,
+        //         showCancelButton: true,
+        //         focusConfirm: false,
+        //         confirmButtonText: '<i class="fa fa-thumbs-up pr-1 pl-1"></i> SIM ',
+        //         cancelButtonText: '<i class="fa fa-thumbs-down pr-1 pl-1"></i> CANCELAR',
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+
+        //             document.getElementById("fecharBar").disabled = true;
+        //             document.getElementById("abrirBar").disabled = false;
+
+        //             statusBarAtualizado = 0;
+
+        //             updateStatusBar(statusBarAtualizado).then((result) => {
+        //                 Swal.fire({
+        //                     icon: 'success',
+        //                     title: 'BAR FECHADO!',
+        //                     html: 'O bar foi fechado com sucesso!',
+        //                 });
+
+        //                 location.reload();
+
+        //             });
+
+        //         }
+        //     });
+
+
+
+
+
+        // });
+
+
+        // updateStatusBar = (fieldStatus) => {
+        //     return new Promise((resolve, reject) => {
+        //         $.ajax({
+        //             url: URL_BASE + URL_CONTROLLER,
+        //             method: 'POST',
+        //             data: {
+        //                 'status': fieldStatus,
+        //             },
+        //             headers: {
+        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //             },
+        //             success: function (success) {
+        //                 console.log(success)
+        //                 return resolve(success)
+        //             },
+        //             erro: function (data) {
+
+        //                 if (data.status === 0) {
+        //                     Swal.fire({
+        //                         icon: 'error',
+        //                         title: 'Sem conexão com internet!',
+        //                         html: '<br>Contate o administrador.',
+        //                     });
+        //                     return reject(data)
+        //                 } else if (data.status == 404 || data.status == 405) {
+        //                     Swal.fire({
+        //                         icon: 'error',
+        //                         title: 'Página Solicitada não encontrada',
+        //                         html: '<br>Contate o administrador.',
+        //                     });
+        //                     return reject(data)
+
+        //                 } else if (data.status == 500) {
+        //                     Swal.fire({
+        //                         icon: 'error',
+        //                         title: 'Erro!',
+        //                         html: '<br>Contate o administrador.',
+        //                     });
+        //                     return reject(data)
+
+        //                 } else {
+        //                     Swal.fire({
+        //                         icon: 'error',
+        //                         title: 'Erro!',
+        //                         html: 'Erro Crítico! <br>Contate o administrador.',
+        //                     });
+        //                     return reject(data)
+        //                 }
+
+
+        //             }
+
+        //         });
+
+        //     });
+        // }
+
     });
-
-
-    // if (statusBar == 1) {
-    //     document.getElementById("abrirBar").disabled = true;
-    //     $("#abrirBar").addClass("btn-secondary");
-    //     $("#fecharBar").addClass("btn-danger");
-    // } else {
-    //     document.getElementById("fecharBar").disabled = true;
-    //     $("#fecharBar").addClass("btn-secondary");
-    //     $("#abrirBar").addClass("btn-success");
-    // }
-
-    //desabilita o botão no início
-
-    // $("#abrirBar").click(function () {
-    //     Swal.fire({
-    //         position: 'center',
-    //         icon: 'warning',
-    //         title: 'Abrir bar?',
-    //         html: 'Deseja realmente abrir esse bar?',
-    //         allowOutsideClick: false,
-    //         showCloseButton: true,
-    //         showCancelButton: true,
-    //         focusConfirm: false,
-    //         confirmButtonText: '<i class="fa fa-thumbs-up pr-1 pl-1"></i> SIM ',
-    //         cancelButtonText: '<i class="fa fa-thumbs-down pr-1 pl-1"></i> CANCELAR',
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-
-    //             document.getElementById("abrirBar").disabled = true;
-    //             document.getElementById("fecharBar").disabled = false;
-    //             // $( "#abrirBar" ).removeClass( "btn-success" ).addClass( "btn-secondary" );
-    //             statusBarAtualizado = 1;
-    //             updateStatusBar(statusBarAtualizado).then((result) => {
-
-    //                 Swal.fire({
-    //                     icon: 'success',
-    //                     title: 'BAR ABERTO!',
-    //                     html: 'O bar foi aberto com sucesso!',
-    //                 });
-
-    //                 location.reload();
-    //             });
-
-    //         }
-    //     });
-
-
-    // });
-
-    // $('#fecharBar').click(function () {
-
-    //     Swal.fire({
-    //         position: 'center',
-    //         icon: 'warning',
-    //         title: 'Fechar bar?',
-    //         html: 'Deseja realmente fechar esse bar?',
-    //         allowOutsideClick: false,
-    //         showCloseButton: true,
-    //         showCancelButton: true,
-    //         focusConfirm: false,
-    //         confirmButtonText: '<i class="fa fa-thumbs-up pr-1 pl-1"></i> SIM ',
-    //         cancelButtonText: '<i class="fa fa-thumbs-down pr-1 pl-1"></i> CANCELAR',
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-
-    //             document.getElementById("fecharBar").disabled = true;
-    //             document.getElementById("abrirBar").disabled = false;
-
-    //             statusBarAtualizado = 0;
-
-    //             updateStatusBar(statusBarAtualizado).then((result) => {
-    //                 Swal.fire({
-    //                     icon: 'success',
-    //                     title: 'BAR FECHADO!',
-    //                     html: 'O bar foi fechado com sucesso!',
-    //                 });
-
-    //                 location.reload();
-
-    //             });
-
-    //         }
-    //     });
-
-
-
-
-
-    // });
-
-
-    // updateStatusBar = (fieldStatus) => {
-    //     return new Promise((resolve, reject) => {
-    //         $.ajax({
-    //             url: urlBase + urlController,
-    //             method: 'POST',
-    //             data: {
-    //                 'status': fieldStatus,
-    //             },
-    //             headers: {
-    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //             },
-    //             success: function (success) {
-    //                 console.log(success)
-    //                 return resolve(success)
-    //             },
-    //             erro: function (data) {
-
-    //                 if (data.status === 0) {
-    //                     Swal.fire({
-    //                         icon: 'error',
-    //                         title: 'Sem conexão com internet!',
-    //                         html: '<br>Contate o administrador.',
-    //                     });
-    //                     return reject(data)
-    //                 } else if (data.status == 404 || data.status == 405) {
-    //                     Swal.fire({
-    //                         icon: 'error',
-    //                         title: 'Página Solicitada não encontrada',
-    //                         html: '<br>Contate o administrador.',
-    //                     });
-    //                     return reject(data)
-
-    //                 } else if (data.status == 500) {
-    //                     Swal.fire({
-    //                         icon: 'error',
-    //                         title: 'Erro!',
-    //                         html: '<br>Contate o administrador.',
-    //                     });
-    //                     return reject(data)
-
-    //                 } else {
-    //                     Swal.fire({
-    //                         icon: 'error',
-    //                         title: 'Erro!',
-    //                         html: 'Erro Crítico! <br>Contate o administrador.',
-    //                     });
-    //                     return reject(data)
-    //                 }
-
-
-    //             }
-
-    //         });
-
-    //     });
-    // }
-
-});
 </script>
 
 
