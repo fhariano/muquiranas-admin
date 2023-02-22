@@ -41,7 +41,7 @@ class HomeController extends Controller
            
                 $idBar = 2;
                 $statusBar = $this->statusBar;
-                $resultConsolidado = $this->consolidadoDados($idBar);
+                $resultConsolidado = $this->buscarDadosConsolidados($idBar,1);
                 $nameBar = $this->nameBar;
                 $fieldsBar = Bars::all(); //corrigir fazer consula que mostrará todos os bares do user logado.
                 $group = $this->group_id;
@@ -185,12 +185,16 @@ class HomeController extends Controller
 
     public function requestConsolidadoDados(Request $request){
 
-       
+       $idBar = intval($request->input('idBar'));
+       $idCategoria = intval($request->input('idCategoria'));
         try{
-             return $this->consolidadoDados($request->idBar);
-        }catch(\Throwable $th){
-            return $th;
+              // Chamar função para buscar os dados consolidados
+            $consolidadoDados = $this->buscarDadosConsolidados($request->idBar, $request->idCategoria);
+        }catch(\Exception $e){
+            return response()->json(['message' => 'Ocorreu um erro ao buscar os dados consolidados. Por favor, tente novamente mais tarde.'],500);
         }
+
+        return $consolidadoDados;
         
 
     }
@@ -202,19 +206,19 @@ class HomeController extends Controller
     //         DB::raw('sum(orders_items.price) as price'),
     //         DB::raw('sum(orders_items.total) as total'),
     //         DB::raw('sum(orders.total) as totalGeral'),
-    //         DB::raw('ctg.name as nameCategoria'),
+    //         DB::raw('category.name as nameCategoria'),
     //     )
     //         ->join('products as p', 'p.id', '=', 'product_id')
-    //         ->leftJoin('categories As ctg', function ($join) {
-    //             $join->on('ctg.id', '=', 'p.category_id');
+    //         ->leftJoin('categories As category', function ($join) {
+    //             $join->on('category.id', '=', 'p.category_id');
     //         })
     //         ->leftJoin('orders As orders', function ($join) {
     //             $join->on('orders.id', '=', 'order_id');
     //         })
-    //         //  ->where('ctg.name','Cervejas')
-    //         ->where('ctg.bar_id', $idBar)
+    //         //  ->where('category.name','Cervejas')
+    //         ->where('category.bar_id', $idBar)
     //         ->where('orders.active', 1)
-    //         ->where('ctg.id', 6)
+    //         ->where('category.id', 6)
     //         ->whereNotNull('orders.erp_id')
     //         ->groupBy('nameCategoria')
     //         ->get();
@@ -248,53 +252,57 @@ class HomeController extends Controller
     }
 
 
-    public function consolidadoDados($idBar)  //colocar $categoriaBar
+    private function buscarDadosConsolidados($idBar, $idCategoria)  //colocar $categoriaBar
     {
+
+
         $consolidoDia = OrdersItems::select(
             DB::raw('sum(orders_items.quantity) as qtd'),
             DB::raw('sum(orders_items.price) as price'),
             DB::raw('sum(orders_items.total) as total'),
             // DB::raw('sum(orders.total) as totalGeral'),
-            DB::raw('ctg.name as nameCategoria'),
-             DB::raw('ctg.icon_name as iconCategoria'),
+            DB::raw('category.name as nameCategoria'),
+             DB::raw('category.icon_name as iconCategoria'),
         )
             ->join('products as p', 'p.id', '=', 'product_id')
-            ->leftJoin('categories As ctg', function ($join) {
-                $join->on('ctg.id', '=', 'p.category_id');
+            ->leftJoin('categories As category', function ($join) {
+                $join->on('category.id', '=', 'p.category_id');
             })
             ->leftJoin('orders As orders', function ($join) {
                 $join->on('orders.id', '=', 'order_id');
             })
             ->where('orders.bar_id', $idBar)
             ->where('orders.active', 1)
-            ->where('ctg.id', 1) //idCategoria
+            ->where('category.id', $idCategoria) //idCategoria
             ->whereNull('orders.erp_id')
             ->groupBy('nameCategoria', 'iconCategoria')
-            ->get();
+            ->first();
 
        
        
-        if ($consolidoDia->count() == 0) {
+        if (!$consolidoDia) {
+           
             return [
-                "qtdTotalDia" => 0,
-                "totalDia" => 0,
-                "mediaDia" => 0,
-                "totalGeral" => 0,
-                "name" => 'SEM VENDA',
+                'qtdTotalDia' => 0,
+                'totalDia' => 0,
+                'mediaDia' => 0,
+                'totalGeral' => 0,
+                'name' => 'SEM VENDA',
+                'iconCategoria' => '',
+                'noData' => true,
             ];
         }
 
-        $mediaConsolidadoDia = number_format($consolidoDia[0]->total / $consolidoDia[0]->qtd,2,'.','');
+        $mediaConsolidadoDia = number_format($consolidoDia->total / $consolidoDia->qtd,2,'.','');
        
         return [
-            "qtdTotalDia" => $consolidoDia[0]->qtd,
-            "totalDia" => $consolidoDia[0]->total,
-            //  "mediaDia" => str_replace('.', ',', $mediaConsolidadoDia),
-             "mediaDia" => $mediaConsolidadoDia,
-            //  "totalGeral" => $consolidoDia->totalGeral,
-             "totalGeral" => $this->TotalGeralBar($idBar),
-            "name" => $consolidoDia[0]->nameCategoria,
-            "iconCategoria" => $consolidoDia[0]->iconCategoria,
+            'qtdTotalDia' => $consolidoDia->qtd,
+            'totalDia' => $consolidoDia->total,
+            'mediaDia' => $mediaConsolidadoDia,
+            'totalGeral' => $this->TotalGeralBar($idBar),
+            'name' => $consolidoDia->nameCategoria,
+            'iconCategoria' => $consolidoDia->iconCategoria,
+            'noData' => false,
             ];
     }
  
