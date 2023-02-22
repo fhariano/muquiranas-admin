@@ -39,19 +39,21 @@ class HomeController extends Controller
     
         
            
-                $idBar = 2;
+                $idBar = $this->bar_id;
                 $statusBar = $this->statusBar;
+
                 $resultConsolidado = $this->buscarDadosConsolidados($idBar,1);
                 $nameBar = $this->nameBar;
                 $fieldsBar = Bars::all(); //corrigir fazer consula que mostrará todos os bares do user logado.
-                $group = $this->group_id;
+                $groupUser = $this->group_id;
                 $categoriesAll = Categories::whereIn('bar_id',[$idBar])->get();
                 
                 // $this->atualizaSession($fieldUserAtual);
     
                 return view('home.home')
+                    ->with('idBar', $idBar)
                     ->with('statusBar', $statusBar)
-                    ->with('group', $group)
+                    ->with('groupUser', $groupUser)
                     ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
                     ->with('receitas', $this->receitasBar)
                     ->with('totalDia', $resultConsolidado['totalDia'])

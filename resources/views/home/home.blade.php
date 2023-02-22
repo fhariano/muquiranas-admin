@@ -4,7 +4,7 @@
 <div class="card card-default">
 
     <div class="card-body">
-        <div class="row" align="center">
+        <div class="row sr-only" id="selectBars" align="center">
             <!-- <select class="selectBar-basic-single form-control bg-primary d-flex justify-content-between" style="width:100%" id="selectBar" name="selectBar"> -->
             <select class="js-selectBar-ajax form-control bg-primary d-flex justify-content-between" style="width:100%"
                 id="selectBar" name="selectBar">
@@ -16,13 +16,7 @@
         </div>
 
         <div class="row sr-only" id="selectCategories" align="center">
-            <!-- <select  class="selectCategory-basic-single form-control bg-primary d-flex justify-content-between" style="width:100%" id="categoriesBar" name="categoriesBar" style="display:none"> -->
-            <select id="categoriesBar" style="width:100%;display:none">
-                <!-- <option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>
-                @foreach($categoriesAll as $key => $value)
-                <option value="{{$value['id'] }}">{{ $value['name'] }}</option>
-                @endforeach -->
-            </select>
+            <select id="categoriesBar" style="width:100%;display:none"></select>
         </div>
 
     </div>
@@ -37,7 +31,7 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-12 col-sm-6 col-md-3" id='clsCardReceita'></div>
+            <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardReceita'></div>
 
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardITotaltens'></div>
             <div class="clearfix hidden-md-up"></div>
@@ -285,11 +279,13 @@ $(function() {
     const ROTA_HOME = '/home/';
     const ROTA_BAR = '/bar/';
     const URL_CONTROLLER = '/resultBars';
-    valorReceita = '250,00';
-
-    let barUser = 1;
+    let valorReceita = <?=$receitas?>;
+    let barUser = <?=$idBar?>;
+    let groupUser = <?=$groupUser?>;
     let idBarSelecionado = 1;
     let control = 0;
+
+
 
     $('#selectBar').select2();
     $('#categoriesBar').select2();
@@ -310,7 +306,7 @@ $(function() {
         cardReceita += '<div class="info-box-content">';
         cardReceita += '<span class="info-box-text-receita"><b> RECEITAS </b></span>';
         cardReceita += '<span class="info-box-number-receita">';
-        cardReceita += '$' + <?=$receitas?>;
+        cardReceita += '$' + valor;
 
         cardReceita += '</span>';
         cardReceita += '</div>';
@@ -404,23 +400,41 @@ $(function() {
     }
 
 
+// Função condicional, onde mostrará ou não o selctBar e o CardReceitas. 
+    if (groupUser != 6) {
 
-    selectBar.change(function(event) {
+            $('#categoriesBar').empty();
+            $("#clsCardReceita").addClass("sr-only");
+            $("#clsCardITotaltens").addClass("sr-only");
+            $("#clsCardTotal").addClass("sr-only");
+            $("#clsCardMedia").addClass("sr-only");
+            getReceitaBarForCard(barUser);
+            getCategoriesForSelect(barUser);
 
-        //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
-        barUser = $(this).val();
+    } else {
+        
+        
+        $("#selectBars").removeClass("sr-only");
+        $("#clsCardReceita").removeClass("sr-only");
+        selectBar.change(function(event) {
 
-        //função ajax para atualizar o valor da receita baseado no is do bar selecionado.
+            //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
+            barUser = $(this).val();
 
-        $('#categoriesBar').empty();
-        $("#clsCardReceita").addClass("sr-only");
-        $("#clsCardITotaltens").addClass("sr-only");
-        $("#clsCardTotal").addClass("sr-only");
-        $("#clsCardMedia").addClass("sr-only");
-        getReceitaBarForCard(barUser);
-        getCategoriesForSelect(barUser);
+            //função ajax para atualizar o valor da receita baseado no is do bar selecionado.
 
-    });
+            $('#categoriesBar').empty();
+            $("#clsCardReceita").addClass("sr-only");
+            $("#clsCardITotaltens").addClass("sr-only");
+            $("#clsCardTotal").addClass("sr-only");
+            $("#clsCardMedia").addClass("sr-only");
+            getReceitaBarForCard(barUser);
+            getCategoriesForSelect(barUser);
+
+        });
+
+    }
+
 
     function getReceitaBarForCard(idBar) {
 
@@ -435,7 +449,6 @@ $(function() {
             },
             dataType: "json",
             success: function(success) {
-
 
                 updateValueCardReceita(success);
 
@@ -500,32 +513,32 @@ $(function() {
                     // result.totalDia;
                     // result.totalGeral;
 
-                if(result.noData != true){
-                    $("#tabelaProdutos").removeClass("sr-only");
-                }
-                cardTotal(result.totalDia, result.iconCategoria);
-                cardItens(result.qtdTotalDia, result.iconCategoria);
-                cardMedia(result.mediaDia, result.iconCategoria);
-               
+                    if (result.noData != true) {
+                        $("#tabelaProdutos").removeClass("sr-only");
+                    }
+                    cardTotal(result.totalDia, result.iconCategoria);
+                    cardItens(result.qtdTotalDia, result.iconCategoria);
+                    cardMedia(result.mediaDia, result.iconCategoria);
+
                 });
-              
+
                 control = 1;
             } else {
-            
+
                 $("#tabelaProdutos").addClass("sr-only");
                 getConsolidadoDados(barUser, idCategories).then((result) => {
 
-                    if(result.noData != true){
+                    if (result.noData != true) {
                         $("#tabelaProdutos").removeClass("sr-only");
                     }
                     updateValueCardTotal(result.totalDia, result.iconCategoria);
                     updateValueCardItens(result.qtdTotalDia);
                     updateValueCardMedia(result.mediaDia);
-                    
+
                 });
 
-             
-          
+
+
 
                 //criar a função que mudará a informações da tabela
 

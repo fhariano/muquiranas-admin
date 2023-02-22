@@ -70,6 +70,7 @@ class BarsController extends Controller
       
         if($fieldUserAtual[0]->group_id !=6 && $fieldUserAtual[0]->group_id !=7){
             $this->atualizaSession($fieldUserAtual);
+            $this->atualizaReceitasSession($this->getReceitaBar($fieldUserAtual[0]->bar_id));
             return redirect(route('home'));
         }else{
 
@@ -98,12 +99,16 @@ class BarsController extends Controller
         return $resultReceitaBar;
     }
 
-    public function getReceitaBar($bars) {    
+    public function getReceitaBar($idbars) {    
         $resultReceitaBar = 0;
-
-        foreach ($bars as $bar) {
-        $resultReceitaBar += $this->consolidadoReceitas($bar->bar_id);
+        if( is_array($idbars)){
+            foreach ($idbars as $bar) {
+                $resultReceitaBar += $this->consolidadoReceitas($bar->bar_id);
+                }
+        }else{
+            $resultReceitaBar += $this->consolidadoReceitas($idbars);
         }
+        
         return $resultReceitaBar;
     }
 
