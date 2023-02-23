@@ -298,12 +298,14 @@ class HomeController extends Controller
 
        //Dados da tabela dos produtos
         $fieldsProducts = $consolidadoDia->map(function ($consolidado) {
+            $mediaPorProduto = number_format($consolidado->total / $consolidado->quantity,2,'.','');
             return [
                 'product_name' => $consolidado->product_name,
                 'quantity' => $consolidado->quantity,
                 'price' => $consolidado->price,
                 'total' => $consolidado->total,
                 'product_image' => $consolidado->product_image,
+                'mediaPorProduto' =>$mediaPorProduto,
             ];
         });
         

@@ -45,10 +45,7 @@
                 <div class="card sr-only" id='tabelaProdutos'>
                     <div class="card-header border-0">
                         <h3 class="card-title">TABELA DE PRODUTOS</h3>
-                        <div class="card-tools">
-
-
-                        </div>
+                        <div class="card-tools"></div>
                     </div>
                     <div class="card-body table-responsive p-0">
                         <table class="table table-striped table-valign-middle">
@@ -61,81 +58,7 @@
 
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-
-
-                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7583007/thumb/d7e95e59-3e56-49d6-8f4c-809a597499f6.png"
-                                            alt="Product 1" class="img-circle img-size-32 mr-2">
-                                        STELLA ARTOIS
-                                    </td>
-                                    <td>3 </td>
-                                    <td>$7,00</td>
-                                    <td>
-                                        <!-- <small class="text-success mr-1">
-                                        <i class="fas fa-arrow-up"></i>
-                                        12%
-                                    </small> -->
-                                        12,00
-                                    </td>
-
-                                </tr>
-
-
-
-                                <tr>
-                                    <td>
-                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689807/47477094-2cea-4d34-bf7a-a0d1024ed1f4.png"
-                                            alt="Product 1" class="img-circle img-size-32 mr-2">
-                                        BRAHMA EXTRA WEISS
-                                    </td>
-                                    <td>2 </td>
-                                    <td>$5,00</td>
-                                    <td>
-                                        <!-- <small class="text-warning mr-1">
-                                        <i class="fas fa-arrow-down"></i>
-                                        0.5%
-                                    </small> -->
-                                        10,00
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7543657/aa1bf253-1bae-4272-bc1e-4486c66115bc.png"
-                                            alt="Product 1" class="img-circle img-size-32 mr-2">
-                                        SKOL
-                                    </td>
-                                    <td>4 </td>
-                                    <td>$6,00</td>
-                                    <td>
-                                        <!-- <small class="text-danger mr-1">
-                                        <i class="fas fa-arrow-down"></i>
-                                        3%
-                                    </small> -->
-                                        9,00
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <img src="https://s3-sa-east-1.amazonaws.com/cake-app-files/public/customers/11083/products/7689812/45d81c9f-d6e7-46f4-8a9a-9b791ca3178c.png"
-                                            alt="Product 1" class="img-circle img-size-32 mr-2">
-                                        CERVEJA BECKS
-                                        <!-- <span class="badge bg-danger">NEW</span> -->
-                                    </td>
-                                    <td>6</td>
-                                    <td>$8,00</td>
-                                    <td>
-                                        <!-- <small class="text-success mr-1">
-                                        <i class="fas fa-arrow-up"></i>
-                                        63%
-                                    </small> -->
-                                        11,00
-                                    </td>
-
-                                </tr>
+                            <tbody id="tabelaProdutosBody">
                             </tbody>
                         </table>
                     </div>
@@ -145,117 +68,7 @@
         </div>
     </div>
 
-    <!-- <div class="card-body"> -->
-
-
-
-    <!-- <div class="card">
-            <div class="card-header">
-                <h3 class="card-title"><b> Consolidade por Categória <b> </h3>
-            </div> -->
-
-    <!-- <div class="card-body"> -->
-    <!-- <div class="row"> -->
-    <!-- <div class="col-md-8">
-                        <div class="chart-responsive">
-                            <div class="chartjs-size-monitor">
-                                <div class="chartjs-size-monitor-expand">
-                                    <div class=""></div>
-                                </div>
-                                <div class="chartjs-size-monitor-shrink">
-                                    <div class=""></div>
-                                </div>
-                            </div>
-                            <div display>
-                                <canvas id="myChart" height="172" width="344"
-                                    style="display: block; width: 516px; height: 258px;"
-                                    class="chartjs-render-monitor"></canvas>
-                            </div>
-
-
-
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-4">
-                        <ul class="chart-legend clearfix">
-                            <li><i class="far fa-circle text-secondary"></i> Cervejas</li>
-                            <li><i class="far fa-circle text-danger"></i> Combos e Pra Levar</li>
-                            <li><i class="far fa-circle text-success"></i> Comidinhas </li>
-                            <li><i class="far fa-circle text-warning"></i> Garrafas</li>
-                            <li><i class="far fa-circle text-info"></i> Não Alcoólicos</li>
-                            <li><i class="far fa-circle text-primary"></i> Drinks e Doses</li>
-                        </ul>
-                    </div>
-
-                </div>
-
-            </div>
-            -->
-    <!-- <div class="card-footer p-0">
-                <ul class="nav nav-pills flex-column">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <?=$name?>
-                            <span class="float-right text-success">
-                                ?= $qtdTotalDia ?>
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            Drinks e Doses
-                            <span class="float-right text-success">
-                                5
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            Não Alcoólicos
-                            <span class="float-right text-success">
-                                15
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            Garrafas
-                            <span class="float-right text-success">
-                                15
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            Comidinhas
-                            <span class="float-right text-success">
-                                15
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            Combos e Pra Levar
-                            <span class="float-right text-success">
-                                15
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="chart-container" style="position: relative; height:30vw; width:60vw">
-
-                <canvas id="myChart"></canvas>
-
-            </div>
-        </div>
-
-        </div> -->
+   
 </div>
 
 @endsection
@@ -509,12 +322,7 @@ $(function() {
                 // icon = 'sports_bar';
 
                 getConsolidadoDados(barUser, idCategories).then((result) => {
-                    // result.iconCategory;
-                    // result.mediaDia;
-                    // result.name;
-                    // result.qtdTotalDia;
-                    // result.totalDia;
-                    // result.totalGeral;
+                   
 
                     if (result.noData != true) {
                         $("#tabelaProdutos").removeClass("sr-only");
@@ -522,6 +330,7 @@ $(function() {
                     cardTotal(result.totalDia, result.category_icon);
                     cardItens(result.qtdTotalDia, result.category_icon);
                     cardMedia(result.mediaDia, result.category_icon);
+                    popularTabelaProdutos(result.fieldsProducts);
 
                 });
 
@@ -538,6 +347,7 @@ $(function() {
                     updateValueCardItens(result.qtdTotalDia);
                     updateValueCardMedia(result.mediaDia);
                     updateIconCards(result.category_icon);
+                    popularTabelaProdutos(result.fieldsProducts);
 
                 });
 
@@ -550,6 +360,48 @@ $(function() {
 
         }
     })
+
+
+    function popularTabelaProdutos(produtos) {
+        console.log(produtos);
+        var tabelaBody = $('#tabelaProdutosBody');
+        tabelaBody.empty(); // limpa o conteúdo anterior da tabela
+
+        $.each(produtos, function (i, produto) {
+            var imgSrc = produto.product_image;
+            var nomeProduto = produto.product_name;
+            var quantidade = produto.quantity;
+            var preco = produto.price  = new Intl.NumberFormat('pt-BR', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }).format(produto.price);
+            
+            var media = produto.mediaPorProduto;
+
+            var tr = $('<tr>');
+
+            var tdProduto = $('<td>');
+            var img = $('<img>').attr('src', imgSrc).addClass('img-circle img-size-32 mr-2');
+            tdProduto.append(img).append(nomeProduto);
+
+            var tdQuantidade = $('<td>').text(quantidade);
+
+            var tdPreco = $('<td>').text(preco);
+
+            var tdMedia = $('<td>').text(media);
+
+            tr.append(tdProduto).append(tdQuantidade).append(tdPreco).append(tdMedia);
+
+            tabelaBody.append(tr);
+        });
+    }
+
+
+
+
+
+
+
 
 
     function getConsolidadoDados(idBar, idCategoria) {
