@@ -316,7 +316,6 @@ $(function() {
     }
 
 
-
     function cardItens(valor, icon) {
         let cardTotalItens = '';
         cardTotalItens += '<div class="info-box mb-3" divBox>';
@@ -386,18 +385,22 @@ $(function() {
 
     }
 
-    function updateValueCardTotal(newValue, iconCard) {
+    function updateValueCardTotal(newValue) {
         $("#clsCardTotal").removeClass("sr-only");
         $('.info-box-number-total').text('$' + newValue);
-        $('.cardCategoria').text(iconCard);
+       
 
     }
-
+    
     function updateValueCardMedia(newValue) {
         $("#clsCardMedia").removeClass("sr-only");
         $('.info-box-number-media').text('$' + newValue);
-
+        
     }
+    
+        function updateIconCards(iconCard){
+            $('.cardCategoria').text(iconCard);
+        }
 
 
 // Função condicional, onde mostrará ou não o selctBar e o CardReceitas. 
@@ -506,7 +509,7 @@ $(function() {
                 // icon = 'sports_bar';
 
                 getConsolidadoDados(barUser, idCategories).then((result) => {
-                    // result.iconCategoria;
+                    // result.iconCategory;
                     // result.mediaDia;
                     // result.name;
                     // result.qtdTotalDia;
@@ -516,9 +519,9 @@ $(function() {
                     if (result.noData != true) {
                         $("#tabelaProdutos").removeClass("sr-only");
                     }
-                    cardTotal(result.totalDia, result.iconCategoria);
-                    cardItens(result.qtdTotalDia, result.iconCategoria);
-                    cardMedia(result.mediaDia, result.iconCategoria);
+                    cardTotal(result.totalDia, result.category_icon);
+                    cardItens(result.qtdTotalDia, result.category_icon);
+                    cardMedia(result.mediaDia, result.category_icon);
 
                 });
 
@@ -531,9 +534,10 @@ $(function() {
                     if (result.noData != true) {
                         $("#tabelaProdutos").removeClass("sr-only");
                     }
-                    updateValueCardTotal(result.totalDia, result.iconCategoria);
+                    updateValueCardTotal(result.totalDia);
                     updateValueCardItens(result.qtdTotalDia);
                     updateValueCardMedia(result.mediaDia);
+                    updateIconCards(result.category_icon);
 
                 });
 
