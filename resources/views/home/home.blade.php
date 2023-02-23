@@ -53,8 +53,9 @@
                                 <tr>
                                     <th>Produto</th>
                                     <th>Quantidade</th>
-                                    <th>Preço</th>
-                                    <th>Média</th>
+                                    <th>Preço (R$)</th>
+                                    <th>Média (R$)</th>
+                                    <th>Total (R$)</th>
 
                                 </tr>
                             </thead>
@@ -108,10 +109,18 @@ $(function() {
 
     cardReceita(valorReceita);
 
+    function numberFormatPtBr(valor){
+        return new Intl.NumberFormat('pt-BR', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }).format(valor);
+    }
     // Funções para criação dos cards
 
     function cardReceita(valor) {
+   
 
+        var media =  numberFormatPtBr(valor);
         let cardReceita = '';
         cardReceita += '<div class="info-box">';
         cardReceita +=
@@ -119,7 +128,7 @@ $(function() {
         cardReceita += '<div class="info-box-content">';
         cardReceita += '<span class="info-box-text-receita"><b> RECEITAS </b></span>';
         cardReceita += '<span class="info-box-number-receita">';
-        cardReceita += '$' + valor;
+        cardReceita +=  'R$ ' + media;
 
         cardReceita += '</span>';
         cardReceita += '</div>';
@@ -138,7 +147,7 @@ $(function() {
         cardTotalItens += '      <div class="info-box-content">';
         cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
         cardTotalItens += '             <span class="info-box-number-itens">';
-        cardTotalItens += '              $' + valor;
+        cardTotalItens +=                valor;
         cardTotalItens += '             </span>';
         cardTotalItens += '       </div>';
         cardTotalItens += '       </div>';
@@ -148,7 +157,7 @@ $(function() {
     }
 
     function cardTotal(valor, icon) {
-
+        var total =  numberFormatPtBr(valor);
         let cardTotalp = '';
         cardTotalp += '<div class="info-box mb-3" divBox>';
         cardTotalp += '<span class="info-box-icon cardCategoria bg-info elevation-1 material-icons">' + icon +
@@ -156,7 +165,7 @@ $(function() {
         cardTotalp += '<div class="info-box-content">';
         cardTotalp += '<span class="info-box-text"><b>TOTAL</b></span>';
         cardTotalp += '<span class="info-box-number-total">';
-        cardTotalp += '$' + valor;
+        cardTotalp += 'R$ ' + total;
         cardTotalp += '</span>';
         cardTotalp += '</div>';
         cardTotalp += '</div>';
@@ -166,7 +175,7 @@ $(function() {
     }
 
     function cardMedia(valor, icon) {
-
+        media = numberFormatPtBr(valor);
         let cardMedia = '';
         cardMedia += '<div class="info-box mb-3" divBox>';
         cardMedia += '<span class="info-box-icon cardCategoria bg-warning elevation-1 material-icons">' + icon +
@@ -175,7 +184,7 @@ $(function() {
         cardMedia += '<span class="info-box-text"><b>MÉDIA</b></span>';
         cardMedia += '<span class="info-box-number-media">';
         cardMedia += '<span class="info-box-number-media">';
-        cardMedia += '$' + valor + '';
+        cardMedia += 'R$ ' + media + '';
         cardMedia += '</span>';
         cardMedia += '</div>';
         cardMedia += '</div>';
@@ -186,8 +195,9 @@ $(function() {
     }
 
     function updateValueCardReceita(newValue) {
+        valueReceitaFormatado = numberFormatPtBr(newValue);
         $("#clsCardReceita").removeClass("sr-only");
-        $('.info-box-number-receita').text('$' + newValue);
+        $('.info-box-number-receita').text('R$ ' + valueReceitaFormatado);
         $('.info-box-text-receita').text('RECEITA');
     }
 
@@ -199,15 +209,17 @@ $(function() {
     }
 
     function updateValueCardTotal(newValue) {
+        valueTotalFormatado = numberFormatPtBr(newValue);
         $("#clsCardTotal").removeClass("sr-only");
-        $('.info-box-number-total').text('$' + newValue);
+        $('.info-box-number-total').text('R$ ' + valueTotalFormatado);
        
 
     }
     
     function updateValueCardMedia(newValue) {
+        valueMediaFormatado = numberFormatPtBr(newValue);
         $("#clsCardMedia").removeClass("sr-only");
-        $('.info-box-number-media').text('$' + newValue);
+        $('.info-box-number-media').text('R$ ' + valueMediaFormatado);
         
     }
     
@@ -375,22 +387,28 @@ $(function() {
                                     minimumFractionDigits: 2,
                                     maximumFractionDigits: 2
                                 }).format(produto.price);
+
+            var media = produto.mediaPorProduto = new Intl.NumberFormat('pt-BR', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }).format(produto.mediaPorProduto); 
+          
+            var total = produto.total  = new Intl.NumberFormat('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(produto.total);
             
-            var media = produto.mediaPorProduto;
 
             var tr = $('<tr>');
-
             var tdProduto = $('<td>');
             var img = $('<img>').attr('src', imgSrc).addClass('img-circle img-size-32 mr-2');
-            tdProduto.append(img).append(nomeProduto);
-
+                tdProduto.append(img).append(nomeProduto);
             var tdQuantidade = $('<td>').text(quantidade);
-
             var tdPreco = $('<td>').text(preco);
-
             var tdMedia = $('<td>').text(media);
+            var tdTotal = $('<td>').text(total);
 
-            tr.append(tdProduto).append(tdQuantidade).append(tdPreco).append(tdMedia);
+            tr.append(tdProduto).append(tdQuantidade).append(tdPreco).append(tdMedia).append(tdTotal);
 
             tabelaBody.append(tr);
         });
