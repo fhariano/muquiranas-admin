@@ -1,3 +1,4 @@
+/bootstrap/cache
 /node_modules
 /public/hot
 /public/storage
@@ -14,3 +15,4 @@ yarn-error.log
 /.vscode
 /.docker
 *.log
+composer.lock
