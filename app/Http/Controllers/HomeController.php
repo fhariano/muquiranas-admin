@@ -48,7 +48,7 @@ class HomeController extends Controller
                 $groupUser = $this->group_id;
                 $categoriesAll = Categories::whereIn('bar_id',[$idBar])->get();
                 
-                // $this->atualizaSession($fieldUserAtual);
+                //Retirar esses dados que vão para view
     
                 return view('home.home')
                     ->with('idBar', $idBar)
@@ -59,7 +59,7 @@ class HomeController extends Controller
                     ->with('totalDia', $resultConsolidado['totalDia'])
                     ->with('mediaDia', $resultConsolidado['mediaDia'])
                     // ->with('totalGeral', $resultConsolidado['totalGeral'])
-                    ->with('name', $resultConsolidado['name'])
+                    ->with('name', $resultConsolidado['category_name'])
                     ->with('nameBar', $nameBar)
                     ->with('fieldsBar', $fieldsBar)
                     ->with('categoriesAll', $categoriesAll);
@@ -75,15 +75,15 @@ class HomeController extends Controller
         // if ( !empty($this->UserIsOwnerOfBar(Auth::user()->id)  && $qtdBar > 1)){
 
         // //print_r('Usuário SUPER ADMIN onde é dono de vários bares' );
-        // // dd($this->UserIsOwnerOfBar($idUser));
+        
 
         //     return $this->selectBar($this->UserIsOwnerOfBar($idUser));
 
         // }else {
 
         //     print_r('Usuário ADMIN que administra mais varios bares.' );
-        //     dd($this->UserMultAdmin(Auth::user()->id)) ;
-        //     // dd($this->UserMultAdmin(Auth::user()->id));
+  
+   
 
         // }
 
@@ -203,12 +203,12 @@ class HomeController extends Controller
 
     // public function consolidadoDados($idBar)
     // {
-    //     $consolidoDia = OrdersItems::select(
+    //     $consolidadoDia = OrdersItems::select(
     //         DB::raw('sum(orders_items.quantity) as qtd'),
     //         DB::raw('sum(orders_items.price) as price'),
     //         DB::raw('sum(orders_items.total) as total'),
     //         DB::raw('sum(orders.total) as totalGeral'),
-    //         DB::raw('category.name as nameCategoria'),
+    //         DB::raw('category.name as category_name'),
     //     )
     //         ->join('products as p', 'p.id', '=', 'product_id')
     //         ->leftJoin('categories As category', function ($join) {
@@ -222,22 +222,22 @@ class HomeController extends Controller
     //         ->where('orders.active', 1)
     //         ->where('category.id', 6)
     //         ->whereNotNull('orders.erp_id')
-    //         ->groupBy('nameCategoria')
+    //         ->groupBy('category_name')
     //         ->get();
 
 
 
-    //     // $dados = json_decode($consolidoDia,true);
+    //     // $dados = json_decode($consolidadoDia,true);
     //     // dd($dados);   
 
-    //     $mediaConsolidadoDia = empty($consolidoDia[0]->total) && empty($consolidoDia[0]->qtd) ? '0' : number_format($consolidoDia[0]->total / $consolidoDia[0]->qtd, 2);
+    //     $mediaConsolidadoDia = empty($consolidadoDia[0]->total) && empty($consolidadoDia[0]->qtd) ? '0' : number_format($consolidadoDia[0]->total / $consolidadoDia[0]->qtd, 2);
     //     $resultConsolidadoDia = array(
 
-    //         "qtdTotalDia" => empty($consolidoDia[0]->qtd) ? '0' : $consolidoDia[0]->qtd,
-    //         "totalDia" => empty($consolidoDia[0]->total) ? '0,00' : str_replace('.', ',', $consolidoDia[0]->total),
+    //         "qtdTotalDia" => empty($consolidadoDia[0]->qtd) ? '0' : $consolidadoDia[0]->qtd,
+    //         "totalDia" => empty($consolidadoDia[0]->total) ? '0,00' : str_replace('.', ',', $consolidadoDia[0]->total),
     //         "mediaDia" => str_replace('.', ',', $mediaConsolidadoDia),
-    //         "totalGeral" => empty($consolidoDia[0]->totalGeral) ? '0' : $consolidoDia[0]->totalGeral,
-    //         "name" => empty($consolidoDia[0]->nameCategoria) ? 'SEM VENDA' : $consolidoDia[0]->nameCategoria,
+    //         "totalGeral" => empty($consolidadoDia[0]->totalGeral) ? '0' : $consolidadoDia[0]->totalGeral,
+    //         "name" => empty($consolidadoDia[0]->category_name) ? 'SEM VENDA' : $consolidadoDia[0]->category_name,
     //     );
     //     return $resultConsolidadoDia;
 
@@ -254,17 +254,16 @@ class HomeController extends Controller
     }
 
 
-    private function buscarDadosConsolidados($idBar, $idCategoria)  //colocar $categoriaBar
+    private function buscarDadosConsolidados(int $barId, int $categoryId):array  //colocar $categoriaBar
     {
-
-
-        $consolidoDia = OrdersItems::select(
-            DB::raw('sum(orders_items.quantity) as qtd'),
+        $consolidadoDia = OrdersItems::select(
+            DB::raw('sum(orders_items.quantity) as quantity'),
             DB::raw('sum(orders_items.price) as price'),
             DB::raw('sum(orders_items.total) as total'),
-            // DB::raw('sum(orders.total) as totalGeral'),
-            DB::raw('category.name as nameCategoria'),
-             DB::raw('category.icon_name as iconCategoria'),
+            DB::raw('category.name as category_name'),
+            DB::raw('category.icon_name as category_icon'),
+            DB::raw('p.short_name as product_name'),
+            DB::raw('p.image_url as product_image'),
         )
             ->join('products as p', 'p.id', '=', 'product_id')
             ->leftJoin('categories As category', function ($join) {
@@ -273,39 +272,67 @@ class HomeController extends Controller
             ->leftJoin('orders As orders', function ($join) {
                 $join->on('orders.id', '=', 'order_id');
             })
-            ->where('orders.bar_id', $idBar)
-            ->where('orders.active', 1)
-            ->where('category.id', $idCategoria) //idCategoria
+            ->where('orders.bar_id', $barId)
+            ->where('orders.active', true)
+            ->where('category.id', $categoryId)
             ->whereNull('orders.erp_id')
-            ->groupBy('nameCategoria', 'iconCategoria')
-            ->first();
+            ->groupBy('category_name', 'category_icon','product_name','product_image')
+            ->orderBy('quantity')
+            ->get();
 
        
        
-        if (!$consolidoDia) {
+        if ($consolidadoDia->isEmpty()) {
            
             return [
+                'product_name' => [],
                 'qtdTotalDia' => 0,
                 'totalDia' => 0,
                 'mediaDia' => 0,
                 'totalGeral' => 0,
-                'name' => 'SEM VENDA',
-                'iconCategoria' => '',
+                'category_name' => 'SEM VENDA',
+                'category_icon' => '',
                 'noData' => true,
             ];
         }
 
-        $mediaConsolidadoDia = number_format($consolidoDia->total / $consolidoDia->qtd,2,'.','');
-       
-        return [
-            'qtdTotalDia' => $consolidoDia->qtd,
-            'totalDia' => $consolidoDia->total,
-            'mediaDia' => $mediaConsolidadoDia,
-            'totalGeral' => $this->TotalGeralBar($idBar),
-            'name' => $consolidoDia->nameCategoria,
-            'iconCategoria' => $consolidoDia->iconCategoria,
-            'noData' => false,
+       //Dados da tabela dos produtos
+        $fieldsProducts = $consolidadoDia->map(function ($consolidado) {
+            $mediaPorProduto = number_format($consolidado->total / $consolidado->quantity,2,'.','');
+            return [
+                'product_name' => $consolidado->product_name,
+                'quantity' => $consolidado->quantity,
+                'price' => $consolidado->price,
+                'total' => $consolidado->total,
+                'product_image' => $consolidado->product_image,
+                'mediaPorProduto' =>$mediaPorProduto,
             ];
+        });
+        
+        //Dados consolidado dos cards
+        $fieldsCards = [];
+        $qtdTotalDia = 0;
+        $totalDia = 0;
+       
+        foreach ($consolidadoDia as $consolidado) {
+            $qtdTotalDia += $consolidado->quantity;
+            $totalDia += $consolidado->total;         
+                
+        }
+
+        $mediaConsolidadoDia = number_format($totalDia / $qtdTotalDia,2,'.','');
+        
+        return [
+            'fieldsProducts' => $fieldsProducts,
+            'qtdTotalDia' => $qtdTotalDia,
+            'totalDia' => $totalDia,
+            'mediaDia' => $mediaConsolidadoDia,
+            'totalGeral' => $this->TotalGeralBar($barId),
+            'category_name' => $consolidadoDia[0]->category_name,
+            'category_icon' => $consolidadoDia[0]->category_icon,
+            'noData' => false,
+        ];
+
     }
  
     
