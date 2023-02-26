@@ -30,16 +30,28 @@
 
     <div class="container-fluid">
 
+   
+            <div class="bd-example sr-only">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+       
         <div class="row">
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardReceita'></div>
 
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardITotaltens'></div>
             <div class="clearfix hidden-md-up"></div>
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardTotal'></div>
-
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardMedia'></div>
-            <div class="card-body">
 
+
+
+
+            <div class="card-body">
 
 
                 <div class="card sr-only" id='tabelaProdutos'>
@@ -53,9 +65,9 @@
                                 <tr>
                                     <th>Produto</th>
                                     <th>Quantidade</th>
-                                    <th>Preço (R$)</th>
-                                    <th>Média (R$)</th>
                                     <th>Total (R$)</th>
+                                    <th>Média (R$)</th>
+                                    <th>Preço Base (R$)</th>
 
                                 </tr>
                             </thead>
@@ -69,7 +81,7 @@
         </div>
     </div>
 
-   
+
 </div>
 
 @endsection
@@ -109,18 +121,18 @@ $(function() {
 
     cardReceita(valorReceita);
 
-    function numberFormatPtBr(valor){
+    function numberFormatPtBr(valor) {
         return new Intl.NumberFormat('pt-BR', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }).format(valor);
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(valor);
     }
     // Funções para criação dos cards
 
     function cardReceita(valor) {
-   
 
-        var media =  numberFormatPtBr(valor);
+
+        var media = numberFormatPtBr(valor);
         let cardReceita = '';
         cardReceita += '<div class="info-box">';
         cardReceita +=
@@ -128,7 +140,7 @@ $(function() {
         cardReceita += '<div class="info-box-content">';
         cardReceita += '<span class="info-box-text-receita"><b> RECEITAS </b></span>';
         cardReceita += '<span class="info-box-number-receita">';
-        cardReceita +=  'R$ ' + media;
+        cardReceita += 'R$ ' + media;
 
         cardReceita += '</span>';
         cardReceita += '</div>';
@@ -147,7 +159,7 @@ $(function() {
         cardTotalItens += '      <div class="info-box-content">';
         cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
         cardTotalItens += '             <span class="info-box-number-itens">';
-        cardTotalItens +=                valor;
+        cardTotalItens += valor;
         cardTotalItens += '             </span>';
         cardTotalItens += '       </div>';
         cardTotalItens += '       </div>';
@@ -157,7 +169,7 @@ $(function() {
     }
 
     function cardTotal(valor, icon) {
-        var total =  numberFormatPtBr(valor);
+        var total = numberFormatPtBr(valor);
         let cardTotalp = '';
         cardTotalp += '<div class="info-box mb-3" divBox>';
         cardTotalp += '<span class="info-box-icon cardCategoria bg-info elevation-1 material-icons">' + icon +
@@ -212,36 +224,37 @@ $(function() {
         valueTotalFormatado = numberFormatPtBr(newValue);
         $("#clsCardTotal").removeClass("sr-only");
         $('.info-box-number-total').text('R$ ' + valueTotalFormatado);
-       
+
 
     }
-    
+
     function updateValueCardMedia(newValue) {
         valueMediaFormatado = numberFormatPtBr(newValue);
         $("#clsCardMedia").removeClass("sr-only");
         $('.info-box-number-media').text('R$ ' + valueMediaFormatado);
-        
+
     }
-    
-        function updateIconCards(iconCard){
-            $('.cardCategoria').text(iconCard);
-        }
+
+    function updateIconCards(iconCard) {
+        $('.cardCategoria').text(iconCard);
+    }
 
 
-// Função condicional, onde mostrará ou não o selctBar e o CardReceitas. 
+    // Função condicional, onde mostrará ou não o selctBar e o CardReceitas. 
     if (groupUser != 6) {
 
-            $('#categoriesBar').empty();
-            $("#clsCardReceita").addClass("sr-only");
-            $("#clsCardITotaltens").addClass("sr-only");
-            $("#clsCardTotal").addClass("sr-only");
-            $("#clsCardMedia").addClass("sr-only");
-            getReceitaBarForCard(barUser);
-            getCategoriesForSelect(barUser);
+        $('.bd-example').removeClass("sr-only");
+        $('#categoriesBar').empty();
+        $("#clsCardReceita").addClass("sr-only");
+        $("#clsCardITotaltens").addClass("sr-only");
+        $("#clsCardTotal").addClass("sr-only");
+        $("#clsCardMedia").addClass("sr-only");
+        getReceitaBarForCard(barUser);
+        getCategoriesForSelect(barUser);
 
     } else {
-        
-        
+
+
         $("#selectBars").removeClass("sr-only");
         $("#clsCardReceita").removeClass("sr-only");
         selectBar.change(function(event) {
@@ -251,7 +264,9 @@ $(function() {
 
             //função ajax para atualizar o valor da receita baseado no is do bar selecionado.
 
+            $('.bd-example').removeClass("sr-only");
             $('#categoriesBar').empty();
+            $("#tabelaProdutos").addClass("sr-only");
             $("#clsCardReceita").addClass("sr-only");
             $("#clsCardITotaltens").addClass("sr-only");
             $("#clsCardTotal").addClass("sr-only");
@@ -302,7 +317,7 @@ $(function() {
                 dataType: "json",
                 success: function(categories) {
 
-
+                    $('.bd-example').addClass("sr-only");
                     $("#categoriesBar").append(
                         '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
                     )
@@ -333,11 +348,15 @@ $(function() {
             if (control != 1) {
                 // icon = 'sports_bar';
 
-                getConsolidadoDados(barUser, idCategories).then((result) => {
-                   
+                $('.bd-example').removeClass("sr-only");
 
+                getConsolidadoDados(barUser, idCategories).then((result) => {
+
+
+                    $('.bd-example').addClass("sr-only");
                     if (result.noData != true) {
                         $("#tabelaProdutos").removeClass("sr-only");
+
                     }
                     cardTotal(result.totalDia, result.category_icon);
                     cardItens(result.qtdTotalDia, result.category_icon);
@@ -350,9 +369,18 @@ $(function() {
             } else {
 
                 $("#tabelaProdutos").addClass("sr-only");
+                $("#clsCardITotaltens").addClass("sr-only");
+                $("#clsCardTotal").addClass("sr-only");
+                $("#clsCardMedia").addClass("sr-only");
+                $('.bd-example').removeClass("sr-only");
+
                 getConsolidadoDados(barUser, idCategories).then((result) => {
 
+                    $('.bd-example').addClass("sr-only");
                     if (result.noData != true) {
+                        $("#clsCardITotaltens").removeClass("sr-only");
+                        $("#clsCardTotal").removeClass("sr-only");
+                        $("#clsCardMedia").removeClass("sr-only");
                         $("#tabelaProdutos").removeClass("sr-only");
                     }
                     updateValueCardTotal(result.totalDia);
@@ -365,9 +393,6 @@ $(function() {
 
 
 
-
-                //criar a função que mudará a informações da tabela
-
             }
 
         }
@@ -375,49 +400,32 @@ $(function() {
 
 
     function popularTabelaProdutos(produtos) {
-        console.log(produtos);
+     
         var tabelaBody = $('#tabelaProdutosBody');
         tabelaBody.empty(); // limpa o conteúdo anterior da tabela
 
-        $.each(produtos, function (i, produto) {
+        $.each(produtos, function(i, produto) {
             var imgSrc = produto.product_image;
             var nomeProduto = produto.product_name;
             var quantidade = produto.quantity;
-            var preco = produto.price  = new Intl.NumberFormat('pt-BR', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }).format(produto.price);
-
-            var media = produto.mediaPorProduto = new Intl.NumberFormat('pt-BR', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }).format(produto.mediaPorProduto); 
-          
-            var total = produto.total  = new Intl.NumberFormat('pt-BR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }).format(produto.total);
-            
+            var total = numberFormatPtBr(produto.total)
+            var media = numberFormatPtBr(produto.mediaPorProduto)
+            var preco = numberFormatPtBr(produto.price)
 
             var tr = $('<tr>');
             var tdProduto = $('<td>');
             var img = $('<img>').attr('src', imgSrc).addClass('img-circle img-size-32 mr-2');
-                tdProduto.append(img).append(nomeProduto);
+            tdProduto.append(img).append(nomeProduto);
             var tdQuantidade = $('<td>').text(quantidade);
-            var tdPreco = $('<td>').text(preco);
-            var tdMedia = $('<td>').text(media);
             var tdTotal = $('<td>').text(total);
+            var tdMedia = $('<td>').text(media);
+            var tdPreco = $('<td>').text(preco);
 
-            tr.append(tdProduto).append(tdQuantidade).append(tdPreco).append(tdMedia).append(tdTotal);
+            tr.append(tdProduto).append(tdQuantidade).append(tdTotal).append(tdMedia).append(tdPreco);
 
             tabelaBody.append(tr);
         });
     }
-
-
-
-
-
 
 
 

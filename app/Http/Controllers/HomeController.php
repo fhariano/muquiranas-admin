@@ -277,7 +277,7 @@ class HomeController extends Controller
             ->where('category.id', $categoryId)
             ->whereNull('orders.erp_id')
             ->groupBy('category_name', 'category_icon','product_name','product_image')
-            ->orderBy('quantity')
+            ->orderByDesc('quantity')
             ->get();
 
        
