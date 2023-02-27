@@ -5,12 +5,11 @@
 
     <div class="card-body">
         <div class="row sr-only" id="selectBars" align="center">
-            <!-- <select class="selectBar-basic-single form-control bg-primary d-flex justify-content-between" style="width:100%" id="selectBar" name="selectBar"> -->
             <select class="js-selectBar-ajax form-control bg-primary d-flex justify-content-between" style="width:100%"
                 id="selectBar" name="selectBar">
                 <option class="font-weight-bold sr-only" selected disabled value="" align="center">TODOS</option>
                 @foreach($fieldsBar as $key => $value)
-                <option value="{{$value['id'] }}">{{ $value['name'] }}</option>
+                <option value="{{ $value->bar_id }}">{{ $value->nameBar }}</option>
                 @endforeach
             </select>
         </div>

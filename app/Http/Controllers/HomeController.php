@@ -44,12 +44,13 @@ class HomeController extends Controller
 
                 $resultConsolidado = $this->buscarDadosConsolidados($idBar,1);
                 $nameBar = $this->nameBar;
-                $fieldsBar = Bars::all(); //corrigir fazer consula que mostrará todos os bares do user logado.
+                $fieldsBar = $this->baresUserLogado; //corrigir fazer consula que mostrará todos os bares do user logado.
                 $groupUser = $this->group_id;
                 $categoriesAll = Categories::whereIn('bar_id',[$idBar])->get();
                 
                 //Retirar esses dados que vão para view
-    
+            
+         
                 return view('home.home')
                     ->with('idBar', $idBar)
                     ->with('statusBar', $statusBar)

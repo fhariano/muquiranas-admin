@@ -24,8 +24,9 @@ class Controller extends BaseController
     protected  $nameBar;
 
     protected $receitasBar;
+    protected $baresUserLogado;
     
-
+    
 
     
     public function __construct()
@@ -36,9 +37,9 @@ class Controller extends BaseController
             $this->group_id = session()->get('group_id');
             $this->nameBar = session()->get('nameBar');
             $this->receitasBar = session()->get('receitasBar');
+            $this->baresUserLogado = session()->get('baresUserLogado');
             $this->statusBar = $this->getStatusBar($this->bar_id);
             $this->name_user = Auth::user()->name;
-          
             return $next($request);
         });
     }

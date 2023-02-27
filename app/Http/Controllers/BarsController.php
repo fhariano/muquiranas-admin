@@ -71,13 +71,14 @@ class BarsController extends Controller
         if($fieldUserAtual[0]->group_id !=6 && $fieldUserAtual[0]->group_id !=7){
             $this->atualizaSession($fieldUserAtual);
             $this->atualizaReceitasSession($this->getReceitaBar($fieldUserAtual[0]->bar_id));
+            $this->salvaDadosBaresUsuarioSession($fieldUserAtual);
             return redirect(route('home'));
         }else{
 
            $fieldsBarsUser = $this->UserIsOwnerOfBar(Auth::user()->id);
         //    $this->receitasBares = $this->getReceitaBar($fieldsBarsUser);
           $this->atualizaReceitasSession($this->getReceitaBar($fieldsBarsUser));
-   
+          $this->salvaDadosBaresUsuarioSession($fieldsBarsUser);
            return view('bar.selectBar')
            ->with('fieldsBarsUser', $fieldsBarsUser);
            $this->atualizaSession($fieldUserAtual);
@@ -122,6 +123,8 @@ class BarsController extends Controller
             ->get();  
         return $totalBar[0]->totalBar;
     }
+
+
     
     /**
      * Show the form for creating a new resource.
@@ -407,6 +410,15 @@ class BarsController extends Controller
     public function atualizaReceitasSession($valor)
     {
         return session(['receitasBar' =>  $valor]);
+    }
+
+    public function salvaDadosBaresUsuarioSession($fieldsBares){
+     $bar = [
+        'bar_id' => 'Teste Murilo',
+
+     ] ;
+        return session(['baresUserLogado' => $fieldsBares]);
+
     }
 
 }
