@@ -54,7 +54,7 @@ function getStatusBar($id)
 
 
   <ul class="navbar-nav" style="text-align:center;"> 
-        <h1 style="text-align:center;"> <? echo $name;?></h1> 
+        <h1 style="text-align:center;" id="nomeDoBar">  <? echo 'Muquiranas';?></h1> 
   </ul>
     
     {{-- Navbar right links --}}

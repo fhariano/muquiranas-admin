@@ -258,6 +258,9 @@ $(function() {
         $("#clsCardReceita").removeClass("sr-only");
         selectBar.change(function(event) {
 
+
+             atualizarNomeBar($(this).find("option:selected").text());
+      
             //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
             barUser = $(this).val();
 
@@ -275,6 +278,11 @@ $(function() {
 
         });
 
+    }
+
+    function atualizarNomeBar(name){
+     
+        $("#nomeDoBar").text('Muquiranas '+ name);
     }
 
 
