@@ -20,6 +20,7 @@ class CreateOrdersItemsTable extends Migration
             $table->double('price', 9,2); // 00.000,00
             $table->double('total', 14,2); // 000.000.000,00
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 

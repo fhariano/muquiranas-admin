@@ -19,5 +19,7 @@ class GroupsSeeder extends Seeder
         $groups = Group::create(['name' => 'Gerente']);
         $groups = Group::create(['name' => 'Supervisor']);
         $groups = Group::create(['name' => 'Usuário']);
+        $groups = Group::create(['name' => 'DonoBar']);
+        $groups = Group::create(['name' => 'MultiAdmin']);
     }
 }
