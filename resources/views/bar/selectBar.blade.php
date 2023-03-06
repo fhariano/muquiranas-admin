@@ -17,6 +17,14 @@
 
     </div>
 
+    <div class="bd-example sr-only">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+    </div>
+
 </div>
 
 
@@ -40,12 +48,9 @@ $(function() {
             success: function(response) {
 
                 
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Bar Selecionado!',
-                    html: 'O bar foi selecionado com sucesso!',
-                });
-
+                $('.bd-example').removeClass('sr-only');
+                $('.list-group').addClass('sr-only');
+        
                 window.location.replace(response);
 
             },

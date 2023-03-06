@@ -145,6 +145,7 @@ $(function() {
         cardReceita += '</div>';
         cardReceita += '</div>';
         $('#clsCardReceita').append(cardReceita);
+        $("#clsCardReceita").removeClass("sr-only");
 
     }
 
