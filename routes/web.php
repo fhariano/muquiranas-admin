@@ -106,7 +106,7 @@ Route::name('promocoes.')->middleware('auth')->prefix('/promocoes')->controller(
     Route::post('/edit/{id}', 'edit')->name('edit');
     Route::put('/update', 'update')->name('update');
     Route::put('/delete', 'destroy')->name('delete');
-    Route::put('/list/{idList}/product/{idProduct}', 'getProductsList')->name('getProductsList');
+    Route::get('/list/{idList}/product/{idProduct}', 'getProductsList')->name('getProductsList');
 });
 
 

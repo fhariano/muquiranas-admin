@@ -22,7 +22,7 @@ class OrdersItemsSeeder extends Seeder
             "order_id" => 1,
             "item" => 3 ,
             "product_id" => 1,
-            "quantity" => 13 ,
+            "quantity" => 10 ,
             "price" => 12.00 ,
             "total" => 120.00 ,
         ]);
@@ -36,5 +36,27 @@ class OrdersItemsSeeder extends Seeder
             "price" => 7.00 ,
             "total" => 49.00 ,
         ]);
+
+        $ordersItems = OrdersItems::create([
+
+            "order_id" => 2,
+            "item" => 5 ,
+            "product_id" => 8,
+            "quantity" => 10 ,
+            "price" => 7.00 ,
+            "total" => 70.00 ,
+        ]);
+
+        $ordersItems = OrdersItems::create([
+
+            "order_id" => 3,
+            "item" => 5 ,
+            "product_id" => 7,
+            "quantity" => 10 ,
+            "price" => 7.00 ,
+            "total" => 70.00 ,
+        ]);
+
+
     }
 }

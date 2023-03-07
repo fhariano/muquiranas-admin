@@ -41,7 +41,6 @@
        
         <div class="row">
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardReceita'></div>
-
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardITotaltens'></div>
             <div class="clearfix hidden-md-up"></div>
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardTotal'></div>
@@ -131,7 +130,8 @@ $(function() {
     function cardReceita(valor) {
 
 
-        var media = numberFormatPtBr(valor);
+        // media = numberFormatPtBr(valor);
+        media = valor ? numberFormatPtBr(valor) : 0;
         let cardReceita = '';
         cardReceita += '<div class="info-box">';
         cardReceita +=
@@ -207,8 +207,11 @@ $(function() {
     }
 
     function updateValueCardReceita(newValue) {
-        valueReceitaFormatado = numberFormatPtBr(newValue);
+        //  valueReceitaFormatado = numberFormatPtBr(newValue);
+         valueReceitaFormatado = newValue ? numberFormatPtBr(newValue) : '0,00';
+       
         $("#clsCardReceita").removeClass("sr-only");
+        
         $('.info-box-number-receita').text('R$ ' + valueReceitaFormatado);
         $('.info-box-text-receita').text('RECEITA');
     }
@@ -300,7 +303,7 @@ $(function() {
             },
             dataType: "json",
             success: function(success) {
-
+              
                 updateValueCardReceita(success);
 
             }
@@ -331,6 +334,7 @@ $(function() {
                     )
 
                     $.each(categories, function(key, value) {
+                        updateValueCardReceita();
                         $("#selectCategories").removeClass("sr-only");
 
                         $("#categoriesBar").append('<option value="' + value['id'] +
@@ -364,6 +368,7 @@ $(function() {
                     $('.bd-example').addClass("sr-only");
                     if (result.noData != true) {
                         $("#tabelaProdutos").removeClass("sr-only");
+                        $("#clsCardReceita").removeClass("sr-only");
 
                     }
                     cardTotal(result.totalDia, result.category_icon);
@@ -383,9 +388,10 @@ $(function() {
                 $('.bd-example').removeClass("sr-only");
 
                 getConsolidadoDados(barUser, idCategories).then((result) => {
-
+                   
                     $('.bd-example').addClass("sr-only");
                     if (result.noData != true) {
+                       
                         $("#clsCardITotaltens").removeClass("sr-only");
                         $("#clsCardTotal").removeClass("sr-only");
                         $("#clsCardMedia").removeClass("sr-only");

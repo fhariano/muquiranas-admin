@@ -33,14 +33,7 @@ class UsersBarsSeeder extends Seeder
         $userBar = UsersBar::create([
             'user_id' => 2,
             'bar_id' => 1,
-            'group_id' => 6,
-            'is_owner' => true,
-            'inserted_for' => 'Murilo'
-        ]);
-        $userBar = UsersBar::create([
-            'user_id' => 2,
-            'bar_id' => 2,
-            'group_id' => 6,
+            'group_id' => 1,
             'is_owner' => true,
             'inserted_for' => 'Murilo'
             
@@ -60,7 +53,21 @@ class UsersBarsSeeder extends Seeder
         $userBar = UsersBar::create([
             'user_id' => 4,
             'bar_id' => 1,
-            'group_id' => 1, 
+            'group_id' => 6, 
+            'inserted_for' => 'Murilo'
+        ]);
+        $userBar = UsersBar::create([
+            'user_id' => 4,
+            'bar_id' => 1,
+            'group_id' => 6,
+            'is_owner' => true,
+            'inserted_for' => 'Murilo'
+        ]);
+        $userBar = UsersBar::create([
+            'user_id' => 5,
+            'bar_id' => 1,
+            'group_id' => 2,
+            'is_owner' => true,
             'inserted_for' => 'Murilo'
         ]);
     }
