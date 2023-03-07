@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
             UsersBarsSeeder::class,
             PermissionsGroupsSeeder::class,
             OrderTypesSeeder::class,
-            OrdersSeeder::class,
-            OrdersItemsSeeder::class,
+            // OrdersSeeder::class,
+            // OrdersItemsSeeder::class,
 
 
         ]);
