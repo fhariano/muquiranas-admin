@@ -46,9 +46,10 @@ class TransferenciaController extends Controller
                 'x-cake-token' => '04d1be2fd17ba6769bbf',
                 'Accept' => 'application/json'
             ])->get('https://app.cakeerp.com/api/product/all?active=1')['list'];
-
+        
             $products = json_decode($response);
             $result = array();
+                 
 
             foreach ($products as $key => $value) {
 
@@ -73,9 +74,10 @@ class TransferenciaController extends Controller
 
                 array_push($result, $result_array);
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
 
-            return  $th;
+            return response()->json(['message' => 'Ocorreu um erro ao buscar os dados. Por favor, tente novamente mais tarde.'], 500);
+
         }
 
         return $result;
@@ -176,19 +178,33 @@ class TransferenciaController extends Controller
         return json_decode($response);
     }
 
+ 
     public function categoria($id)
     {
         try {
             $response = Http::withHeaders([
                 'x-cake-token' => '04d1be2fd17ba6769bbf',
                 'Accept' => 'application/json'
-            ])->get('https://app.cakeerp.com/api/product_category/all?id=' . $id)['list'];
-        } catch (\Throwable $th) {
-            return $th;
+            ])->get('https://app.cakeerp.com/api/product_category/all?id=' . $id);
+    
+           
+            $data = json_decode($response['list']);
+    
+            if (empty($data)) {
+                // retorna um array vazio caso não haja dados disponíveis
+                return [];
+            }
+    
+            return $data;
+        } catch(\Exception $e){
+            return response()->json(['message' => 'Ocorreu um erro ao buscar os dados categoria. Por favor, tente novamente mais tarde.'],500);
         }
-
-        return json_decode($response);
     }
+
+
+
+
+
     public function imgProduct($id)
     {
         try {
