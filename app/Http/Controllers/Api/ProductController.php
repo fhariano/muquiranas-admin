@@ -90,6 +90,8 @@ class ProductController extends Controller
         //     ->orderBy('products.order', 'asc')
         //     ->get();
         // dd($products);
+        $products = $products->collect();
+
         if ($products->isEmpty()) {
             return response()->json([
                 "error" => true,
