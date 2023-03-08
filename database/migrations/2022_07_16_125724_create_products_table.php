@@ -27,6 +27,10 @@ class CreateProductsTable extends Migration
             $table->decimal('price_base',$precision=8, $scale=2)->default(0.00);
             $table->string('image_url',255)->default("")->nullable();
             $table->integer('order')->default(0);
+            $table->boolean('promo')->default(false);
+            $table->decimal('promo_price',$precision=8, $scale=2)->default(0.00);
+            $table->char('promo_expire',8)->default("00:00:00");
+            $table->char('now_time',8)->default("00:00:00");
             $table->boolean('active')->default(true);
             $table->string('inserted_for',45)->nullable();
             $table->string('updated_for',45)->nullable();

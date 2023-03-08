@@ -90,8 +90,6 @@ class ProductController extends Controller
         //     ->orderBy('products.order', 'asc')
         //     ->get();
         // dd($products);
-        $products = $products->collect();
-
         if ($products->isEmpty()) {
             return response()->json([
                 "error" => true,
@@ -112,24 +110,17 @@ class ProductController extends Controller
             // dd($products_promo_list);
 
             foreach ($products as $product) {
-                $product['promo'] = false;
-                $product['promo_price'] = '0.00';
-                $product['promo_expire'] = '00:00:00';
+                $product->promo = false;
+                $product->promo_price = '0.00';
+                $product->promo_expire = '00:00:00';
                 foreach ($products_promo_list as $promos) {
                     if ($product->id == $promos->product_id) {
-                        $product['promo'] = true;
-                        $product['promo_price'] = $promos->price;
-                        $product['promo_expire'] = $promos->hour_end;
+                        $product->promo = true;
+                        $product->promo_price = $promos->price;
+                        $product->promo_expire = $promos->hour_end;
                     }
                 }
-                $product['now_time'] = $nowTime;
-            }
-        } else {
-            foreach ($products as $product) {
-                $product['promo'] = false;
-                $product['promo_price'] = '0.00';
-                $product['promo_expire'] = '00:00:00';
-                $product['now_time'] = $nowTime;
+                $product->now_time = $nowTime;
             }
         }
 
