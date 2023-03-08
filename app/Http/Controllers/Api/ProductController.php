@@ -74,11 +74,21 @@ class ProductController extends Controller
         $nowTime = \Carbon\Carbon::now();
         $nowTime = (string) $nowTime->format('H:i:s');
         $bar_id = $request->bar_id;
-        $products = Products::where('products.active', 1)
-            ->where('products.bar_id', $bar_id)
-            ->orderBy('products.category_id', 'asc')
-            ->orderBy('products.order', 'asc')
+        $products = DB::table('categories as c')
+            ->leftJoin('products as p', 'c.id', '=', 'p.category_id')
+            ->where('c.bar_id', $bar_id)
+            ->where('c.active', 1)
+            ->where('p.active', 1)
+            ->where('p.active', 1)
+            ->orderBy('p.category_id', 'asc')
+            ->orderBy('p.order', 'asc')
             ->get();
+
+        // $products = Products::where('products.active', 1)
+        //     ->where('products.bar_id', $bar_id)
+        //     ->orderBy('products.category_id', 'asc')
+        //     ->orderBy('products.order', 'asc')
+        //     ->get();
         // dd($products);
         if ($products->isEmpty()) {
             return response()->json([
