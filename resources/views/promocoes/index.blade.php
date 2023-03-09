@@ -602,13 +602,10 @@
 
                 url: urlBase + urlController + idList, //nome 
                 pagination: true,
-                // showRefresh: true,
                 toolbar: '#promosListsToolbar',
-                pagination: true,
                 clickToSelect: true,
                 search: true,
                 searchTimeOut: 1500,
-                // searchOnEnterKey: true,
                 searchAccentNeutralise: true,
                 sortable: true,
                 detailView: true,

@@ -201,10 +201,6 @@ class TransferenciaController extends Controller
         }
     }
 
-
-
-
-
     public function imgProduct($id)
     {
         try {

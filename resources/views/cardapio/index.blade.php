@@ -550,8 +550,8 @@
                 Swal.fire({
                     position: 'center',
                     icon: 'warning',
-                    title: 'Apagar Produto do Cardápio?',
-                    html: 'ATENÇÃO: Esse será excluído !',
+                    title: 'Remover Produto do Cardápio?',
+                    html: 'ATENÇÃO: Esse será removido do seu cardápio!',
                     allowOutsideClick: false,
                     showCloseButton: true,
                     showCancelButton: true,
