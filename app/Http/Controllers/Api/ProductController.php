@@ -160,7 +160,7 @@ class ProductController extends Controller
 
     public function toggleFavoriteProduct(Request $request)
     {
-        Log::channel('muquiranas')->info("toggleFavoriteProduct - barId: " . $request->bar_id . " - UserId: " . $request->user_id);
+        Log::channel('muquiranas')->info("toggleFavoriteProduct - barId: " . $request->bar_id . " - UserId: " . $request->user_id . " - productId: " . $request->product_id);
         $favorite = UsersFavorites::select('id')
             ->where('bar_id', $request->bar_id)
             ->where('user_id', $request->user_id)
