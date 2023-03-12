@@ -22,21 +22,24 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// API
-Route::get('/bars', [BarController::class, 'index']);
-Route::get('/bars/{id}', [BarController::class, 'show']);
 
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{id}', [CategoryController::class, 'show']);
-Route::get('/categories/bar/{bar_id}', [CategoryController::class, 'barCategories']);
+Route::middleware(['chk_user_auth'])->group(function () {
+    // API
+    Route::get('/bars', [BarController::class, 'index']);
+    Route::get('/bars/{id}', [BarController::class, 'show']);
 
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{id}', [ProductController::class, 'show']);
-Route::get('/products/bar/{bar_id}', [ProductController::class, 'barProducts']);
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/{id}', [CategoryController::class, 'show']);
+    Route::get('/categories/bar/{bar_id}', [CategoryController::class, 'barCategories']);
 
-Route::get('/products/favorites/bar/{bar_id}/user/{user_id}', [ProductController::class, 'favoritesProducts']);
-Route::put('/products/favorites/bar/{bar_id}/user/{user_id}', [ProductController::class, 'toggleFavoriteProduct']);
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/products/{id}', [ProductController::class, 'show']);
+    Route::get('/products/bar/{bar_id}', [ProductController::class, 'barProducts']);
 
-Route::get('/orders/{order_id}', [OrderController::class, 'show']);
-Route::get('/orders/user/{user_id}/bar/{bar_id}', [OrderController::class, 'index']);
-Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/products/favorites/bar/{bar_id}/user/{user_id}', [ProductController::class, 'favoritesProducts']);
+    Route::put('/products/favorites/bar/{bar_id}/user/{user_id}', [ProductController::class, 'toggleFavoriteProduct']);
+
+    Route::get('/orders/{order_id}', [OrderController::class, 'show']);
+    Route::get('/orders/user/{user_id}/bar/{bar_id}', [OrderController::class, 'index']);
+    Route::post('/orders', [OrderController::class, 'store']);
+});
