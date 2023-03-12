@@ -135,16 +135,16 @@ class OrderController extends Controller
 
         Log::channel('muquiranas')->info('data:' . print_r($data, true));
 
-        $order = $this->model->create([
-            'bar_id' => $data['bar_id'],
-            'customer_id' => $data['customer_id'],
-            'order_num' => $data['order_num'],
-            'total' => $data['total'],
-            'order_at' => $data['order_at'],
-            'inserted_for' => $data['inserted_for'],
-        ]);
+        // $order = $this->model->create([
+        //     'bar_id' => $data['bar_id'],
+        //     'customer_id' => $data['customer_id'],
+        //     'order_num' => $data['order_num'],
+        //     'total' => $data['total'],
+        //     'order_at' => $data['order_at'],
+        //     'inserted_for' => $data['inserted_for'],
+        // ]);
 
-        $items = $order->Products()->sync($data['items']);
+        // $items = $order->Products()->sync($data['items']);
 
         return response()->json([
             "error" => false,
