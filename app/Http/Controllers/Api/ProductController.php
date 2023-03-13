@@ -110,12 +110,12 @@ class ProductController extends Controller
             // dd($products_promo_list);
 
             foreach ($products as $product) {
-                $product->promo = false;
+                $product->promo = 0;
                 $product->promo_price = '0.00';
                 $product->promo_expire = '00:00:00';
                 foreach ($products_promo_list as $promos) {
                     if ($product->id == $promos->product_id) {
-                        $product->promo = true;
+                        $product->promo = 1;
                         $product->promo_price = $promos->price;
                         $product->promo_expire = $promos->hour_end;
                     }

@@ -168,7 +168,7 @@ class OrderController extends Controller
                     "error" => true,
                     "message" => "O produto {$result->short_name}\nestá Sem Estoque!",
                     "data" => []
-                ], 200); 
+                ], 422); 
             }
         }
 
