@@ -148,7 +148,6 @@ class OrderController extends Controller
         $items = [];
         $items = $data['items'];
 
-        Log::channel('muquiranas')->info('ORDER - data: ' . print_r($data, true));
         for ($i = 0; $i < count($items); $i++) {
             Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
             
