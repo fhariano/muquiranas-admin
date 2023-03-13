@@ -175,7 +175,7 @@ class OrderController extends Controller
 
             $nowTime = \Carbon\Carbon::now()->subMinutes(config('microservices.stopPromo'));
             $nowTime = (string) $nowTime->format('H:i:s');
-            Log::channel('muquiranas')->info('ORDER stop promo:' . $nowTime. ' - promo product: '. $data['promoExpire']);
+            Log::channel('muquiranas')->info('ORDER stop promo:' . $nowTime. ' - promo product: '. $items[$i]['promo_expire']);
 
             $promo_list = PromosLists::where('bar_id', $data['bar_id'])->where('active', 1)->first();
             Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
