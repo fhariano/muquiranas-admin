@@ -158,10 +158,18 @@ class OrderController extends Controller
             ->select('p.*')
             ->first();
             
-            Log::channel('muquiranas')->info('ORDER estoque result :' . print_r($result, true));
-            Log::channel('muquiranas')->info('ORDER estoque product:' . $result->quantity);
-            Log::channel('muquiranas')->info('ORDER estoque minimo :' . config('microservices.minStock'));
+            Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
+            Log::channel('muquiranas')->info('ORDER estoque product :' . $result->quantity);
+            Log::channel('muquiranas')->info('ORDER estoque minimo  :' . config('microservices.minStock'));
 
+            // Produto abaixo do estoque mínimo retorna erro
+            if($result->quantity < config('microservices.minStock')) {
+                return response()->json([
+                    "error" => true,
+                    "message" => "O produto {$result->short_name}\nestá Sem Estoque!",
+                    "data" => []
+                ], 200); 
+            }
         }
 
         // $order = $this->model->create([
