@@ -138,10 +138,10 @@ class OrderController extends Controller
         Log::channel('muquiranas')->info('request1:' . print_r($request->all(), true));
         Request()->attributes->add(['apikey' => $this->apikey]);
         Log::channel('muquiranas')->info('request2:' . print_r($request->all(), true));
-        $data = $request->validated();
+        // $data = $request->validated();
 
         Log::channel('muquiranas')->info('user identify:' . $this->identify);
-        Log::channel('muquiranas')->info('data:' . print_r($data, true));
+        // Log::channel('muquiranas')->info('data:' . print_r($data, true));
         
         // $order = $this->model->create([
         //     'bar_id' => $data['bar_id'],
