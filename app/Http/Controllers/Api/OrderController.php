@@ -158,8 +158,9 @@ class OrderController extends Controller
             ->select('p.*')
             ->first();
             
-            Log::channel('muquiranas')->info('ORDER estoque result:' . print_r($result, true));
+            Log::channel('muquiranas')->info('ORDER estoque result :' . print_r($result, true));
             Log::channel('muquiranas')->info('ORDER estoque product:' . $result->quantity);
+            Log::channel('muquiranas')->info('ORDER estoque minimo :' . config('microservices.minStock'));
 
         }
 
