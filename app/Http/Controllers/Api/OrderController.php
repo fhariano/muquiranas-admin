@@ -181,10 +181,10 @@ class OrderController extends Controller
             // Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
 
             if ($promo_list) {
-                $stopPromo = strtotime($nowTime) <= strtotime($items[$i]['promo_expire']);
+                $stopPromo = strtotime($nowTime) > strtotime($items[$i]['promo_expire']);
                 Log::channel('muquiranas')->info('ORDER stop promo:' . $stopPromo);
 
-                if ($result->quantity < config('microservices.minStock')) {
+                if ($stopPromo) {
                     return response()->json([
                         "error" => true,
                         "message" => "O produto {$result->short_name}\nnão está mais com este preço!",
