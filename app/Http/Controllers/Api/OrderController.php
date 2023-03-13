@@ -140,17 +140,24 @@ class OrderController extends Controller
 
         Log::channel('muquiranas')->info('ORDER - user identify:' . $this->identify);
         Log::channel('muquiranas')->info('ORDER - data: ' . print_r($data, true));
-        
+
         // Primeiro: Checar itens do carrinho!
         // - quantidade do item em estoque
         // Segundo: Checar itens em promoção
         // - promoção ainda é válida?
         $items = [];
         $items = $data['items'];
-        
+
         Log::channel('muquiranas')->info('ORDER - data: ' . print_r($data, true));
-        for ($i=0; $i < count($items); $i++) { 
+        for ($i = 0; $i < count($items); $i++) {
             Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
+            $result = DB::table('bars as b')
+            ->leftJoin('products as p', 'b.id', '=', 'p.bar_id')
+            ->where('b.id',$data['bar_id'])
+            ->where('p.id',$items[$i]['product_id'])
+            ->first();
+            
+            Log::channel('muquiranas')->info('ORDER estoque result:' . print_r($result, true));
         }
 
         // $order = $this->model->create([
