@@ -161,8 +161,8 @@ class OrderController extends Controller
                 ->first();
 
             // Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
-            // Log::channel('muquiranas')->info('ORDER estoque product :' . $result->quantity);
-            // Log::channel('muquiranas')->info('ORDER estoque minimo  :' . config('microservices.minStock'));
+            Log::channel('muquiranas')->info('ORDER estoque product :' . $result->quantity);
+            Log::channel('muquiranas')->info('ORDER estoque minimo  :' . config('microservices.minStock'));
 
             // Produto abaixo do estoque mínimo retorna erro
             if ($result->quantity < config('microservices.minStock')) {
@@ -175,14 +175,22 @@ class OrderController extends Controller
 
             $nowTime = \Carbon\Carbon::now()->addMinutes(config('microservices.stopPromo'));
             $nowTime = (string) $nowTime->format('H:i:s');
-            Log::channel('muquiranas')->info('ORDER nowTime:' . $nowTime. ' - promo product: '. $items[$i]['promo_expire']);
-            
+            Log::channel('muquiranas')->info('ORDER nowTime:' . $nowTime . ' - promo product: ' . $items[$i]['promo_expire']);
+
             $promo_list = PromosLists::where('bar_id', $data['bar_id'])->where('active', 1)->first();
             // Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
-            
+
             if ($promo_list) {
                 $stopPromo = strtotime($nowTime) <= strtotime($items[$i]['promo_expire']);
                 Log::channel('muquiranas')->info('ORDER stop promo:' . $stopPromo);
+
+                if ($result->quantity < config('microservices.minStock')) {
+                    return response()->json([
+                        "error" => true,
+                        "message" => "O produto {$result->short_name}\nnão está mais com este preço!",
+                        "data" => []
+                    ], 422);
+                }
             }
         }
 
