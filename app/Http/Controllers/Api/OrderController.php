@@ -138,8 +138,8 @@ class OrderController extends Controller
     {
         $data = $request->validated();
 
-        Log::channel('muquiranas')->info('ORDER - user identify:' . $this->identify);
-        Log::channel('muquiranas')->info('ORDER - data: ' . print_r($data, true));
+        // Log::channel('muquiranas')->info('ORDER - user identify:' . $this->identify);
+        // Log::channel('muquiranas')->info('ORDER - data: ' . print_r($data, true));
 
         // Primeiro: Checar itens do carrinho!
         // - quantidade do item em estoque
@@ -151,13 +151,17 @@ class OrderController extends Controller
         Log::channel('muquiranas')->info('ORDER - data: ' . print_r($data, true));
         for ($i = 0; $i < count($items); $i++) {
             Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
+            
             $result = DB::table('bars as b')
             ->leftJoin('products as p', 'b.id', '=', 'p.bar_id')
             ->where('b.id',$data['bar_id'])
             ->where('p.id',$items[$i]['product_id'])
+            ->select('p.*')
             ->first();
             
             Log::channel('muquiranas')->info('ORDER estoque result:' . print_r($result, true));
+            Log::channel('muquiranas')->info('ORDER estoque product:' . $result['quantity']);
+
         }
 
         // $order = $this->model->create([
