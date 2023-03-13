@@ -13,11 +13,13 @@ class OrderController extends Controller
 {
     protected $model;
     protected $identify;
+    protected $apikey;
 
     public function __construct(Orders $order)
     {
         $this->model = $order;
         $this->identify = request()->header('Identify');
+        $this->apikey = request()->header('apikey');
     }
 
     /**
@@ -133,6 +135,7 @@ class OrderController extends Controller
 
     public function store(StoreOrder $request)
     {
+        $request->merge(['apikey' => $this->apikey]);
         $data = $request->validated();
 
         Log::channel('muquiranas')->info('user identify:' . $this->identify);
