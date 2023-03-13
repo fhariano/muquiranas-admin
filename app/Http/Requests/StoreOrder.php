@@ -33,7 +33,7 @@ class StoreOrder extends FormRequest
             'inserted_for' => ['required', 'string', 'min:3'],
             'items' => ['required', 'array'],
             'payment_info' => ['required', 'array'],
-            // 'apikey' => ['required', 'string', 'max:50', Rule::in($apikeys['web'], $apikeys['mobile'])],
+            'apikey' => ['required', 'string', 'max:50', Rule::in($apikeys['web'], $apikeys['mobile'])],
         ];
 
         return $rules;
