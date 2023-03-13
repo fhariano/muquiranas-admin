@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\Log;
 class OrderController extends Controller
 {
     protected $model;
+    protected $identify;
 
     public function __construct(Orders $order)
     {
         $this->model = $order;
+        $this->identify = request()->header('Authorization');
     }
 
     /**
@@ -133,8 +135,9 @@ class OrderController extends Controller
     {
         $data = $request->validated();
 
+        Log::channel('muquiranas')->info('user identify:' . $this->identify);
         Log::channel('muquiranas')->info('data:' . print_r($data, true));
-
+        
         // $order = $this->model->create([
         //     'bar_id' => $data['bar_id'],
         //     'customer_id' => $data['customer_id'],
