@@ -17,7 +17,7 @@ class OrderController extends Controller
     public function __construct(Orders $order)
     {
         $this->model = $order;
-        $this->identify = request()->header('Authorization');
+        $this->identify = request()->header('Identify');
     }
 
     /**
