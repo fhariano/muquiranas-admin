@@ -7,4 +7,5 @@ return [
         ],
     ],
     'minStock' => env('MIN_STOCK'),
+    'stopPromo' => env('STOP_PROMO'),
 ];
