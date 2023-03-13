@@ -135,7 +135,7 @@ class OrderController extends Controller
 
     public function store(StoreOrder $request)
     {
-        $request->request->add(['apikey' => $this->apikey]);
+        Request()->attributes->add(['apikey' => $this->apikey]);
         $data = $request->validated();
 
         Log::channel('muquiranas')->info('user identify:' . $this->identify);
