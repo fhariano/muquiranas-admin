@@ -138,8 +138,19 @@ class OrderController extends Controller
     {
         $data = $request->validated();
 
-        Log::channel('muquiranas')->info('user identify:' . $this->identify);
-        Log::channel('muquiranas')->info('data:' . print_r($data, true));
+        Log::channel('muquiranas')->info('ORDER - user identify:' . $this->identify);
+        Log::channel('muquiranas')->info('ORDER - data: ' . print_r($data, true));
+        
+        // Primeiro: Checar itens do carrinho!
+        // - quantidade do item em estoque
+        // Segundo: Checar itens em promoção
+        // - promoção ainda é válida?
+        $itens = [];
+        $itens = $data['itens'];
+        
+        for ($i=0; $i < count($itens); $i++) { 
+            Log::channel('muquiranas')->info('ORDER item:' . print_r($itens[$i], true));
+        }
 
         // $order = $this->model->create([
         //     'bar_id' => $data['bar_id'],
