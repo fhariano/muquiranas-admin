@@ -176,7 +176,8 @@ class OrderController extends Controller
             $nowTime = \Carbon\Carbon::now();
             $nowTime = (string) $nowTime->format('H:i:s');
 
-            $promo_list = PromosLists::where('promos_lists.bar_id', $data['bar_id'])->where('promos_lists.active', 1)->first();
+            $promo_list = PromosLists::where('bar_id', $data['bar_id'])->where('active', 1)->first();
+            Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
 
             if ($promo_list) {
                 $product_promo_list = ProductsPromosLists::where('products_promos_lists.promos_list_id', $promo_list->id)
