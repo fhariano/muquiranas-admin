@@ -145,11 +145,12 @@ class OrderController extends Controller
         // - quantidade do item em estoque
         // Segundo: Checar itens em promoção
         // - promoção ainda é válida?
-        $itens = [];
-        $itens = $data['itens'];
+        $items = [];
+        $items = $data['items'];
         
-        for ($i=0; $i < count($itens); $i++) { 
-            Log::channel('muquiranas')->info('ORDER item:' . print_r($itens[$i], true));
+        Log::channel('muquiranas')->info('ORDER - data: ' . print_r($data, true));
+        for ($i=0; $i < count($items); $i++) { 
+            Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
         }
 
         // $order = $this->model->create([
