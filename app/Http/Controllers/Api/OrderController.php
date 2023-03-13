@@ -151,7 +151,7 @@ class OrderController extends Controller
         $items = $data['items'];
 
         for ($i = 0; $i < count($items); $i++) {
-            Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
+            // Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
 
             $result = DB::table('bars as b')
                 ->leftJoin('products as p', 'b.id', '=', 'p.bar_id')
@@ -160,9 +160,9 @@ class OrderController extends Controller
                 ->select('p.*')
                 ->first();
 
-            Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
-            Log::channel('muquiranas')->info('ORDER estoque product :' . $result->quantity);
-            Log::channel('muquiranas')->info('ORDER estoque minimo  :' . config('microservices.minStock'));
+            // Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
+            // Log::channel('muquiranas')->info('ORDER estoque product :' . $result->quantity);
+            // Log::channel('muquiranas')->info('ORDER estoque minimo  :' . config('microservices.minStock'));
 
             // Produto abaixo do estoque mínimo retorna erro
             if ($result->quantity < config('microservices.minStock')) {
@@ -175,21 +175,14 @@ class OrderController extends Controller
 
             $nowTime = \Carbon\Carbon::now()->subMinutes(config('microservices.stopPromo'));
             $nowTime = (string) $nowTime->format('H:i:s');
-            Log::channel('muquiranas')->info('ORDER stop promo:' . $nowTime. ' - promo product: '. $items[$i]['promo_expire']);
-
+            Log::channel('muquiranas')->info('ORDER nowTime:' . $nowTime. ' - promo product: '. $items[$i]['promo_expire']);
+            
             $promo_list = PromosLists::where('bar_id', $data['bar_id'])->where('active', 1)->first();
-            Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
-
+            // Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
+            
             if ($promo_list) {
-                $product_promo_list = ProductsPromosLists::where('products_promos_lists.promos_list_id', $promo_list->id)
-                    ->where('products_promos_lists.active', 1)
-                    ->where('products_promos_lists.product_id', $items[$i]['product_id'])
-                    ->whereRaw("((TIME(hour_start) <= '$nowTime' AND TIME(hour_end) >= '$nowTime'))")
-                    ->orderBy('products_promos_lists.product_id', 'asc')
-                    ->orderBy('products_promos_lists.hour_start', 'asc')
-                    ->first();
-
-                Log::channel('muquiranas')->info('ORDER promo result  :' . print_r($product_promo_list, true));
+                $stopPromo = strtotime($nowTime) <= strtotime($items[$i]['promo_expire']);
+                Log::channel('muquiranas')->info('ORDER stop promo:' . $stopPromo);
             }
         }
 
