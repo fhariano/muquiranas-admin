@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrder;
 use App\Models\Orders;
+use App\Models\ProductsPromosLists;
+use App\Models\PromosLists;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -150,25 +152,42 @@ class OrderController extends Controller
 
         for ($i = 0; $i < count($items); $i++) {
             Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
-            
+
             $result = DB::table('bars as b')
-            ->leftJoin('products as p', 'b.id', '=', 'p.bar_id')
-            ->where('b.id',$data['bar_id'])
-            ->where('p.id',$items[$i]['product_id'])
-            ->select('p.*')
-            ->first();
-            
+                ->leftJoin('products as p', 'b.id', '=', 'p.bar_id')
+                ->where('b.id', $data['bar_id'])
+                ->where('p.id', $items[$i]['product_id'])
+                ->select('p.*')
+                ->first();
+
             Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
             Log::channel('muquiranas')->info('ORDER estoque product :' . $result->quantity);
             Log::channel('muquiranas')->info('ORDER estoque minimo  :' . config('microservices.minStock'));
 
             // Produto abaixo do estoque mínimo retorna erro
-            if($result->quantity < config('microservices.minStock')) {
+            if ($result->quantity < config('microservices.minStock')) {
                 return response()->json([
                     "error" => true,
                     "message" => "O produto {$result->short_name}\nestá Sem Estoque!",
                     "data" => []
-                ], 422); 
+                ], 422);
+            }
+
+            $nowTime = \Carbon\Carbon::now();
+            $nowTime = (string) $nowTime->format('H:i:s');
+
+            $promo_list = PromosLists::where('promos_lists.bar_id', $data['bar_id'])->where('promos_lists.active', 1)->first();
+
+            if ($promo_list) {
+                $product_promo_list = ProductsPromosLists::where('products_promos_lists.promos_list_id', $promo_list->id)
+                    ->where('products_promos_lists.active', 1)
+                    ->where('products_promos_lists.product_id', $items[$i]['product_id'])
+                    ->whereRaw("((TIME(hour_start) <= '$nowTime' AND TIME(hour_end) >= '$nowTime'))")
+                    ->orderBy('products_promos_lists.product_id', 'asc')
+                    ->orderBy('products_promos_lists.hour_start', 'asc')
+                    ->first();
+
+                Log::channel('muquiranas')->info('ORDER promo result  :' . print_r($product_promo_list, true));
             }
         }
 
