@@ -226,7 +226,7 @@ class OrderController extends Controller
             ->withHeaders([
                 'Authorization' => $this->authorization
             ])
-            ->get(config('microservices.available.micro_payment.url') . "/getnet/card/" . $paymentInfo['card_id']);
+            ->get(config('microservices.available.micro_payment.url') . "/getnet-card/" . $paymentInfo['card_id']);
 
         if ($response->status() > 299) {
             Log::channel('muquiranas')->error('ORDER: ' . $data['order_num'] . ' - GETCARD INFO');
