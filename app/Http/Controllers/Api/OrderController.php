@@ -17,12 +17,10 @@ class OrderController extends Controller
     protected $model;
     protected $apikey;
     protected $authorization;
-    protected $identify;
 
     public function __construct(Orders $order)
     {
         $this->model = $order;
-        $this->identify = request()->header('Identify');
         $this->authorization = request()->header('Authorization');
         $this->apikey = request()->header('apikey');
         request()->request->add(['apikey' => $this->apikey]);
@@ -212,7 +210,7 @@ class OrderController extends Controller
             ->get(config('microservices.available.micro_auth.url') . "/me");
 
         if ($response->status() > 299) {
-            Log::channel('muquiranas')->error('ORDER: ' . $data['order_num'] . ' - AUTHORIZATION INVALIDA');
+            Log::channel('muquiranas')->error('ORDER: ' . $data['order_num'] . ' - AUTHORIZATION');
             return response()->json([
                 "error" => true,
                 "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
@@ -220,7 +218,27 @@ class OrderController extends Controller
             ], 301);
         }
 
-        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - user infos.: ' . print_r($response->body(), true));
+        $user = $response->body();
+
+        // Buscar informações do cartão no cofre na GetNet
+        $paymentInfo = $data['payment_info'];
+        $response = Http::acceptJson()
+            ->withHeaders([
+                'Authorization' => $this->authorization
+            ])
+            ->get(config('microservices.available.micro_payment.url') . "/getnet/card/" . $paymentInfo['card_id']);
+
+        if ($response->status() > 299) {
+            Log::channel('muquiranas')->error('ORDER: ' . $data['order_num'] . ' - GETCARD INFO');
+            return response()->json([
+                "error" => true,
+                "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
+                "data" => []
+            ], 301);
+        }
+
+
+        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - card infos.: ' . print_r($response->body(), true));
 
         // $order = $this->model->create([
         //     'bar_id' => $data['bar_id'],
