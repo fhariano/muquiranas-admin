@@ -160,7 +160,7 @@ class OrderController extends Controller
                 ->leftJoin('products as p', 'b.id', '=', 'p.bar_id')
                 ->where('b.id', $data['bar_id'])
                 ->where('p.id', $items[$i]['product_id'])
-                ->select('b.soft_descriptor , p.*')
+                ->select('b.soft_descriptor', 'p.*')
                 ->first();
 
             // Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
