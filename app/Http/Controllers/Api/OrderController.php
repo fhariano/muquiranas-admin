@@ -177,14 +177,15 @@ class OrderController extends Controller
             if ($items[$i]['promo'] == 1) {
                 $nowTime = \Carbon\Carbon::now()->addMinutes(config('microservices.stopPromo'));
                 $nowTime = (string) $nowTime->format('H:i:s');
-                Log::channel('muquiranas')->info('ORDER promo: ' . $result->short_name . ' - nowTime: ' . $nowTime . ' - promo expire: ' . $items[$i]['promo_expire']);
-
+                
                 $promo_list = PromosLists::where('bar_id', $data['bar_id'])->where('active', 1)->first();
                 // Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
-
+                
                 if ($promo_list) {
                     $stopPromo = strtotime($nowTime) > strtotime($items[$i]['promo_expire']);
-                    Log::channel('muquiranas')->info('ORDER promo: ' . $result->short_name . ' - stop promo: ' . (($stopPromo) ? 'true' : 'false'));
+                    Log::channel('muquiranas')->info('ORDER promo: ' . $result->short_name . ' - nowTime: ' 
+                        . $nowTime . ' - promo expire: ' . $items[$i]['promo_expire'] . ' - stop promo: ' 
+                        . (($stopPromo) ? 'true' : 'false'));
 
                     if ($stopPromo) {
                         Log::channel('muquiranas')->warning('ORDER promo: ' . $result->short_name . -'PROMO INVALIDA');
