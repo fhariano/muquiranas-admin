@@ -245,7 +245,7 @@ class OrderController extends Controller
         $response = json_decode($response->body());
         Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - card infos.: ' . print_r($response, true));
 
-        $fullName = explode(' ', $user['short_name']);
+        $fullName = explode(' ', $user->short_name);
         $firstName = $fullName[0];
         $lastName = $fullName[count($fullName)];
         $paymentData = array(
@@ -260,20 +260,20 @@ class OrderController extends Controller
             "expirationYear" => $response->expiration_year,
             "securityCode" => $paymentInfo['security_code'],
             "softDescriptor" => $softDescriptor,
-            "clientId" => $user['identify'],
+            "clientId" => $user->identify,
             "clientFirstName" => $firstName,
             "clientLastName" => $lastName,
-            "clientCpfCnpj" => $user['cpf'],
+            "clientCpfCnpj" => $user->cpf,
             "clientDocType" => "CPF",
-            "clientEmail" => $user['email'],
-            "clientPhone" => "55" . $user['cell_phone'],
-            "clientStreet" => $user['street'],
-            "clientNumber" => $user['number'],
-            "clientComplement" => $user['complement'],
-            "clientDistrict" => $user['district'],
-            "clientCity" => $user['city'],
-            "clientUF" => $user['state'],
-            "clientCEP" => $user['postal_code'],
+            "clientEmail" => $user->email,
+            "clientPhone" => "55" . $user->cell_phone,
+            "clientStreet" => $user->street,
+            "clientNumber" => $user->number,
+            "clientComplement" => $user->complement,
+            "clientDistrict" => $user->district,
+            "clientCity" => $user->city,
+            "clientUF" => $user->state,
+            "clientCEP" => $user->postal_code,
         );
 
         Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - payment data.: ' . print_r($paymentData, true));
