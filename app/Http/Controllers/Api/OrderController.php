@@ -222,7 +222,7 @@ class OrderController extends Controller
         }
 
         $user = json_decode($response->body());
-        $user = $user['data'];
+        $user = $user->data;
         Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - user infos.: ' . print_r($user, true));
 
         // Buscar informações do cartão no cofre na GetNet
