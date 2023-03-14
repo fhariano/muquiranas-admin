@@ -166,9 +166,10 @@ class OrderController extends Controller
 
             // Produto abaixo do estoque mínimo retorna erro
             if ($result->quantity < config('microservices.minStock')) {
+                Log::channel('muquiranas')->warning('ORDER estoque product: ' . $result->short_name . - 'SEM ESTOQUE');
                 return response()->json([
                     "error" => true,
-                    "message" => "O produto {$result->short_name}\nestá Sem Estoque!",
+                    "message" => "O produto {$result->short_name} está Sem Estoque!\nRemova este produto da sacola!",
                     "data" => []
                 ], 422);
             }
@@ -176,19 +177,22 @@ class OrderController extends Controller
             if ($items[$i]['promo'] == 1) {
                 $nowTime = \Carbon\Carbon::now()->addMinutes(config('microservices.stopPromo'));
                 $nowTime = (string) $nowTime->format('H:i:s');
-                Log::channel('muquiranas')->info('ORDER nowTime:' . $nowTime . ' - promo product: ' . $items[$i]['promo_expire']);
+                Log::channel('muquiranas')->info('ORDER estoque product: ' . $result->short_name . ' - nowTime:' . $nowTime 
+                    . ' - promo product: ' . $items[$i]['promo_expire']);
 
                 $promo_list = PromosLists::where('bar_id', $data['bar_id'])->where('active', 1)->first();
                 // Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
 
                 if ($promo_list) {
                     $stopPromo = strtotime($nowTime) > strtotime($items[$i]['promo_expire']);
-                    Log::channel('muquiranas')->info('ORDER stop promo:' . $stopPromo);
+                    Log::channel('muquiranas')->info('ORDER estoque product: ' . $result->short_name . ' - stop promo:' 
+                        . ($stopPromo) ? 'true' : 'false');
 
                     if ($stopPromo) {
+                        Log::channel('muquiranas')->warning('ORDER estoque product: ' . $result->short_name . - 'PROMO INVALIDA');
                         return response()->json([
                             "error" => true,
-                            "message" => "O produto {$result->short_name}\nnão está mais com este preço!",
+                            "message" => "A promoção do produto {$result->short_name} expirou!\nRemova este produto da sacola!",
                             "data" => []
                         ], 422);
                     }
