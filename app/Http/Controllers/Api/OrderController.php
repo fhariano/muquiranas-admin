@@ -193,7 +193,7 @@ class OrderController extends Controller
 
                     // Retorna erro se a promoção não estiver no período descontando o stopPromo (microservices.stopPromo - ver .env)
                     if ($stopPromo) {
-                        Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' -  promo: ' . $result->short_name . -'PROMO INVALIDA');
+                        Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' -  promo: ' . $result->short_name . ' - PROMO INVALIDA');
                         return response()->json([
                             "error" => true,
                             "message" => "A promoção do produto {$result->short_name} expirou!\nRemova este produto da sacola!",
