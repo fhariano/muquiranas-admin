@@ -173,23 +173,25 @@ class OrderController extends Controller
                 ], 422);
             }
 
-            $nowTime = \Carbon\Carbon::now()->addMinutes(config('microservices.stopPromo'));
-            $nowTime = (string) $nowTime->format('H:i:s');
-            Log::channel('muquiranas')->info('ORDER nowTime:' . $nowTime . ' - promo product: ' . $items[$i]['promo_expire']);
+            if ($items[$i]['promo'] == 1) {
+                $nowTime = \Carbon\Carbon::now()->addMinutes(config('microservices.stopPromo'));
+                $nowTime = (string) $nowTime->format('H:i:s');
+                Log::channel('muquiranas')->info('ORDER nowTime:' . $nowTime . ' - promo product: ' . $items[$i]['promo_expire']);
 
-            $promo_list = PromosLists::where('bar_id', $data['bar_id'])->where('active', 1)->first();
-            // Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
+                $promo_list = PromosLists::where('bar_id', $data['bar_id'])->where('active', 1)->first();
+                // Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
 
-            if ($promo_list) {
-                $stopPromo = strtotime($nowTime) > strtotime($items[$i]['promo_expire']);
-                Log::channel('muquiranas')->info('ORDER stop promo:' . $stopPromo);
+                if ($promo_list) {
+                    $stopPromo = strtotime($nowTime) > strtotime($items[$i]['promo_expire']);
+                    Log::channel('muquiranas')->info('ORDER stop promo:' . $stopPromo);
 
-                if ($stopPromo) {
-                    return response()->json([
-                        "error" => true,
-                        "message" => "O produto {$result->short_name}\nnão está mais com este preço!",
-                        "data" => []
-                    ], 422);
+                    if ($stopPromo) {
+                        return response()->json([
+                            "error" => true,
+                            "message" => "O produto {$result->short_name}\nnão está mais com este preço!",
+                            "data" => []
+                        ], 422);
+                    }
                 }
             }
         }
