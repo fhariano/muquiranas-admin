@@ -162,11 +162,11 @@ class OrderController extends Controller
 
             // Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
             Log::channel('muquiranas')->info('ORDER estoque product: ' . $result->short_name . ' - qtd: ' . $items[$i]['quantity']
-                . ' - stock: ' . $result->quantity . ' - minimo  :' . config('microservices.minStock'));
+                . ' - stock: ' . $result->quantity . ' - minimo: ' . config('microservices.minStock'));
 
             // Produto abaixo do estoque mínimo retorna erro
             if ($result->quantity < config('microservices.minStock')) {
-                Log::channel('muquiranas')->warning('ORDER estoque product: ' . $result->short_name . - 'SEM ESTOQUE');
+                Log::channel('muquiranas')->warning('ORDER estoque product: ' . $result->short_name . -'SEM ESTOQUE');
                 return response()->json([
                     "error" => true,
                     "message" => "O produto {$result->short_name} está Sem Estoque!\nRemova este produto da sacola!",
@@ -177,19 +177,17 @@ class OrderController extends Controller
             if ($items[$i]['promo'] == 1) {
                 $nowTime = \Carbon\Carbon::now()->addMinutes(config('microservices.stopPromo'));
                 $nowTime = (string) $nowTime->format('H:i:s');
-                Log::channel('muquiranas')->info('ORDER estoque product: ' . $result->short_name . ' - nowTime:' . $nowTime 
-                    . ' - promo product: ' . $items[$i]['promo_expire']);
+                Log::channel('muquiranas')->info('ORDER promo product: ' . $result->short_name . ' - nowTime: ' . $nowTime . ' - promo expire: ' . $items[$i]['promo_expire']);
 
                 $promo_list = PromosLists::where('bar_id', $data['bar_id'])->where('active', 1)->first();
                 // Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
 
                 if ($promo_list) {
                     $stopPromo = strtotime($nowTime) > strtotime($items[$i]['promo_expire']);
-                    Log::channel('muquiranas')->info('ORDER estoque product: ' . $result->short_name . ' - stop promo:' 
-                        . ($stopPromo) ? 'true' : 'false');
+                    Log::channel('muquiranas')->info('ORDER promo product: ' . $result->short_name . ' - stop promo:' . (($stopPromo) ? 'true' : 'false'));
 
                     if ($stopPromo) {
-                        Log::channel('muquiranas')->warning('ORDER estoque product: ' . $result->short_name . - 'PROMO INVALIDA');
+                        Log::channel('muquiranas')->warning('ORDER promo product: ' . $result->short_name . -'PROMO INVALIDA');
                         return response()->json([
                             "error" => true,
                             "message" => "A promoção do produto {$result->short_name} expirou!\nRemova este produto da sacola!",
