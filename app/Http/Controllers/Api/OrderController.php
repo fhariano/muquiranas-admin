@@ -243,7 +243,8 @@ class OrderController extends Controller
         }
 
         $response = json_decode($response->body());
-        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - card infos.: ' . print_r($response, true));
+        $cardInfo = $response->data;
+        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - card infos.: ' . print_r($cardInfo, true));
 
         $fullName = explode(' ', $user->short_name);
         $firstName = $fullName[0];
@@ -251,13 +252,13 @@ class OrderController extends Controller
         $paymentData = array(
             "barId" => $data['bar_id'],
             "type" =>  $paymentInfo['type'],
-            "brand" => $response->brand,
+            "brand" => $cardInfo->brand,
             "amount" => $data['total'],
             "orderId" => $data['order_num'],
-            "numberToken" => $response->number_token,
-            "cardHolderName" => $response->cardholder_name,
-            "expirationMonth" => $response->expiration_month,
-            "expirationYear" => $response->expiration_year,
+            "numberToken" => $cardInfo->number_token,
+            "cardHolderName" => $cardInfo->cardholder_name,
+            "expirationMonth" => $cardInfo->expiration_month,
+            "expirationYear" => $cardInfo->expiration_year,
             "securityCode" => $paymentInfo['security_code'],
             "softDescriptor" => $softDescriptor,
             "clientId" => $user->identify,
