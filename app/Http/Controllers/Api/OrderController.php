@@ -151,6 +151,8 @@ class OrderController extends Controller
         $items = [];
         $items = $data['items'];
 
+        $softDescriptor = '';
+
         for ($i = 0; $i < count($items); $i++) {
             // Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
 
@@ -158,7 +160,7 @@ class OrderController extends Controller
                 ->leftJoin('products as p', 'b.id', '=', 'p.bar_id')
                 ->where('b.id', $data['bar_id'])
                 ->where('p.id', $items[$i]['product_id'])
-                ->select('p.*')
+                ->select('b.soft_escriptor , p.*')
                 ->first();
 
             // Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
@@ -200,6 +202,7 @@ class OrderController extends Controller
                     }
                 }
             }
+            $softDescriptor = $result->soft_escriptor;
         }
 
         // Buscar dados do usuário para efetuar o pagamento
@@ -218,7 +221,7 @@ class OrderController extends Controller
             ], 301);
         }
 
-        $user = $response->body();
+        $user = json_decode($response->body());
 
         // Buscar informações do cartão no cofre na GetNet
         $paymentInfo = $data['payment_info'];
@@ -238,19 +241,50 @@ class OrderController extends Controller
         }
 
         $response = json_decode( $response->body());
-        $response = $response;
         Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - card infos.: ' . print_r($response, true));
-
+        
+        $fullName = explode(' ', $user->short_name);
+        $firstName = $fullName[0];
+        $lastName = $fullName[count($fullName)];
+        $paymentData = array(
+            "barId" => $data['bar_id'],
+            "type" =>  $paymentInfo['type'],
+            "brand" => $response->brand,
+            "amount" => $data['total'],
+            "orderId" => $data['order_num'],
+            "numberToken" => $response->number_token,
+            "cardHolderName" => $response->cardholder_name,
+            "expirationMonth" => $response->expiration_month,
+            "expirationYear" => $response->expiration_year,
+            "securityCode" => $paymentInfo['security_code'],
+            "softDescriptor" => $softDescriptor,
+            "clientId" => $user->identify,
+            "clientFirstName" => $firstName,
+            "clientLastName" => $lastName,
+            "clientCpfCnpj" => $user->cpf,
+            "clientDocType" => "CPF",
+            "clientEmail" => $user->email,
+            "clientPhone" => "55".$user->cell_phone,
+            "clientStreet" => $user->street,
+            "clientNumber" => $user->number,
+            "clientComplement" => $user->complement,
+            "clientDistrict" => $user->district,
+            "clientCity" => $user->city,
+            "clientUF" => $user->state,
+            "clientCEP" => $user->postal_code,
+        );
+        
+        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - payment data.: ' . print_r($paymentData, true));
         // $order = $this->model->create([
-        //     'bar_id' => $data['bar_id'],
-        //     'customer_id' => $data['customer_id'],
-        //     'order_num' => $data['order_num'],
-        //     'total' => $data['total'],
-        //     'order_at' => $data['order_at'],
-        //     'inserted_for' => $data['inserted_for'],
-        // ]);
-
-        // $items = $order->Products()->sync($data['items']);
+            //     'bar_id' => $data['bar_id'],
+            //     'customer_id' => $data['customer_id'],
+            //     'order_num' => $data['order_num'],
+            //     'total' => $data['total'],
+            //     'order_at' => $data['order_at'],
+            //     'inserted_for' => $data['inserted_for'],
+            // ]);
+            
+            // $items = $order->Products()->sync($data['items']);
 
         return response()->json([
             "error" => false,
