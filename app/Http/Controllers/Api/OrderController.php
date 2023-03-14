@@ -160,7 +160,7 @@ class OrderController extends Controller
                 ->leftJoin('products as p', 'b.id', '=', 'p.bar_id')
                 ->where('b.id', $data['bar_id'])
                 ->where('p.id', $items[$i]['product_id'])
-                ->select('b.soft_escriptor , p.*')
+                ->select('b.soft_descriptor , p.*')
                 ->first();
 
             // Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
@@ -202,7 +202,7 @@ class OrderController extends Controller
                     }
                 }
             }
-            $softDescriptor = $result->soft_escriptor;
+            $softDescriptor = $result->soft_descriptor;
         }
 
         // Buscar dados do usuário para efetuar o pagamento
