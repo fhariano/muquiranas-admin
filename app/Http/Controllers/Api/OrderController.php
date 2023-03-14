@@ -220,7 +220,7 @@ class OrderController extends Controller
             ], 301);
         }
 
-        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - user infos.: ' . print_r($response, true));
+        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - user infos.: ' . print_r($response->body(), true));
 
         // $order = $this->model->create([
         //     'bar_id' => $data['bar_id'],
