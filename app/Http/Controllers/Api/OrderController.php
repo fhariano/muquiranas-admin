@@ -247,7 +247,7 @@ class OrderController extends Controller
 
         $fullName = explode(' ', $user->short_name);
         $firstName = $fullName[0];
-        $lastName = $fullName[count($fullName)];
+        $lastName = $fullName[count($fullName) - 1];
         $paymentData = array(
             "barId" => $data['bar_id'],
             "type" =>  $paymentInfo['type'],
