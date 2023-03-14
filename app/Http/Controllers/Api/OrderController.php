@@ -9,18 +9,21 @@ use App\Models\ProductsPromosLists;
 use App\Models\PromosLists;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
     protected $model;
-    protected $identify;
     protected $apikey;
+    protected $authorization;
+    protected $identify;
 
     public function __construct(Orders $order)
     {
         $this->model = $order;
         $this->identify = request()->header('Identify');
+        $this->authorization = request()->header('Authorization');
         $this->apikey = request()->header('apikey');
         request()->request->add(['apikey' => $this->apikey]);
     }
@@ -164,7 +167,7 @@ class OrderController extends Controller
             Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . ' - qtd: '
                 . $items[$i]['quantity'] . ' - stock: ' . $result->quantity . ' - minimo: ' . config('microservices.minStock'));
 
-            // Produto abaixo do estoque mínimo retorna erro
+            // Retorna erro se o produto está abaixo do estoque mínimo (microservices.minStock - ver .env)
             if ($result->quantity < config('microservices.minStock')) {
                 Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . -'SEM ESTOQUE');
                 return response()->json([
@@ -174,6 +177,7 @@ class OrderController extends Controller
                 ], 422);
             }
 
+            // Verifica se o produto está em promoção e se a promoção é válida para o horário corrente
             if ($items[$i]['promo'] == 1) {
                 $nowTime = \Carbon\Carbon::now()->addMinutes(config('microservices.stopPromo'));
                 $nowTime = (string) $nowTime->format('H:i:s');
@@ -187,6 +191,7 @@ class OrderController extends Controller
                         . $nowTime . ' - promo expire: ' . $items[$i]['promo_expire'] . ' - stop promo: '
                         . (($stopPromo) ? 'true' : 'false'));
 
+                    // Retorna erro se a promoção não estiver no período descontando o stopPromo (microservices.stopPromo - ver .env)
                     if ($stopPromo) {
                         Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' -  promo: ' . $result->short_name . -'PROMO INVALIDA');
                         return response()->json([
@@ -198,6 +203,24 @@ class OrderController extends Controller
                 }
             }
         }
+
+        // Buscar dados do usuário para efetuar o pagamento
+        $response = Http::acceptJson()
+            ->withHeaders([
+                'Authorization' => $this->authorization
+            ])
+            ->get(config('microservices.available.micro_auth.url') . "/me");
+
+        if ($response->status() > 299) {
+            Log::channel('muquiranas')->error('ORDER: ' . $data['order_num'] . ' - AUTHORIZATION INVALIDA');
+            return response()->json([
+                "error" => true,
+                "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
+                "data" => []
+            ], 301);
+        }
+
+        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - user infos.: ' . print_r($response, true));
 
         // $order = $this->model->create([
         //     'bar_id' => $data['bar_id'],
