@@ -237,8 +237,8 @@ class OrderController extends Controller
             ], 301);
         }
 
-        $response = $response->body();
-        $response = $response['data'];
+        $response = json_decode( $response->body());
+        $response = $response;
         Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - card infos.: ' . print_r($response, true));
 
         // $order = $this->model->create([
