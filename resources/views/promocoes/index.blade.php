@@ -292,6 +292,7 @@
                         });
 
                     } else if (success == true) {
+                        $tblProductsPromosLists.bootstrapTable('refresh');
                         $tblProductsPromosLists.bootstrapTable('collapseRow', indexDetailsRow)
                         $tblProductsPromosLists.bootstrapTable('expandRow', indexDetailsRow)
                         Swal.fire({
