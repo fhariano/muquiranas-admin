@@ -221,7 +221,7 @@ class OrderController extends Controller
             ], 301);
         }
 
-        $user = $response->body();
+        $user = json_decode($response->body());
         $user = $user['data'];
         Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - user infos.: ' . print_r($user, true));
 
