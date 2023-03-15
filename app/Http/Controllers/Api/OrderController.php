@@ -285,7 +285,7 @@ class OrderController extends Controller
             ->withHeaders([
                 'Authorization' => $this->authorization
             ])
-            ->post(config('microservices.available.micro_payment.url') . "/getnet-process-payment", $paymentData);
+            ->post(config('microservices.available.micro_payment.url') . "/getnet-process-credit", $paymentData);
 
         $response = json_decode($response->body());
         Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - payment result.: ' . print_r($response, true));
