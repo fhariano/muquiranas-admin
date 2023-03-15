@@ -288,7 +288,7 @@ class OrderController extends Controller
             ->post(config('microservices.available.micro_payment.url') . "/getnet-process-payment", $paymentData);
 
         $response = json_decode($response->body());
-        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - payment result.: ' . print_r($result, true));
+        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - payment result.: ' . print_r($response, true));
 
 
         // $order = $this->model->create([
