@@ -253,7 +253,7 @@ class OrderController extends Controller
         $paymentData = array(
             "barId" => $data['bar_id'],
             "type" =>  $paymentInfo['type'],
-            "brand" => $cardInfo->brand,
+            "brand" => ucfirst(strtolower($cardInfo->brand)),
             "amount" => $data['total'],
             "orderId" => $data['order_num'],
             "numberToken" => $cardInfo->number_token,
@@ -275,7 +275,7 @@ class OrderController extends Controller
             "clientDistrict" => $user->district,
             "clientCity" => $user->city,
             "clientUF" => $user->state,
-            "clientCEP" => $user->postal_code,
+            "clientCEP" => preg_replace('/[^0-9]/', '', $user->postal_code),
         );
 
         Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - payment data.: ' . print_r($paymentData, true));
