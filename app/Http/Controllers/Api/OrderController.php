@@ -253,6 +253,7 @@ class OrderController extends Controller
         $paymentData = array(
             "barId" => $data['bar_id'],
             "type" =>  $paymentInfo['type'],
+            "cardNumber" => $paymentInfo['card_number'],
             "brand" => ucfirst(strtolower($cardInfo->brand)),
             "amount" => $data['total'],
             "orderId" => $data['order_num'],
