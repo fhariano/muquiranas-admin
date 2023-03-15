@@ -164,8 +164,9 @@ class OrderController extends Controller
                 ->first();
 
             // Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
-            Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . ' - qtd: '
-                . $items[$i]['quantity'] . ' - stock: ' . $result->quantity . ' - minimo: ' . config('microservices.minStock'));
+            Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . ' - item qtd: '
+                . $items[$i]['quantity'] . ' - stock qtd: ' . $result->quantity . ' - min qtd: ' . config('microservices.minStock')
+                . ' - app price: ' . $items[$i]['price']);
 
             // Retorna erro se o produto está abaixo do estoque mínimo (microservices.minStock - ver .env)
             if ($result->quantity < config('microservices.minStock')) {
@@ -187,8 +188,8 @@ class OrderController extends Controller
 
                 if ($promo_list) {
                     $stopPromo = strtotime($nowTime) > strtotime($items[$i]['promo_expire']);
-                    Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - promo: ' . $result->short_name . ' - nowTime: '
-                        . $nowTime . ' - promo expire: ' . $items[$i]['promo_expire'] . ' - stop promo: '
+                    Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - promo: ' . $result->short_name
+                        . ' - nowTime: ' . $nowTime . ' - promo expire: ' . $items[$i]['promo_expire'] . ' - stop promo: '
                         . (($stopPromo) ? 'true' : 'false'));
 
                     // Retorna erro se a promoção não estiver no período descontando o stopPromo (microservices.stopPromo - ver .env)
@@ -223,7 +224,7 @@ class OrderController extends Controller
 
         $user = json_decode($response->body());
         $user = $user->data;
-        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - user infos.: ' . print_r($user, true));
+        // Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - user infos.: ' . print_r($user, true));
 
         // Buscar informações do cartão no cofre na GetNet
         $paymentInfo = $data['payment_info'];
@@ -244,7 +245,7 @@ class OrderController extends Controller
 
         $response = json_decode($response->body());
         $cardInfo = $response->data;
-        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - card infos.: ' . print_r($cardInfo, true));
+        // Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - card infos.: ' . print_r($cardInfo, true));
 
         $fullName = explode(' ', $user->short_name);
         $firstName = $fullName[0];
@@ -278,6 +279,18 @@ class OrderController extends Controller
         );
 
         Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - payment data.: ' . print_r($paymentData, true));
+
+        // Efetua o pagamento na Getnet
+        $response = Http::acceptJson()
+            ->withHeaders([
+                'Authorization' => $this->authorization
+            ])
+            ->post(config('microservices.available.micro_payment.url') . "/getnet-process-payment", $paymentData);
+
+        $response = json_decode($response->body());
+        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - payment result.: ' . print_r($result, true));
+
+
         // $order = $this->model->create([
         //     'bar_id' => $data['bar_id'],
         //     'customer_id' => $data['customer_id'],
