@@ -174,7 +174,7 @@ class OrderController extends Controller
                 ->select('b.soft_descriptor', 'p.*')
                 ->first();
 
-            if ($result->count() <= 0) {
+            if (!$result) {
                 // Retorna erro se o produto não está mais no cardápio ou sem estoque!
                 Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $data['short_name'] . -'FORA DO CARDÁPIO');
                 return response()->json([
