@@ -174,7 +174,7 @@ class OrderController extends Controller
                 ->select('b.soft_descriptor', 'p.*')
                 ->first();
 
-            // Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
+            Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
             Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . ' - item qtd: '
                 . $items[$i]['quantity'] . ' - stock qtd: ' . $result->quantity . ' - min qtd: ' . config('microservices.minStock')
                 . ' - app price: ' . $items[$i]['price']);
