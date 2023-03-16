@@ -179,7 +179,7 @@ class OrderController extends Controller
                 Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $items[$i]['short_name'] . ' - FORA DO CARDÁPIO');
                 return response()->json([
                     "error" => true,
-                    "message" => "O produto {$data['short_name']} não está mais no cardápio!\nRemova este produto da sacola!",
+                    "message" => "O produto {$items[$i]['short_name']} não está mais no cardápio!\nRemova este produto da sacola!",
                     "data" => []
                 ], 422);
             }
