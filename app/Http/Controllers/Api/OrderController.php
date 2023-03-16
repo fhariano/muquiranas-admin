@@ -18,6 +18,17 @@ class OrderController extends Controller
     protected $apikey;
     protected $authorization;
 
+    /**
+     * Bar_Code (000-000000-0000-000000-000): order_id-product_id-item
+     *    product_id: 6 caracteres podendo chegar a 999999 (~ 1 milhão)
+     *    item: 3 caracteres podendo chegar a 999 (~ mil por proudct_id) (se comprar 3 itens do mesmo produto vai de 1-3)
+     *
+     * Order_Id (000-000000-0000): bar_id-user_id-count
+     *    bar_id: 3 caracteres podendo chegar a 999 (~ mil bares)
+     *    user_id: 6 caracteres podendo chegar 999999 (~ 1 milhão de usuários)
+     *    count: 4 caracteres podendo chegar 9999 (~ 10 mil ordens por usuário )
+     */
+
     public function __construct(Orders $order)
     {
         $this->model = $order;
@@ -169,8 +180,8 @@ class OrderController extends Controller
                 . ' - app price: ' . $items[$i]['price']);
 
             // Retorna erro se o produto está abaixo do estoque mínimo (microservices.minStock - ver .env)
-            if ( (int) $result->quantity < (int) config('microservices.minStock')) {
-                // Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . -'SEM ESTOQUE');
+            if ($result->quantity < config('microservices.minStock')) {
+                Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . -'SEM ESTOQUE');
                 return response()->json([
                     "error" => true,
                     "message" => "O produto {$result->short_name} está Sem Estoque!\nRemova este produto da sacola!",
