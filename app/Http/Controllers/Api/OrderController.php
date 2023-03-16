@@ -165,7 +165,7 @@ class OrderController extends Controller
         $softDescriptor = '';
 
         for ($i = 0; $i < count($items); $i++) {
-            // Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
+            Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
 
             $result = DB::table('bars as b')
                 ->leftJoin('products as p', 'b.id', '=', 'p.bar_id')
