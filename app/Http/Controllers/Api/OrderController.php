@@ -176,7 +176,7 @@ class OrderController extends Controller
 
             if (!$result) {
                 // Retorna erro se o produto não está mais no cardápio ou sem estoque!
-                Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $items[$i]['short_name'] . -'FORA DO CARDÁPIO');
+                Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $items[$i]['short_name'] . ' - FORA DO CARDÁPIO');
                 return response()->json([
                     "error" => true,
                     "message" => "O produto {$data['short_name']} não está mais no cardápio!\nRemova este produto da sacola!",
@@ -191,7 +191,7 @@ class OrderController extends Controller
 
             // Retorna erro se o produto está abaixo do estoque mínimo (microservices.minStock - ver .env)
             if ($result->quantity < config('microservices.minStock')) {
-                Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . -'SEM ESTOQUE');
+                Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . ' - SEM ESTOQUE');
                 return response()->json([
                     "error" => true,
                     "message" => "O produto {$result->short_name} está Sem Estoque!\nRemova este produto da sacola!",
