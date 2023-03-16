@@ -169,7 +169,7 @@ class OrderController extends Controller
                 . ' - app price: ' . $items[$i]['price']);
 
             // Retorna erro se o produto está abaixo do estoque mínimo (microservices.minStock - ver .env)
-            if ($result->quantity < (int) config('microservices.minStock')) {
+            if ( (int) $result->quantity < (int) config('microservices.minStock')) {
                 Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . -'SEM ESTOQUE');
                 return response()->json([
                     "error" => true,
