@@ -14,11 +14,7 @@ class AddQuantityFieldTableProducts extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->string('quantity',10)
-            ->nullable()
-            ->after('marca')
-            ->default(0);
-               
+            $table->decimal('price_cost_erp', $precision = 8, $scale = 2)->default(0.00)->after('marca');
         });
     }
 
