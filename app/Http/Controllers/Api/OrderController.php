@@ -174,6 +174,16 @@ class OrderController extends Controller
                 ->select('b.soft_descriptor', 'p.*')
                 ->first();
 
+            if ($result->count() <= 0) {
+                // Retorna erro se o produto não está mais no cardápio ou sem estoque!
+                Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $data['short_name'] . -'FORA DO CARDÁPIO');
+                return response()->json([
+                    "error" => true,
+                    "message" => "O produto {$data['short_name']} não está mais no cardápio!\nRemova este produto da sacola!",
+                    "data" => []
+                ], 422);
+            }
+
             Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
             Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . ' - item qtd: '
                 . $items[$i]['quantity'] . ' - stock qtd: ' . $result->quantity . ' - min qtd: ' . config('microservices.minStock')
@@ -270,8 +280,8 @@ class OrderController extends Controller
             "orderNum" => $data['order_num'],
             "numberToken" => $cardInfo->number_token,
             "cardHolderName" => $cardInfo->cardholder_name,
-            "expirationMonth" => (String) $cardInfo->expiration_month,
-            "expirationYear" => (String) $cardInfo->expiration_year,
+            "expirationMonth" => (string) $cardInfo->expiration_month,
+            "expirationYear" => (string) $cardInfo->expiration_year,
             "securityCode" => $paymentInfo['security_code'],
             "softDescriptor" => $softDescriptor,
             "clientIdentify" => $user->identify,
