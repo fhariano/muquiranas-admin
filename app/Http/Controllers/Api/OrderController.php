@@ -176,7 +176,7 @@ class OrderController extends Controller
 
             if (!$result) {
                 // Retorna erro se o produto não está mais no cardápio ou sem estoque!
-                Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $data['short_name'] . -'FORA DO CARDÁPIO');
+                Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $items[$i]['short_name'] . -'FORA DO CARDÁPIO');
                 return response()->json([
                     "error" => true,
                     "message" => "O produto {$data['short_name']} não está mais no cardápio!\nRemova este produto da sacola!",
