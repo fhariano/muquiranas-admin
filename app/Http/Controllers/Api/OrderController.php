@@ -323,8 +323,22 @@ class OrderController extends Controller
         Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment status: ' . print_r($response, true));
 
         if ($paymentResult->status == 'APPROVED') {
-            Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
+            Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - SALVAR ORDER');
 
+            $order = $this->model->create([
+                'bar_id' => $data['bar_id'],
+                'customer_id' => $user->identify,
+                'order_num' => $data['order_num'],
+                'total' => $data['total'],
+                'order_at' => $data['order_at'],
+                'inserted_for' => $data['inserted_for'],
+            ])->id;
+
+            $items = $order->Products()->sync($data['items']);
+            $orderId = $order->id;
+            Log::channel('orderlog')->info('ORDER: orderId' . $orderId);
+            
+            Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
             for ($i = 0; $i < count($items); $i++) {
                 for ($j = 0; $j < $items[$i]['quantity']; $j++) {
                     /**
@@ -341,17 +355,6 @@ class OrderController extends Controller
                 }
             }
         }
-
-        // $order = $this->model->create([
-        //     'bar_id' => $data['bar_id'],
-        //     'customer_id' => $data['customer_id'],
-        //     'order_num' => $data['order_num'],
-        //     'total' => $data['total'],
-        //     'order_at' => $data['order_at'],
-        //     'inserted_for' => $data['inserted_for'],
-        // ]);
-
-        // $items = $order->Products()->sync($data['items']);
 
         return response()->json([
             "error" => false,

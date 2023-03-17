@@ -19,6 +19,8 @@ class CreateOrdersItemsTable extends Migration
             $table->tinyInteger('quantity'); // The signed range is -128 to 127. The unsigned range is 0 to 255
             $table->double('price', 9,2); // 00.000,00
             $table->double('total', 14,2); // 000.000.000,00
+            $table->boolean('promo');
+            $table->timestamp('promo_expire')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });

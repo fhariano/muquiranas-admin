@@ -15,6 +15,8 @@ class OrdersItems extends Model
         'product_id',
         'quantity',
         'price',
-        'total'
+        'total',
+        'promo',
+        'promo_expire',
     ];
 }
