@@ -22,7 +22,6 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalPreco_label"></h5>
-
                     </div>
 
                     <div class="modal-body">
@@ -64,7 +63,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">R$</span>
                                         </div>
-                                        <input type=text id="price" class="money2  text-right form-control" value="" aria-label="Amount " placeholder="0,00" required>
+                                        <input type=text id="price" class="money2  text-right form-control" value="" aria-label="Amount" placeholder="0,00" required>
                                         <div id="priceFeedback" class="invalid-feedback">
                                             Preencha o Preço
                                         </div>
@@ -253,14 +252,11 @@
                 // console.log('ID produto vindo resultValidation: ' + resultValidation.product_id);
                 savePriceProduct(resultValidation);
 
-
-
             } else {
 
                 if (actionButtonSavePreco == 'UpdatePrice' && resultValidation != false) {
 
                     updatePriceProduct(resultValidation, idPromo);
-
 
                 }
 
@@ -292,7 +288,6 @@
                         });
 
                     } else if (success == true) {
-                        $tblProductsPromosLists.bootstrapTable('refresh');
                         $tblProductsPromosLists.bootstrapTable('collapseRow', indexDetailsRow)
                         $tblProductsPromosLists.bootstrapTable('expandRow', indexDetailsRow)
                         Swal.fire({
@@ -300,8 +295,9 @@
                             title: 'Salvo!',
                             html: 'Novo preço cadastrado com sucesso!',
                         });
-
+                        
                         $('#modalPreco').modal('hide');
+                        $tblProductsPromosLists.bootstrapTable('refresh');
 
                     } else {
                         Swal.fire({
