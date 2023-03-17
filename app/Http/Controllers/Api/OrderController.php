@@ -310,9 +310,9 @@ class OrderController extends Controller
             ->post(config('microservices.available.micro_payment.url') . "/getnet-process-credit", $paymentData);
 
         $response = json_decode($response->body());
-        Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment status: ' . $response->status);
+        Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment status: ' . $response['status']);
 
-        if ($response->status == 'APPROVED') {
+        if ($response['status'] == 'APPROVED') {
             Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
 
             for ($i = 0; $i < count($items); $i++) {
