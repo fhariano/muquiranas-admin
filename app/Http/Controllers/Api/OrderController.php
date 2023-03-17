@@ -165,7 +165,7 @@ class OrderController extends Controller
         $softDescriptor = '';
 
         for ($i = 0; $i < count($items); $i++) {
-            Log::channel('muquiranas')->info('ORDER item:' . print_r($items[$i], true));
+            Log::channel('orderlog')->info('ORDER item:' . print_r($items[$i], true));
 
             $result = DB::table('bars as b')
                 ->leftJoin('products as p', 'b.id', '=', 'p.bar_id')
@@ -176,7 +176,7 @@ class OrderController extends Controller
 
             if (!$result) {
                 // Retorna erro se o produto não está mais no cardápio ou sem estoque!
-                Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $items[$i]['short_name'] . ' - FORA DO CARDÁPIO');
+                Log::channel('orderlog')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $items[$i]['short_name'] . ' - FORA DO CARDÁPIO');
                 return response()->json([
                     "error" => true,
                     "message" => "O produto {$items[$i]['short_name']} não está mais no cardápio!\nRemova este produto da sacola!",
@@ -184,14 +184,14 @@ class OrderController extends Controller
                 ], 422);
             }
 
-            Log::channel('muquiranas')->info('ORDER estoque result  :' . print_r($result, true));
-            Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . ' - item qtd: '
+            Log::channel('orderlog')->info('ORDER estoque result  :' . print_r($result, true));
+            Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . ' - item qtd: '
                 . $items[$i]['quantity'] . ' - stock qtd: ' . $result->quantity . ' - min qtd: ' . config('microservices.minStock')
                 . ' - app price: ' . $items[$i]['price']);
 
             // Retorna erro se o produto está abaixo do estoque mínimo (microservices.minStock - ver .env)
             if ($result->quantity < config('microservices.minStock')) {
-                Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . ' - SEM ESTOQUE');
+                Log::channel('orderlog')->warning('ORDER: ' . $data['order_num'] . ' - stock: ' . $result->short_name . ' - SEM ESTOQUE');
                 return response()->json([
                     "error" => true,
                     "message" => "O produto {$result->short_name} está Sem Estoque!\nRemova este produto da sacola!",
@@ -205,17 +205,17 @@ class OrderController extends Controller
                 $nowTime = (string) $nowTime->format('H:i:s');
 
                 $promo_list = PromosLists::where('bar_id', $data['bar_id'])->where('active', 1)->first();
-                // Log::channel('muquiranas')->info('ORDER promo list  :' . print_r($promo_list, true));
+                // Log::channel('orderlog')->info('ORDER promo list  :' . print_r($promo_list, true));
 
                 if ($promo_list) {
                     $stopPromo = strtotime($nowTime) > strtotime($items[$i]['promo_expire']);
-                    Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - promo: ' . $result->short_name
+                    Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - promo: ' . $result->short_name
                         . ' - nowTime: ' . $nowTime . ' - promo expire: ' . $items[$i]['promo_expire'] . ' - stop promo: '
                         . (($stopPromo) ? 'true' : 'false'));
 
                     // Retorna erro se a promoção não estiver no período descontando o stopPromo (microservices.stopPromo - ver .env)
                     if ($stopPromo) {
-                        Log::channel('muquiranas')->warning('ORDER: ' . $data['order_num'] . ' -  promo: ' . $result->short_name . ' - PROMO INVALIDA');
+                        Log::channel('orderlog')->warning('ORDER: ' . $data['order_num'] . ' -  promo: ' . $result->short_name . ' - PROMO INVALIDA');
                         return response()->json([
                             "error" => true,
                             "message" => "A promoção do produto {$result->short_name} expirou!\nRemova este produto da sacola!",
@@ -235,7 +235,7 @@ class OrderController extends Controller
             ->get(config('microservices.available.micro_auth.url') . "/me");
 
         if ($response->status() > 299) {
-            Log::channel('muquiranas')->error('ORDER: ' . $data['order_num'] . ' - AUTHORIZATION');
+            Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - AUTHORIZATION');
             return response()->json([
                 "error" => true,
                 "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
@@ -245,7 +245,7 @@ class OrderController extends Controller
 
         $user = json_decode($response->body());
         $user = $user->data;
-        // Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - user infos.: ' . print_r($user, true));
+        // Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - user infos.: ' . print_r($user, true));
 
         // Buscar informações do cartão no cofre na GetNet
         $paymentInfo = $data['payment_info'];
@@ -256,7 +256,7 @@ class OrderController extends Controller
             ->get(config('microservices.available.micro_payment.url') . "/getnet-card/" . $paymentInfo['card_id']);
 
         if ($response->status() > 299) {
-            Log::channel('muquiranas')->error('ORDER: ' . $data['order_num'] . ' - GETCARD INFO');
+            Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - GETCARD INFO');
             return response()->json([
                 "error" => true,
                 "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
@@ -266,7 +266,7 @@ class OrderController extends Controller
 
         $response = json_decode($response->body());
         $cardInfo = $response->data;
-        // Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - card infos.: ' . print_r($cardInfo, true));
+        // Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - card infos.: ' . print_r($cardInfo, true));
 
         $fullName = explode(' ', $user->short_name);
         $firstName = $fullName[0];
@@ -300,7 +300,7 @@ class OrderController extends Controller
             "clientCEP" => preg_replace('/[^0-9]/', '', $user->postal_code),
         );
 
-        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - payment data.: ' . print_r($paymentData, true));
+        Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment data.: ' . print_r($paymentData, true));
 
         // Efetua o pagamento na Getnet
         $response = Http::acceptJson()
@@ -310,8 +310,24 @@ class OrderController extends Controller
             ->post(config('microservices.available.micro_payment.url') . "/getnet-process-credit", $paymentData);
 
         $response = json_decode($response->body());
-        Log::channel('muquiranas')->info('ORDER: ' . $data['order_num'] . ' - payment result.: ' . print_r($response, true));
+        Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment status: ' . $response->status);
 
+        if ($response->status == 'APPROVED') {
+            Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
+
+            for ($i = 0; $i < count($items); $i++) {
+                for ($j = 0; $j < count($items[$i]['quantity']); $j++) {
+                    /**
+                     * Bar_Code (000-000000-0000-000000-000): order_id-product_id-item
+                     *    product_id: 6 caracteres podendo chegar a 999999 (~ 1 milhão)
+                     *    item: 3 caracteres podendo chegar a 999 (~ mil por proudct_id) (se comprar 3 itens do mesmo produto vai de 1-3)
+                     */
+                    Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - BARCODE ITEM: ' . $items[$i]['short_name']
+                        . $data['order_num'] . ' - ' . str_pad($items[$i]['product_id'], "0", 6) . ' - '
+                        . str_pad($items[$i]['item'], "0", 3));
+                }
+            }
+        }
 
         // $order = $this->model->create([
         //     'bar_id' => $data['bar_id'],

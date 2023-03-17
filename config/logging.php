@@ -121,9 +121,17 @@ return [
             'path' => storage_path('logs/muquiranas.log'),
 
             'days' => 30,
-
         ],
-        
+
+        'orderlog' => [
+
+            'driver' => 'daily',
+
+            'path' => storage_path('logs/order-result.log'),
+
+            'days' => 90,
+        ],
+
     ],
 
 ];
