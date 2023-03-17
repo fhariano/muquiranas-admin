@@ -35,6 +35,5 @@ class CreateOrdersItemsTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('orders_items');
-        Schema::enableForeignKeyConstraints();
     }
 }
