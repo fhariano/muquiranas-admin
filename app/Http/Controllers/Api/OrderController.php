@@ -313,6 +313,16 @@ class OrderController extends Controller
         $paymentResult = $response->data;
         Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment status: ' . print_r($response, true));
 
+
+        if($paymentResult->status > 299){
+            Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - PAGAMENTO NÃO PROCESSADO');
+            return response()->json([
+                "error" => true,
+                "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
+                "data" => []
+            ], $paymentResult->status);
+        }
+
         if ($paymentResult->status == 'APPROVED') {
             Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
 
