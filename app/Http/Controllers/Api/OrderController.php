@@ -332,7 +332,7 @@ class OrderController extends Controller
                 'total' => $data['total'],
                 'order_at' => $data['order_at'],
                 'inserted_for' => $data['inserted_for'],
-            ])->id;
+            ]);
 
             $items = $order->Products()->sync($data['items']);
             $orderId = $order->id;
