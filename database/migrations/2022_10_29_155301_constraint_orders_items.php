@@ -27,7 +27,7 @@ class ConstraintOrdersItems extends Migration
      */
     public function down()
     {
-        if (Schema::hasColumn('order_id', 'product_id')) {
+        if (Schema::hasColumn('orders_items', 'order_id')) {
             
             Schema::table('orders_items', function (Blueprint $table) {
                 $table->dropForeign(['order_id']);

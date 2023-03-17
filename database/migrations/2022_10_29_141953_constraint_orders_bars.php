@@ -16,7 +16,6 @@ class ConstraintOrdersBars extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->foreignId('bar_id')->nullable()->after('id')->constrained('bars')->onDelete('cascade');
         });
-        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -26,7 +25,7 @@ class ConstraintOrdersBars extends Migration
      */
     public function down()
     {
-        if (Schema::hasColumn('bar_id')) {
+        if (Schema::hasColumn('orders', 'bar_id')) {
             Schema::table('orders', function (Blueprint $table) {
                 $table->dropForeign(['bar_id']);
             });
