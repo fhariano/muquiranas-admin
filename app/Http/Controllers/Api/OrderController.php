@@ -320,7 +320,7 @@ class OrderController extends Controller
                 "error" => true,
                 "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
                 "data" => []
-            ], $paymentResult->status);
+            ], 500);
         }
 
         if ($paymentResult->status == 'APPROVED') {
