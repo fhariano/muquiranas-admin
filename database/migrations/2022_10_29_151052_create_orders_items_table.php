@@ -13,6 +13,7 @@ class CreateOrdersItemsTable extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('orders_items', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('item'); // The signed range is -128 to 127. The unsigned range is 0 to 255
