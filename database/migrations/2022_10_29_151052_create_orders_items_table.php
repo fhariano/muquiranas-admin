@@ -23,7 +23,7 @@ class CreateOrdersItemsTable extends Migration
             $table->boolean('promo');
             $table->timestamp('promo_expire')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
         });
     }
 
