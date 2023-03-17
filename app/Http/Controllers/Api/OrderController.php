@@ -309,19 +309,20 @@ class OrderController extends Controller
             ])
             ->post(config('microservices.available.micro_payment.url') . "/getnet-process-credit", $paymentData);
 
-        $response = json_decode($response->body());
-        $paymentResult = $response->data;
-        Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment status: ' . print_r($response, true));
-
-
-        if($paymentResult->status > 299){
+        if ($response->status() > 299) {
             Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - PAGAMENTO NÃO PROCESSADO');
             return response()->json([
                 "error" => true,
                 "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
                 "data" => []
-            ], 500);
+            ], $response->status());
         }
+        
+        $response = json_decode($response->body());
+        $paymentResult = $response->data;
+        Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment status: ' . print_r($response, true));
+
+
 
         if ($paymentResult->status == 'APPROVED') {
             Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
