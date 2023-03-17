@@ -319,14 +319,14 @@ class OrderController extends Controller
             for ($i = 0; $i < count($items); $i++) {
                 for ($j = 0; $j < $items[$i]['quantity']; $j++) {
                     /**
-                     * Bar_Code (000-000000-0000-000000-000): order_id-product_id-item
-                     *    product_id: 6 caracteres podendo chegar a 999999 (~ 1 milhão)
+                     * Bar_Code (000-0000000-000-00000000-000): order_num-product_id-item
+                     *    product_id: 8 caracteres podendo chegar a 99999999 (~ 100 milhões)
                      *    item: 3 caracteres podendo chegar a 999 (~ mil por proudct_id) (se comprar 3 itens do mesmo produto vai de 1-3)
                      */
                     Log::channel('orderlog')->info(
                         'ORDER: ' . $data['order_num'] . ' - ITEM: ' . str_pad($items[$i]['short_name'], 15, " ", STR_PAD_RIGHT)
                             . ' - BARCODE ITEM: ' . $data['order_num'] . '-'
-                            . str_pad($items[$i]['product_id'], 6, "0", STR_PAD_LEFT) . '-'
+                            . str_pad($items[$i]['product_id'], 8, "0", STR_PAD_LEFT) . '-'
                             . str_pad($j + 1, 3, "0", STR_PAD_LEFT)
                     );
                 }
