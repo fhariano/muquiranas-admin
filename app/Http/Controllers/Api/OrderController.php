@@ -324,7 +324,7 @@ class OrderController extends Controller
                      *    item: 3 caracteres podendo chegar a 999 (~ mil por proudct_id) (se comprar 3 itens do mesmo produto vai de 1-3)
                      */
                     Log::channel('orderlog')->info(
-                        'ORDER: ' . $data['order_num'] . ' - ITEM: ' . str_pad($items[$i]['short_name'], " ", 15, STR_PAD_RIGHT)
+                        'ORDER: ' . $data['order_num'] . ' - ITEM: ' . str_pad($items[$i]['short_name'], 15, " ", STR_PAD_RIGHT)
                             . ' - BARCODE ITEM: ' . $data['order_num'] . '-'
                             . str_pad($items[$i]['product_id'], 6, "0", STR_PAD_LEFT) . '-'
                             . str_pad($j + 1, 3, "0", STR_PAD_LEFT)
