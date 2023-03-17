@@ -43,12 +43,12 @@ class OrderController extends Controller
      * @param  Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index($identify, $bar_id)
+    public function index($user_id, $bar_id)
     {
         $orders = DB::table('orders')
             ->select('orders.*')
             ->leftJoin('bars', 'orders.bar_id', 'bars.id')
-            ->where('orders.client_identify', $identify)
+            ->where('orders.client_id', $user_id)
             ->where('orders.bar_id', $bar_id)
             ->where('orders.active', 1)
             ->where('bars.active', 1)
@@ -327,6 +327,7 @@ class OrderController extends Controller
 
             $order = $this->model->create([
                 'bar_id' => $data['bar_id'],
+                'client_id' => $user->id,
                 'client_identify' => $user->identify,
                 'order_num' => $data['order_num'],
                 'total' => $data['total'],

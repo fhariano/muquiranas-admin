@@ -40,6 +40,6 @@ Route::middleware(['chk_user_auth'])->group(function () {
     Route::put('/products/favorites/bar/{bar_id}/user/{user_id}', [ProductController::class, 'toggleFavoriteProduct']);
 
     Route::get('/orders/{order_id}', [OrderController::class, 'show']);
-    Route::get('/orders/user/{identify}/bar/{bar_id}', [OrderController::class, 'index']);
+    Route::get('/orders/user/{user_id}/bar/{bar_id}', [OrderController::class, 'index']);
     Route::post('/orders', [OrderController::class, 'store']);
 });

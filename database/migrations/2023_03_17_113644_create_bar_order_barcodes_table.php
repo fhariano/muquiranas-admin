@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('bar_order_barcodes', function (Blueprint $table) {
             $table->id();
-            $table->uuid('user_identify');
+            $table->bigInteger('client_id');
+            $table->uuid('client_identify');
             $table->string('barcode',45);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('validate')->nullable();
