@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('bar_order_barcodes', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('client_id');
