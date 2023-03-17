@@ -26,9 +26,11 @@ class ConstraintOrdersItems extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::table('orders_items', function (Blueprint $table) {
             $table->dropForeign(['order_id']);
             $table->dropForeign(['product_id']);
         });
+        Schema::enableForeignKeyConstraints();
     }
 }
