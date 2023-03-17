@@ -317,7 +317,7 @@ class OrderController extends Controller
             Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
 
             for ($i = 0; $i < count($items); $i++) {
-                for ($j = 0; $j < count($items[$i]['quantity']); $j++) {
+                for ($j = 0; $j < $items[$i]['quantity']; $j++) {
                     /**
                      * Bar_Code (000-000000-0000-000000-000): order_id-product_id-item
                      *    product_id: 6 caracteres podendo chegar a 999999 (~ 1 milhão)
