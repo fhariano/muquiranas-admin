@@ -334,10 +334,10 @@ class OrderController extends Controller
                 'inserted_for' => $data['inserted_for'],
             ]);
 
-            $orderItems = $order->Products()->sync($data['items']);
+            $orderitems = $order->Products()->sync($data['items']);
             $orderId = $order->id;
-            Log::channel('orderlog')->info('ORDER: orderId' . $orderId);
-            
+            Log::channel('orderlog')->info('ORDER: orderId' . $orderId . ' - orderItems: ' . print_r($orderitems, true));
+
             Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
             for ($i = 0; $i < count($items); $i++) {
                 for ($j = 0; $j < $items[$i]['quantity']; $j++) {
