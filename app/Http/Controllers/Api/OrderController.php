@@ -323,7 +323,7 @@ class OrderController extends Controller
         Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment status: ' . print_r($response, true));
 
         if ($paymentResult->status == 'APPROVED') {
-            Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - SALVAR ORDER');
+            Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - userId: ' . $user->id . ' - SALVAR ORDER');
 
             $order = $this->model->create([
                 'bar_id' => $data['bar_id'],
