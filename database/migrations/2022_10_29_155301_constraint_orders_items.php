@@ -17,6 +17,7 @@ class ConstraintOrdersItems extends Migration
             $table->foreignId('order_id')->nullable()->after('id')->constrained('orders')->onDelete('cascade');
             $table->foreignId('product_id')->nullable()->after('item')->constrained('products')->onDelete('cascade');
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -26,11 +27,12 @@ class ConstraintOrdersItems extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::table('orders_items', function (Blueprint $table) {
-            $table->dropForeign(['order_id']);
-            $table->dropForeign(['product_id']);
-        });
-        Schema::enableForeignKeyConstraints();
+        if (Schema::hasColumn('order_id', 'product_id')) {
+            
+            Schema::table('orders_items', function (Blueprint $table) {
+                $table->dropForeign(['order_id']);
+                $table->dropForeign(['product_id']);
+            });
+        }
     }
 }

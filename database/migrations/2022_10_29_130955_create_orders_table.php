@@ -29,7 +29,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('active')->default(true);
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -39,6 +39,5 @@ class CreateOrdersTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('orders');
-        Schema::enableForeignKeyConstraints();
     }
 }
