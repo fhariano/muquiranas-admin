@@ -13,6 +13,7 @@ class ConstraintOrdersBars extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::table('orders', function (Blueprint $table) {
             $table->foreignId('bar_id')->nullable()->after('id')->constrained('bars')->onDelete('cascade');
         });
