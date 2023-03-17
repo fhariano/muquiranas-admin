@@ -334,7 +334,7 @@ class OrderController extends Controller
                 'inserted_for' => $data['inserted_for'],
             ]);
 
-            $items = $order->Products()->sync($data['items']);
+            $orderItems = $order->Products()->sync($data['items']);
             $orderId = $order->id;
             Log::channel('orderlog')->info('ORDER: orderId' . $orderId);
             
