@@ -327,7 +327,7 @@ class OrderController extends Controller
             Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - userId: ' . $user->id . ' - SALVAR ORDER');
             $orderId = 0;
             try {
-                DB::transaction(function ($data, $user, $orderId) {
+                DB::transaction(function () use ($data, $user, $orderId) {
                     $order = $this->model->create([
                         'bar_id' => $data['bar_id'],
                         'client_id' => $user->id,
@@ -391,7 +391,7 @@ class OrderController extends Controller
             }
 
             try {
-                DB::transaction(function ($barcodeData) {
+                DB::transaction(function () use ($barcodeData) {
                     BarOrderBarcodes::create($barcodeData);
                 });
             } catch (\Exception $e) {
