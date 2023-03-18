@@ -383,6 +383,7 @@ class OrderController extends Controller
             }
             if (count($barcodeData) <= 0) {
                 Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - GERANDO BARCODE');
+                Log::channel('orderlog')->error('BARCODE list: '. print_r($barcodeData, true));
                 return response()->json([
                     "error" => true,
                     "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
