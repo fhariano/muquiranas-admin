@@ -343,7 +343,6 @@ class OrderController extends Controller
                 });
             } catch (\Exception $e) {
                 Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - SALVANDO ORDER');
-                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR1: ' . print_r($order, true));
                 Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR2: ' . print_r($e->getMessage(), true));
                 return response()->json([
                     "error" => true,
