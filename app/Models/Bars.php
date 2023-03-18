@@ -18,9 +18,4 @@ class Bars extends Model
     {
         return $this->hasMany(Categories::class);
     }
-
-    public function barOrderBarcodes()
-    {
-        return $this->hasMany(BarOrderBarcodes::class);
-    }
 }

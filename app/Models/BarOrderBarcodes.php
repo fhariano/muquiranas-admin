@@ -18,7 +18,7 @@ class BarOrderBarcodes extends Model
         return $this->belongsTo(Bars::class);
     }
 
-    public function Orders()
+    public function orders()
     {
         return $this->belongsTo(Orders::class);
     }
