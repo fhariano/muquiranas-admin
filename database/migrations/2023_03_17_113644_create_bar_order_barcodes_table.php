@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamp('validate')->nullable();
             $table->timestamp('used_at')->useCurrentOnUpdate();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
             $table->boolean('active')->default(true);
         });
     }
