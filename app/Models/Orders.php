@@ -27,4 +27,9 @@ class Orders extends Model
     {
         return $this->belongsToMany(Products::class, 'orders_items', 'order_id', 'product_id');
     }
+
+    public function barOrderBarcodes()
+    {
+        return $this->hasMany(BarOrderBarcodes::class);
+    }
 }

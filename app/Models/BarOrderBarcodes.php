@@ -9,7 +9,17 @@ class BarOrderBarcodes extends Model
 {
     use HasFactory;
 
-    protected $table ="bar_order_barcodes";
-    
-    protected $fillable = ['bar_id', 'order_id', 'user_identify','barcode','validate','used_at','active'];
+    protected $table = "bar_order_barcodes";
+
+    protected $fillable = ['bar_id', 'order_id', 'user_identify', 'barcode', 'validate', 'used_at', 'active'];
+
+    public function bars()
+    {
+        return $this->belongsTo(Bars::class);
+    }
+
+    public function Orders()
+    {
+        return $this->belongsToMany(Orders::class, 'orders_items', 'product_id', 'order_id');
+    }
 }
