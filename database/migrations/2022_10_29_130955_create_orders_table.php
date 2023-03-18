@@ -25,7 +25,7 @@ class CreateOrdersTable extends Migration
             $table->string('inserted_for',45);
             $table->string('updated_for',45)->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
+            $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->boolean('billed')->default(false);
             $table->boolean('active')->default(true);
         });
