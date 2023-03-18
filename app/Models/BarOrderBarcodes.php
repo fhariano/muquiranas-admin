@@ -20,6 +20,6 @@ class BarOrderBarcodes extends Model
 
     public function Orders()
     {
-        return $this->belongsToMany(Orders::class, 'orders_items', 'product_id', 'order_id');
+        return $this->belongsTo(Orders::class);
     }
 }
