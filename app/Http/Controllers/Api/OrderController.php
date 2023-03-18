@@ -352,7 +352,6 @@ class OrderController extends Controller
             }
 
             Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
-            $barcodeData = [];
             for ($i = 0; $i < count($items); $i++) {
                 for ($j = 0; $j < $items[$i]['quantity']; $j++) {
                     /**
@@ -370,39 +369,31 @@ class OrderController extends Controller
                     // Calcula a validade do barcode data atual + 12 horas
                     $validate = \Carbon\Carbon::now()->addHours(12);
                     $validate = (string) $validate->format('H:i:s');
-                    $barcodeData[] = array(
-                        "bar_id" => $data['bar_id'],
-                        "order_id" => $orderId,
-                        "client_id" => $user->id,
-                        "client_identify" => $user->identify,
-                        "product_id" => $items[$i]['product_id'],
-                        "barcode" => $barcode,
-                        "validate" => $validate,
-                    );
-                }
-            }
-            if (count($barcodeData) <= 0) {
-                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - GERANDO BARCODE');
-                return response()->json([
-                    "error" => true,
-                    "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
-                    "data" => []
-                ], 500);
-            }
 
-            Log::channel('orderlog')->error('BARCODE list: '. print_r($barcodeData, true));
-            try {
-                DB::transaction(function () use ($barcodeData) {
-                    DB::table('bar_order_barcodes')->insert($barcodeData);
-                });
-            } catch (\Exception $e) {
-                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - SALVANDO BARCODE');
-                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR: ' . print_r($e->getMessage(), true));
-                return response()->json([
-                    "error" => true,
-                    "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
-                    "data" => []
-                ], 500);
+                    try {
+                        DB::transaction(function () use ($user, $data, $items, $orderId, $barcode, $validate, $i) {
+                            DB::table('bar_order_barcodes')->insert(
+                                array(
+                                    "bar_id" => $data['bar_id'],
+                                    "order_id" => $orderId,
+                                    "client_id" => $user->id,
+                                    "client_identify" => $user->identify,
+                                    "product_id" => $items[$i]['product_id'],
+                                    "barcode" => $barcode,
+                                    "validate" => $validate,
+                                )
+                            );
+                        });
+                    } catch (\Exception $e) {
+                        Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - SALVANDO BARCODE');
+                        Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR: ' . print_r($e->getMessage(), true));
+                        return response()->json([
+                            "error" => true,
+                            "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
+                            "data" => []
+                        ], 500);
+                    }
+                }
             }
         }
 
