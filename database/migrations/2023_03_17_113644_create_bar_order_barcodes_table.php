@@ -19,7 +19,7 @@ return new class extends Migration
             $table->bigInteger('client_id');
             $table->uuid('client_identify');
             $table->string('barcode',45);
-            $table->timestamp('validate')->nullable();
+            $table->time('validate')->nullable();
             $table->timestamp('used_at')->useCurrentOnUpdate();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
