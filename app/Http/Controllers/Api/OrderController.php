@@ -328,7 +328,7 @@ class OrderController extends Controller
             $orderId = 0;
             try {
                 DB::transaction(function () use ($data, $user, &$orderId) {
-                    $order = $this->model->insert(array(
+                    $order = $this->model->create(array(
                         'bar_id' => $data['bar_id'],
                         'client_id' => $user->id,
                         'client_identify' => $user->identify,
