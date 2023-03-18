@@ -328,7 +328,7 @@ class OrderController extends Controller
             $orderId = 0;
             try {
                 DB::transaction(function () use ($data, $user, $orderId) {
-                    $order = $this->model->create([
+                    $order = $this->model->insert(array(
                         'bar_id' => $data['bar_id'],
                         'client_id' => $user->id,
                         'client_identify' => $user->identify,
@@ -336,14 +336,15 @@ class OrderController extends Controller
                         'total' => $data['total'],
                         'order_at' => $data['order_at'],
                         'inserted_for' => $data['inserted_for'],
-                    ]);
+                    ));
                     $orderitems = $order->Products()->sync($data['items']);
                     $orderId = $order->id;
                     Log::channel('orderlog')->info('ORDER: orderId' . $orderId . ' - orderItems: ' . print_r($orderitems, true));
                 });
             } catch (\Exception $e) {
                 Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - SALVANDO ORDER');
-                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR: ' . print_r($e->getMessage(), true));
+                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR1: ' . print_r($order, true));
+                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR2: ' . print_r($e->getMessage(), true));
                 return response()->json([
                     "error" => true,
                     "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
