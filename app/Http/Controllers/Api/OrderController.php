@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrder;
+use App\Models\BarOrderBarcodes;
 use App\Models\Orders;
 use App\Models\ProductsPromosLists;
 use App\Models\PromosLists;
@@ -324,22 +325,34 @@ class OrderController extends Controller
 
         if ($paymentResult->status == 'APPROVED') {
             Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - userId: ' . $user->id . ' - SALVAR ORDER');
-
-            $order = $this->model->create([
-                'bar_id' => $data['bar_id'],
-                'client_id' => $user->id,
-                'client_identify' => $user->identify,
-                'order_num' => $data['order_num'],
-                'total' => $data['total'],
-                'order_at' => $data['order_at'],
-                'inserted_for' => $data['inserted_for'],
-            ]);
-
-            $orderitems = $order->Products()->sync($data['items']);
-            $orderId = $order->id;
-            Log::channel('orderlog')->info('ORDER: orderId' . $orderId . ' - orderItems: ' . print_r($orderitems, true));
+            $orderId = 0;
+            try {
+                DB::transaction(function ($data, $user, $orderId) {
+                    $order = $this->model->create([
+                        'bar_id' => $data['bar_id'],
+                        'client_id' => $user->id,
+                        'client_identify' => $user->identify,
+                        'order_num' => $data['order_num'],
+                        'total' => $data['total'],
+                        'order_at' => $data['order_at'],
+                        'inserted_for' => $data['inserted_for'],
+                    ]);
+                    $orderitems = $order->Products()->sync($data['items']);
+                    $orderId = $order->id;
+                    Log::channel('orderlog')->info('ORDER: orderId' . $orderId . ' - orderItems: ' . print_r($orderitems, true));
+                });
+            } catch (\Exception $e) {
+                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - SALVANDO ORDER');
+                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR: ' . print_r($e->getMessage(), true));
+                return response()->json([
+                    "error" => true,
+                    "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
+                    "data" => []
+                ], 500);
+            }
 
             Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
+            $barcodeData = [];
             for ($i = 0; $i < count($items); $i++) {
                 for ($j = 0; $j < $items[$i]['quantity']; $j++) {
                     /**
@@ -353,7 +366,42 @@ class OrderController extends Controller
                         'ORDER: ' . $data['order_num'] . ' - ITEM: ' . str_pad($items[$i]['short_name'], 15, " ", STR_PAD_RIGHT)
                             . ' - BARCODE ITEM: ' . $barcode
                     );
+
+                    // Calcula a validade do barcode data atual + 12 horas
+                    $validate = \Carbon\Carbon::now()->addHours(12);
+                    $validate = (string) $nowTime->format('H:i:s');
+                    $barcodeData[] = array(
+                        "bar_id" => $data['bar_id'],
+                        "order_id" => $orderId,
+                        "client_id" => $user->id,
+                        "client_identify" => $user->identify,
+                        "product_id" => $items[$i]['product_id'],
+                        "barcode" => $barcode,
+                        "validate" => $validate,
+                    );
                 }
+            }
+            if (count($barcodeData) <= 0) {
+                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - GERANDO BARCODE');
+                return response()->json([
+                    "error" => true,
+                    "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
+                    "data" => []
+                ], 500);
+            }
+
+            try {
+                DB::transaction(function ($barcodeData) {
+                    BarOrderBarcodes::create($barcodeData);
+                });
+            } catch (\Exception $e) {
+                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - SALVANDO ORDER');
+                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR: ' . print_r($e->getMessage(), true));
+                return response()->json([
+                    "error" => true,
+                    "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
+                    "data" => []
+                ], 500);
             }
         }
 
