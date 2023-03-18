@@ -383,7 +383,6 @@ class OrderController extends Controller
             }
             if (count($barcodeData) <= 0) {
                 Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - GERANDO BARCODE');
-                Log::channel('orderlog')->error('BARCODE list: '. print_r($barcodeData, true));
                 return response()->json([
                     "error" => true,
                     "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
@@ -391,12 +390,13 @@ class OrderController extends Controller
                 ], 500);
             }
 
+            Log::channel('orderlog')->error('BARCODE list: '. print_r($barcodeData, true));
             try {
                 DB::transaction(function () use ($barcodeData) {
                     BarOrderBarcodes::create($barcodeData);
                 });
             } catch (\Exception $e) {
-                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - SALVANDO ORDER');
+                Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - SALVANDO BARCODE');
                 Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR: ' . print_r($e->getMessage(), true));
                 return response()->json([
                     "error" => true,
