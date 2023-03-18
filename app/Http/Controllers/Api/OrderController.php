@@ -393,7 +393,7 @@ class OrderController extends Controller
             Log::channel('orderlog')->error('BARCODE list: '. print_r($barcodeData, true));
             try {
                 DB::transaction(function () use ($barcodeData) {
-                    BarOrderBarcodes::create($barcodeData);
+                    DB::table('bar_order_barcodes')->insert($barcodeData);
                 });
             } catch (\Exception $e) {
                 Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - SALVANDO BARCODE');
