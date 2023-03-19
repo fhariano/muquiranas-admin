@@ -11,15 +11,20 @@ class BarOrderBarcodes extends Model
 
     protected $table = "bar_order_barcodes";
 
-    protected $fillable = ['bar_id', 'order_id', 'user_identify', 'barcode', 'validate', 'used_at', 'active'];
+    protected $fillable = ['bar_id', 'order_id', 'product_id', 'user_identify', 'barcode', 'validate', 'used_at', 'active'];
 
     public function bars()
     {
-        return $this->belongsTo(Bars::class);
+        return $this->belongsToMany(Orders::class, 'bars', 'bar_id', );
     }
 
     public function orders()
     {
-        return $this->belongsTo(Orders::class);
+        return $this->belongsToMany(Orders::class, 'orders', 'order_id', );
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Orders::class, 'products', 'product_id', );
     }
 }

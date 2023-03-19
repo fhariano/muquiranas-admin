@@ -368,7 +368,7 @@ class OrderController extends Controller
 
                     // Calcula a validade do barcode data atual + 12 horas
                     $validate = \Carbon\Carbon::now()->addHours(12);
-                    $validate = (string) $validate->format('H:i:s');
+                    $validate = (string) $validate->format('Y-m-d H:i:s');
 
                     try {
                         DB::transaction(function () use ($user, $data, $items, $orderId, $barcode, $validate, $i) {
