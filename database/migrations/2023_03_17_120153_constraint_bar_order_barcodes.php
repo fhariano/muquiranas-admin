@@ -15,7 +15,7 @@ class ConstraintBarOrderBarcodes extends Migration
     {
         Schema::table('bar_order_barcodes', function (Blueprint $table) {
             $table->foreignId('bar_id')->after('id')->constrained('bars')->onDelete('cascade');
-            $table->foreignId('order_id')->after('bar_id')->constrained('bars')->onDelete('cascade');
+            $table->foreignId('order_id')->after('bar_id')->constrained('orders')->onDelete('cascade');
             $table->foreignId('product_id')->after('order_id')->constrained('products')->onDelete('cascade');
         });
         Schema::enableForeignKeyConstraints();
