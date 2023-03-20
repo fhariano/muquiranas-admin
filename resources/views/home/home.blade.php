@@ -327,16 +327,15 @@ $(function() {
                 },
                 dataType: "json",
                 success: function(categories) {
-
+                  
                     $('.bd-example').addClass("sr-only");
                     $("#categoriesBar").append(
                         '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
                     )
 
                     $.each(categories, function(key, value) {
-                        updateValueCardReceita();
+                        
                         $("#selectCategories").removeClass("sr-only");
-
                         $("#categoriesBar").append('<option value="' + value['id'] +
                             '">' + value['name'] + '<option>');
                     });
@@ -463,11 +462,11 @@ $(function() {
                 data: dados,
                 dataType: "json",
                 success: function(response) {
-                    console.log("Dados Consolidados: ", response);
+                    
                     resolve(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    console.log("Erro na chamada ajax: ", xhr.responseText);
+                   
                     reject(errorThrown);
                 },
             });
@@ -494,11 +493,11 @@ $(function() {
     //         data: dados,
     //         dataType:"json",
     //         success:function(response){
-    //             console.log('Dados Consolidados: ', response);
+    //            
     //             return response;
     //         },
     //         error:function(xhr,textStatus,errorThrown){
-    //             console.log('Erro na chamada ajax: ', xhr.responseText);
+    //           
     //         }
     //     })
 
