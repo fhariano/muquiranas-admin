@@ -78,7 +78,9 @@ class OrderController extends Controller
                     'p.image_url',
                     'oItems.quantity',
                     'oItems.price',
-                    'oItems.total'
+                    'oItems.total',
+                    'oItems.promo',
+                    'oItems.promo_expire'
                 )
                 ->leftJoin('products AS p', 'oItems.product_id', 'p.id')
                 ->where('order_id', $order->id)
