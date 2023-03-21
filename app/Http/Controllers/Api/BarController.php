@@ -22,7 +22,9 @@ class BarController extends Controller
      */
     public function index()
     {
-        $bars = Bars::where('bars.active', 1)->orderBy('bars.order', 'asc')->get();
+        $bars = Bars::where('bars.active', 1)
+            ->where('bars.status', 1)
+            ->orderBy('bars.order', 'asc')->get();
         // dd($bars);
         if ($bars->isEmpty()) {
             return response()->json([
