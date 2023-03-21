@@ -495,10 +495,10 @@
         }
 
 
-        getProducstDetail = (idList, idProduct) => {
+        getProductsDetail = (idList) => {
             return new Promise((resolve, reject) => {
 
-                $.getJSON(urlBase + urlController + 'list/' + idList + '/product/' + idProduct, function(result) {
+                $.getJSON(urlBase + urlController + 'list/' + idList + '/product/' + 0, function(result) {
 
                     return resolve(result);
                 });
