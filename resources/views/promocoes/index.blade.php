@@ -495,7 +495,7 @@
         }
 
 
-        getProductsDetail = (idList, idProduct) => {
+        getProducstDetail = (idList, idProduct) => {
             return new Promise((resolve, reject) => {
 
                 $.getJSON(urlBase + urlController + 'list/' + idList + '/product/' + idProduct, function(result) {
@@ -643,11 +643,9 @@
                             $(this).prev().find('.detail-icon').click()
                         }
                     });
-
-                    
-         
+                             
                     var dataJson = [];
-                    getProductsDetail(idList, row.product_id).then((result) => { 
+                    getProductsDetail(idList).then((result) => {
                         dataJson[index] = [];
                         result.forEach(function(field, idx) {
 
@@ -666,7 +664,6 @@
                                 'promos_list_id': field.idList
                                 
                             });
-
                         })
 
 
