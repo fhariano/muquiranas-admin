@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ConstraintBarOrderBarcodes extends Migration
+class ConstraintOrdersBarcodes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class ConstraintBarOrderBarcodes extends Migration
      */
     public function up()
     {
-        Schema::table('bar_order_barcodes', function (Blueprint $table) {
+        Schema::table('orders_barcodes', function (Blueprint $table) {
             $table->foreignId('bar_id')->after('id')->constrained('bars')->onDelete('cascade');
             $table->foreignId('order_id')->after('bar_id')->constrained('orders')->onDelete('cascade');
             $table->foreignId('product_id')->after('order_id')->constrained('products')->onDelete('cascade');
@@ -28,8 +28,8 @@ class ConstraintBarOrderBarcodes extends Migration
      */
     public function down()
     {
-        if (Schema::hasColumn('bar_order_barcodes', 'bar_id')) {
-            Schema::table('bar_order_barcodes', function (Blueprint $table) {
+        if (Schema::hasColumn('orders_barcodes', 'bar_id')) {
+            Schema::table('orders_barcodes', function (Blueprint $table) {
                 $table->dropForeign(['bar_id']);
                 $table->dropForeign(['order_id']);
                 $table->dropForeign(['product_id']);
