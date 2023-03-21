@@ -311,7 +311,7 @@ class OrderController extends Controller
             ->post(config('microservices.available.micro_payment.url') . "/getnet-process-credit", $paymentData);
 
         if ($response->status() > 299) {
-            Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - PAGAMENTO NÃO PROCESSADO');
+            Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - PAGAMENTO NÃO PROCESSADO - status code: ' . $response->status());
             return response()->json([
                 "error" => true,
                 "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
