@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrder;
-use App\Models\BarOrderBarcodes;
 use App\Models\Orders;
-use App\Models\ProductsPromosLists;
 use App\Models\PromosLists;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -355,6 +353,27 @@ class OrderController extends Controller
 
             Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - GERAR BARCODE');
             for ($i = 0; $i < count($items); $i++) {
+                /**
+                 *  Baixar estoque de cada item!
+                 */
+                Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - STOCK DECREMENT: ' . $items[$i]['short_name'] . ' qtd: ' . $items[$i]['quantity']);
+                try {
+                    DB::transaction(function () use ($data, $items, $i) {
+                        $stock = DB::table('products')
+                        ->where('id', $items[$i]['product_id'])
+                        ->decrement('quantity', $items[$i]['quantity']);
+                        Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - Item: ' . $items[$i]['short_name'] . ' result: ' . print_r($stock, true));
+                    });
+                } catch (\Exception $e) {
+                    Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - AJUSTANDO ESTOQUE');
+                    Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - ERROR: ' . print_r($e->getMessage(), true));
+                    return response()->json([
+                        "error" => true,
+                        "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
+                        "data" => []
+                    ], 500);
+                }
+
                 for ($j = 0; $j < $items[$i]['quantity']; $j++) {
                     /**
                      * Bar_Code (000-0000000-000-00000000-000): order_num-product_id-item
@@ -374,7 +393,7 @@ class OrderController extends Controller
 
                     try {
                         DB::transaction(function () use ($user, $data, $items, $orderId, $barcode, $validate, $i) {
-                            DB::table('bar_order_barcodes')->insert(
+                            DB::table('orders_barcodes')->insert(
                                 array(
                                     "bar_id" => $data['bar_id'],
                                     "order_id" => $orderId,
