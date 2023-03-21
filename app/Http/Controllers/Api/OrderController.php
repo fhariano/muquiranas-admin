@@ -361,7 +361,9 @@ class OrderController extends Controller
                 Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - Item: ' . $items[$i]['short_name'] . ' qtd: ' . $items[$i]['quantity']);
                 try {
                     DB::transaction(function () use ($data, $items, $i) {
-                        $stock = DB::table('products')->decrement('quantity', $items[$i]['quantity']);
+                        $stock = DB::table('products')
+                        ->where('product_id', $items[$i]['product_id'])
+                        ->decrement('quantity', $items[$i]['quantity']);
                         Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - Item: ' . $items[$i]['short_name'] . ' result: ' . print_r($stock, true));
                     });
                 } catch (\Exception $e) {
