@@ -358,7 +358,7 @@ class OrderController extends Controller
                 /**
                  *  Baixar estoque de cada item!
                  */
-                Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - Item: ' . $items[$i]['short_name'] . ' qtd: ' . $items[$i]['quantity']);
+                Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - STOCK DECREMENT: ' . $items[$i]['short_name'] . ' qtd: ' . $items[$i]['quantity']);
                 try {
                     DB::transaction(function () use ($data, $items, $i) {
                         $stock = DB::table('products')
