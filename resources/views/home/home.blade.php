@@ -105,6 +105,7 @@ $(function() {
     const URL_CONTROLLER = '/resultBars';
     let valorReceita = <?=$receitas?>;
     let barUser = <?=$idBar?>;
+    let nameBar = '<?=$nameBar?>';
     let groupUser = <?=$groupUser?>;
     let idBarSelecionado = 1;
     let control = 0;
@@ -254,6 +255,7 @@ $(function() {
         $("#clsCardMedia").addClass("sr-only");
         getReceitaBarForCard(barUser);
         getCategoriesForSelect(barUser);
+        atualizarNomeBar(nameBar);
 
     } else {
 
