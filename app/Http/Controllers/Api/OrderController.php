@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrder;
-use App\Models\BarOrderBarcodes;
 use App\Models\Orders;
-use App\Models\ProductsPromosLists;
 use App\Models\PromosLists;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -395,7 +393,7 @@ class OrderController extends Controller
 
                     try {
                         DB::transaction(function () use ($user, $data, $items, $orderId, $barcode, $validate, $i) {
-                            DB::table('bar_order_barcodes')->insert(
+                            DB::table('orders_barcodes')->insert(
                                 array(
                                     "bar_id" => $data['bar_id'],
                                     "order_id" => $orderId,
