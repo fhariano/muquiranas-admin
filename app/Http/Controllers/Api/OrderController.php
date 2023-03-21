@@ -362,7 +362,7 @@ class OrderController extends Controller
                 try {
                     DB::transaction(function () use ($data, $items, $i) {
                         $stock = DB::table('products')
-                        ->where('product_id', $items[$i]['product_id'])
+                        ->where('id', $items[$i]['product_id'])
                         ->decrement('quantity', $items[$i]['quantity']);
                         Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - Item: ' . $items[$i]['short_name'] . ' result: ' . print_r($stock, true));
                     });
