@@ -27,7 +27,7 @@ class StoreOrder extends FormRequest
         $apikeys = config('acl.apiKeys');
         $rules = [
             'bar_id' => ['required', 'int'],
-            'order_num' => ['required', 'string', 'min:15', 'max:15', 'unique:orders'],
+            'order_num' => ['required', 'string', 'min:10', 'max:15', 'unique:orders'],
             'total' => ['required', 'numeric', 'gt:0'],
             'order_at' => ['required'],
             'inserted_for' => ['required', 'string', 'min:3'],
