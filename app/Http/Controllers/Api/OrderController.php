@@ -304,7 +304,8 @@ class OrderController extends Controller
         Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment data.: ' . print_r($paymentData, true));
 
         // Efetua o pagamento na Getnet
-        $response = Http::acceptJson()
+        $response = Http::timeout(120)
+            ->acceptJson()
             ->withHeaders([
                 'Authorization' => $this->authorization
             ])
