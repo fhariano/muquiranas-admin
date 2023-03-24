@@ -495,10 +495,12 @@
         }
 
 
-        getProductsDetail = (idList) => {
+        getProductsDetail = (idList,idProduct) => {
             return new Promise((resolve, reject) => {
 
-                $.getJSON(urlBase + urlController + 'list/' + idList + '/product/' + 0, function(result) {
+                const productId = idProduct ? idProduct : 0;
+
+                $.getJSON(urlBase + urlController + 'list/' + idList + '/product/' + productId, function(result) {
 
                     return resolve(result);
                 });
@@ -645,7 +647,7 @@
                     });
                              
                     var dataJson = [];
-                    getProductsDetail(idList).then((result) => {
+                    getProductsDetail(idList,row.product_id).then((result) => {
                         dataJson[index] = [];
                         result.forEach(function(field, idx) {
 
