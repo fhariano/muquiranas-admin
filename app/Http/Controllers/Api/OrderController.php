@@ -83,8 +83,7 @@ class OrderController extends Controller
                 )
                 ->leftJoin('products AS p', 'oi.product_id', 'p.id')
                 ->leftJoin(
-                    DB::raw('SELECT order_id, count(1) as used FROM micro_admin.orders_barcodes 
-                        WHERE active = 0 GROUP BY order_id, product_id AS ob'), 'oi.order_id', 'ob.order_id')
+                    DB::raw('(SELECT order_id, count(1) as used FROM micro_admin.orders_barcodes WHERE active = 0 GROUP BY order_id, product_id) AS ob'), 'oi.order_id', 'ob.order_id')
                 ->where('oi.order_id', $order->id)
                 ->orderBy('oi.item', 'asc')
                 ->get();
