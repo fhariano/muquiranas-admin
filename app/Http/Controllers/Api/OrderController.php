@@ -304,14 +304,15 @@ class OrderController extends Controller
         Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - payment data.: ' . print_r($paymentData, true));
 
         // Efetua o pagamento na Getnet
-        $response = Http::acceptJson()
+        $response = Http::timeout(120)
+            ->acceptJson()
             ->withHeaders([
                 'Authorization' => $this->authorization
             ])
             ->post(config('microservices.available.micro_payment.url') . "/getnet-process-credit", $paymentData);
 
         if ($response->status() > 299) {
-            Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - PAGAMENTO NÃO PROCESSADO');
+            Log::channel('orderlog')->error('ORDER: ' . $data['order_num'] . ' - PAGAMENTO NÃO PROCESSADO - status code: ' . $response->status());
             return response()->json([
                 "error" => true,
                 "message" => "Não foi possível concluir a compra, tente novamente mais tarde!",
@@ -360,8 +361,8 @@ class OrderController extends Controller
                 try {
                     DB::transaction(function () use ($data, $items, $i) {
                         $stock = DB::table('products')
-                        ->where('id', $items[$i]['product_id'])
-                        ->decrement('quantity', $items[$i]['quantity']);
+                            ->where('id', $items[$i]['product_id'])
+                            ->decrement('quantity', $items[$i]['quantity']);
                         Log::channel('orderlog')->info('ORDER: ' . $data['order_num'] . ' - Item: ' . $items[$i]['short_name'] . ' result: ' . print_r($stock, true));
                     });
                 } catch (\Exception $e) {
@@ -376,12 +377,12 @@ class OrderController extends Controller
 
                 for ($j = 0; $j < $items[$i]['quantity']; $j++) {
                     /**
-                     * Bar_Code (000-0000000-000-00000000-000): order_num-product_id-item
-                     *    product_id: 8 caracteres podendo chegar a 99999999 (~ 100 milhões)
-                     *    item: 3 caracteres podendo chegar a 999 (~ mil por proudct_id) (se comprar 3 itens do mesmo produto vai de 1-3)
+                     * Bar_Code (00-000000-000-0000000-00): order_num - product_id - item
+                     *    product_id: 7 caracteres podendo chegar a 9999999 (~ 10 milhões)
+                     *    item: 2 caracteres podendo chegar a 99 (~ cem por proudct_id) (se comprar 3 itens do mesmo produto vai de 1-3)
                      */
-                    $barcode = $data['order_num'] . '-' . str_pad($items[$i]['product_id'], 8, "0", STR_PAD_LEFT) . '-'
-                        . str_pad($j + 1, 3, "0", STR_PAD_LEFT);
+                    $barcode = $data['order_num'] . '-' . str_pad($items[$i]['product_id'], 7, "0", STR_PAD_LEFT) . '-'
+                        . str_pad($j + 1, 2, "0", STR_PAD_LEFT);
                     Log::channel('orderlog')->info(
                         'ORDER: ' . $data['order_num'] . ' - ITEM: ' . str_pad($items[$i]['short_name'], 15, " ", STR_PAD_RIGHT)
                             . ' - BARCODE ITEM: ' . $barcode
