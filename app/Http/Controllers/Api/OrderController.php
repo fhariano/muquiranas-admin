@@ -98,7 +98,7 @@ class OrderController extends Controller
                     ->orderby('ob.barcode')
                     ->get();
 
-                $item['barcodes'] = $barcodes;
+                $item->barcodes = $barcodes;
                 $item->used = $item->used ? $item->used : 0;
                 $order->items[] = $item;
             }
