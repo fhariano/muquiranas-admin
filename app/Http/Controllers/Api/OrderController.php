@@ -95,7 +95,8 @@ class OrderController extends Controller
                 $barcodes = DB::table('orders_barcodes AS ob')
                     ->where('ob.order_id', $item->order_id)
                     ->where('ob.product_id', $item->product_id)
-                    ->orderby('ob.barcode');
+                    ->orderby('ob.barcode')
+                    ->get();
 
                 $item['barcodes'] = $barcodes;
                 $item->used = $item->used ? $item->used : 0;
