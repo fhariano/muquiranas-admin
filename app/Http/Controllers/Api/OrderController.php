@@ -89,6 +89,7 @@ class OrderController extends Controller
                 ->get();
 
             foreach ($items as $item) {
+                $item['used'] = $item['used'] ? $item['used'] : 0;
                 $order->items[] = $item;
             }
         }
