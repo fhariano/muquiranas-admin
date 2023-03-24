@@ -16,8 +16,6 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('orders_barcodes', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('client_id');
-            $table->uuid('client_identify');
             $table->string('barcode',45)->unique();
             $table->timestamp('validate')->nullable();
             $table->timestamp('used_at')->useCurrentOnUpdate()->nullable();
