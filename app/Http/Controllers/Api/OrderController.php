@@ -83,12 +83,21 @@ class OrderController extends Controller
                 )
                 ->leftJoin('products AS p', 'oi.product_id', 'p.id')
                 ->leftJoin(
-                    DB::raw('(SELECT order_id, count(1) as used FROM micro_admin.orders_barcodes WHERE active = 0 GROUP BY order_id, product_id) AS ob'), 'oi.order_id', 'ob.order_id')
+                    DB::raw('(SELECT order_id, count(1) as used FROM orders_barcodes WHERE active = 0 GROUP BY order_id, product_id) AS ob'),
+                    'oi.order_id',
+                    'ob.order_id'
+                )
                 ->where('oi.order_id', $order->id)
                 ->orderBy('oi.item', 'asc')
                 ->get();
 
             foreach ($items as $item) {
+                $barcodes = DB::table('orders_barcodes AS ob')
+                    ->where('ob.order_id', $item->order_id)
+                    ->where('ob.product_id', $item->product_id)
+                    ->orderby('ob.barcode');
+
+                $item['barcodes'] = $barcodes;
                 $item->used = $item->used ? $item->used : 0;
                 $order->items[] = $item;
             }
