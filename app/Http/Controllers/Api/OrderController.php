@@ -83,7 +83,7 @@ class OrderController extends Controller
                 )
                 ->leftJoin('products AS p', 'oi.product_id', 'p.id')
                 ->leftJoin(
-                    DB::raw('(SELECT order_id, count(1) as used FROM orders_barcodes WHERE active = 0 GROUP BY order_id, product_id) AS ob'),
+                    DB::raw('(SELECT order_id, count(1) as used FROM orders_barcodes WHERE active = 1 GROUP BY order_id, product_id) AS ob'),
                     'oi.order_id',
                     'ob.order_id'
                 )
