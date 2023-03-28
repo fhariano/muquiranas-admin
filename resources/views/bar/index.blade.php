@@ -188,7 +188,6 @@
         var urlControllerBar = 'updateStatusBar/';
         const statusBar = document.getElementById('statusBar').value;
 
-        console.log('Status Bar atual ' + statusBar);
         if (statusBar == 1) {
             document.getElementById("abrirBar").disabled = true;
             $("#abrirBar").addClass("btn-secondary");
@@ -298,7 +297,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (success) {
-                        console.log(success)
+                      
                         return resolve(success)
                     },
                     erro: function (data) {

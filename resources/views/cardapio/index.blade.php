@@ -324,8 +324,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(success) {
-
-             
+            
 
                     if (success == true) {
 

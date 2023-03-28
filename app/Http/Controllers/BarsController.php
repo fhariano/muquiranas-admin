@@ -282,6 +282,7 @@ class BarsController extends Controller
             $this->actionBar($request->status);
             $barFields = Bars::find($this->bar_id);
             $barFields->status = $request->status;
+            $barFields->updated_for = Auth::user()->name;
           
             $barFields->save();
         
@@ -413,10 +414,10 @@ class BarsController extends Controller
     }
 
     public function salvaDadosBaresUsuarioSession($fieldsBares){
-     $bar = [
-        'bar_id' => 'Teste Murilo',
+    //  $bar = [
+    //     'bar_id' => 'Teste Murilo',
 
-     ] ;
+    //  ] ;
         return session(['baresUserLogado' => $fieldsBares]);
 
     }
