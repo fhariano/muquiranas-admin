@@ -63,29 +63,43 @@ class OrderController extends Controller
         }
 
         foreach ($orders as $order) {
-            $items = DB::table('orders_items AS oItems')
+            $items = DB::table('orders_items AS oi')
                 ->select(
-                    'oItems.order_id',
-                    'oItems.item',
-                    'oItems.product_id',
+                    'oi.order_id',
+                    'oi.item',
+                    'oi.product_id',
                     'p.erp_id',
                     'p.short_name',
                     'p.short_description',
                     'p.marca',
                     'p.unity',
                     'p.image_url',
-                    'oItems.quantity',
-                    'oItems.price',
-                    'oItems.total',
-                    'oItems.promo',
-                    'oItems.promo_expire'
+                    'oi.quantity',
+                    'oi.price',
+                    'oi.total',
+                    'oi.promo',
+                    'oi.promo_expire',
+                    'ob.used'
                 )
-                ->leftJoin('products AS p', 'oItems.product_id', 'p.id')
-                ->where('order_id', $order->id)
-                ->orderBy('oItems.item', 'asc')
+                ->leftJoin('products AS p', 'oi.product_id', 'p.id')
+                ->leftJoin(
+                    DB::raw('(SELECT order_id, count(1) as used FROM orders_barcodes WHERE active = 0 GROUP BY order_id, product_id) AS ob'),
+                    'oi.order_id',
+                    'ob.order_id'
+                )
+                ->where('oi.order_id', $order->id)
+                ->orderBy('oi.item', 'asc')
                 ->get();
 
             foreach ($items as $item) {
+                $barcodes = DB::table('orders_barcodes AS ob')
+                    ->where('ob.order_id', $item->order_id)
+                    ->where('ob.product_id', $item->product_id)
+                    ->orderby('ob.barcode')
+                    ->get();
+
+                $item->barcodes = $barcodes;
+                $item->used = $item->used ? $item->used : 0;
                 $order->items[] = $item;
             }
         }
@@ -117,24 +131,24 @@ class OrderController extends Controller
         }
 
         foreach ($order as $order) {
-            $items = DB::table('orders_items AS oItems')
+            $items = DB::table('orders_items AS oi')
                 ->select(
-                    'oItems.order_id',
-                    'oItems.item',
-                    'oItems.product_id',
+                    'oi.order_id',
+                    'oi.item',
+                    'oi.product_id',
                     'p.erp_id',
                     'p.short_name',
                     'p.short_description',
                     'p.marca',
                     'p.unity',
                     'p.image_url',
-                    'oItems.quantity',
-                    'oItems.price',
-                    'oItems.total'
+                    'oi.quantity',
+                    'oi.price',
+                    'oi.total'
                 )
-                ->leftJoin('products AS p', 'oItems.product_id', 'p.id')
+                ->leftJoin('products AS p', 'oi.product_id', 'p.id')
                 ->where('order_id', $order->id)
-                ->orderBy('oItems.item', 'asc')
+                ->orderBy('oi.item', 'asc')
                 ->get();
 
             foreach ($items as $item) {
