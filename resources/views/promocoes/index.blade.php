@@ -489,18 +489,17 @@
 
                 }
 
-
             })
 
         }
 
 
         getProductsDetail = (idList,idProduct) => {
+       
             return new Promise((resolve, reject) => {
-
-                const productId = idProduct ? idProduct : 0;
-
-                $.getJSON(urlBase + urlController + 'list/' + idList + '/product/' + productId, function(result) {
+                
+             
+                $.getJSON(urlBase + urlController + 'list/' + idList + '/product/' + idProduct, function(result) {
 
                     return resolve(result);
                 });
@@ -647,7 +646,9 @@
                     });
                              
                     var dataJson = [];
-                    getProductsDetail(idList,row.product_id).then((result) => {
+               
+                    const productId = row ? row.product_id : 0;
+                    getProductsDetail(idList,productId).then((result) => {
                         dataJson[index] = [];
                         result.forEach(function(field, idx) {
 
@@ -729,6 +730,8 @@
             })
 
         });
+
+
 
 
 
