@@ -30,7 +30,8 @@ class ProductsPromosListController extends Controller
             return redirect(route('bar.selectBar'));
         }else{
             $resultPromoList = PromosLists::where(['bar_id' => $this->bar_id,])->get();
-            $resultProduct = Products::where(['bar_id' => $this->bar_id,])->get();
+            $resultProduct = Products::where(['bar_id' => $this->bar_id,'active' => 1])->get();
+            
             return view('promocoes.index', 
             [
                 'resultPromoList' => $resultPromoList, 

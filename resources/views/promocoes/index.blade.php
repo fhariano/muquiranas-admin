@@ -277,8 +277,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(success) {
-                    console.log("Data " + success)
-
+                   
                     if (success == 2) {
 
                         Swal.fire({
@@ -288,13 +287,15 @@
                         });
 
                     } else if (success == true) {
-                        $tblProductsPromosLists.bootstrapTable('collapseRow', indexDetailsRow)
-                        $tblProductsPromosLists.bootstrapTable('expandRow', indexDetailsRow)
+                       
                         Swal.fire({
                             icon: 'success',
                             title: 'Salvo!',
                             html: 'Novo preço cadastrado com sucesso!',
                         });
+                        console.log('index update' + indexDetailsRow);
+                        $tblProductsPromosLists.bootstrapTable('collapseRow', indexDetailsRow)
+                        $tblProductsPromosLists.bootstrapTable('expandRow', indexDetailsRow)
                         
                         $('#modalPreco').modal('hide');
                         $tblProductsPromosLists.bootstrapTable('refresh');
@@ -369,6 +370,7 @@
 
                     } else if (success == true) {
 
+                        console.log('index update' + indexDetailsRow);
                         $tblProductsPromosLists.bootstrapTable('collapseRow', indexDetailsRow)
                         $tblProductsPromosLists.bootstrapTable('expandRow', indexDetailsRow)
 
@@ -649,6 +651,7 @@
                
                     const productId = row ? row.product_id : 0;
                     getProductsDetail(idList,productId).then((result) => {
+                        console.log('index principal' + index);
                         dataJson[index] = [];
                         result.forEach(function(field, idx) {
 
