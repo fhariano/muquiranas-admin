@@ -439,7 +439,7 @@
 
                         $tblProductsPromosLists.bootstrapTable('collapseRow', indexDetailsRow)
                         $tblProductsPromosLists.bootstrapTable('expandRow', indexDetailsRow)
-                        $tblProductsPromosLists.bootstrapTable('refresh');
+                        // $tblProductsPromosLists.bootstrapTable('refresh');
                         Swal.fire({
                             icon: 'success',
                             title: 'OK',
@@ -671,6 +671,9 @@
                                 
                             });
                         })
+
+
+
 
 
                     }).then(() => {

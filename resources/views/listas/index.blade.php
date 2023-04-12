@@ -8,7 +8,8 @@
 
     <div class="card-body">
 
-        <div class="modal fade" id="modal_list" tabindex="-1" role="dialog" aria-labelledby="modalList_Label" aria-hidden="true">
+        <div class="modal fade" id="modal_list" tabindex="-1" role="dialog" aria-labelledby="modalList_Label"
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -57,298 +58,383 @@
 @section('js')
 
 <script>
-    $(function() {
+$(function() {
 
-        $tbl_listas = $('#tbl_listas');
-        urlBase = window.location.origin;
-        urlController = '/listas/';
-        var idPromoList = '';
-        var fieldActive = '';
+    $tbl_listas = $('#tbl_listas');
+    urlBase = window.location.origin;
+    urlController = '/listas/';
+    var idPromoList = '';
+    var fieldStatus = '';
 
 
-        window.categoriesActionFormatter = function(index, row, $detail) {
-            var html= '@can("gerenciar_listas",$group_id)';
-            html += '<div>';
-            html += '<a href="javascript:void(0)" class="editCategory" id="editList" title="Editar Lista"><i class=" fas fa-pencil-alt fa-lg pr-2"></i></a>';
-            html += '<a href="javascript:void(0)" class="delCategory" id="delCategory" title="Apagar Lista"><i class=" fas fa-times fa-lg text-danger pl-2"></i></a>';
+    window.categoriesActionFormatter = function(index, row, $detail) {
+        var html = '@can("gerenciar_listas",$group_id)';
+        html += '<div>';
+        html +=
+            '<a href="javascript:void(0)" class="editList" id="editList" title="Editar Lista"><i class=" fas fa-pencil-alt fa-lg pr-2"></i></a>';
+        html +=
+            '<a href="javascript:void(0)" class="delList" id="delList" title="Apagar Lista"><i class=" fas fa-times fa-lg text-danger pl-2"></i></a>';
+        html += '</div>';
+        html += '@endcan';
+        return html;
+
+    }
+
+
+
+
+    disableListPromo = (id, active) => {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: urlBase + urlController + 'disableListPromo',
+                method: 'PUT',
+                data: {
+                    'data': active,
+                    'id': id,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            }).then(result => {
+                resolve(result);
+            })
+
+        });
+    }
+
+
+
+
+
+    window.categoryStatusEvents = {
+
+
+        'click .custom-control-input': function(e, value, row, index) {
+            e.preventDefault();
+            e.stopPropagation();
+            // location.reload();
+            if (row.status == 1) {
+
+                fieldStatus = 0;
+                disableListPromo(row.id, fieldStatus).then((res) => {
+
+
+                    $('#tbl_listas').bootstrapTable('refresh');
+                    if (res == true) {
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Desativada',
+                            html: 'Lista desativada com sucesso!',
+                        });
+
+                    }
+
+                }).catch(err => {
+
+                });
+
+            } else {
+                fieldStatus = 1;
+                disableListPromo(row.id, fieldStatus).then((res) => {
+                    $('#tbl_listas').bootstrapTable('refresh');
+
+
+                    if (res == true) {
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Ativada',
+                            html: 'Lista ativada com sucesso!',
+                        });
+
+                    }
+
+                }).catch(err => {
+
+                });
+            }
+
+        }
+    }
+
+    clickOpenModalListPromo = (val) => {
+        if (val == 1) {
+            clearFieldsModalList();
+        }
+    }
+
+    function clearFieldsModalList() {
+        $('#name_list').val('');
+        $('input').removeClass(["is-valid", "is-invalid"]);
+        $('#button_insert_list').text('Cadastrar');
+        $('#button_insert_list').removeAttr('name', 'Salvar');
+        $("#button_insert_list").attr('name', 'Cadastrar');
+        $('#modalList_label').html('<b>Criar Lista de Promoção</b>');
+        $('#modal_list').modal('show');
+    }
+
+    window.listPromoEditEvents = {
+
+        'click #editList': function(e, value, row, index) {
+
+            idPromoList = row.id;
+            fieldStatus = row.status;
+            $('#name_list').val(row.name);
+            $('#modalList_label').html('<b>Editar Lista de promoção</b>');
+            $('#button_insert_list').text('Salvar');
+            // $('#orderCategory').val(row.order);
+            // $('#price').val(row.price);
+            // $('#promoProduct').attr('disabled', 'disabled');
+            // $("#promoProduct").val(row.product_id).change().prop('selected', true);
+            // $('#buttonSavePreco').text('Salvar Preço')
+            $('#button_insert_list').removeAttr('name', 'Cadastrar');
+            $("#button_insert_list").attr('name', 'Salvar');
+            $("input").removeClass(["is-valid", "is-invalid"])
+            // $("select").removeClass(["is-invalid"])
+            $('#modal_list').modal('show');
+        },
+        'click #delList': function(e, value, row, index) {
+
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Apagar Lista?',
+                html: 'ATENÇÃO: Essa lista será excluída!',
+                allowOutsideClick: false,
+                showCloseButton: true,
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: '<i class="fa fa-thumbs-up pr-1 pl-1"></i> SIM ',
+                cancelButtonText: '<i class="fa fa-thumbs-down pr-1 pl-1"></i> CANCELAR',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    destroyListPromo(row.id);
+                    console.log('id da lista ' + row.id);
+                }
+            });
+
+        }
+
+    }
+
+    window.listaActionFormatter = function(index, row, $detail) {
+        var html = '<div>';
+        if (row.status == 1) {
+            var html = '@can("gerenciar_listas", $group_id)'
+            html += '<div class="custom-control custom-switch">';
+            html += '<input type="checkbox" class="custom-control-input" id="customSwitchList' + row.id +
+                '" checked >';
+            html += '<label class="custom-control-label" for="customSwitchList' + row.id + '"></label>';
+            html += '</div>';
+            html += '@endcan';
+
+            return html;
+        } else {
+            var html = '@can("gerenciar_listas", $group_id)'
+            html += '<div class="custom-control custom-switch">';
+            html += '<input type="checkbox" class="custom-control-input" id="customSwitchList' + row.id +
+                '">';
+            html += '<label class="custom-control-label" for="customSwitchList' + row.id + '"></label>';
             html += '</div>';
             html += '@endcan';
             return html;
-
         }
 
-        disableListPromo = (id, active) => {
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: urlBase + urlController + 'disableListPromo',
-                    method: 'PUT',
-                    data: {
-                        'data': active,
-                        'id': id,
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                }).then(result => {
-                    resolve(result);
-                })
+    }
 
-            });
+    function formValidator(fieldName) {
+        var validatedFields = false;
+
+        if (fieldName.value == '') {
+            fieldName.classList.add("is-invalid");
+            return validatedFields = false;
+        } else {
+            fieldName.classList.remove("is-invalid");
+            fieldName.classList.add("is-valid");
         }
 
-  
+        const fields = {
+            name: fieldName.value,
+        }
+
+        return fields;
+
+    }
 
 
 
-        window.categoryStatusEvents = {
+    /* Criação Tabela Categoria*/
+    $tbl_listas.bootstrapTable({
 
+        url: urlBase + urlController + 'show/',
+        pagination: true,
+        // clickToSelect: true,
+        toolbar: '#listsToolbar',
 
-            'click .custom-control-input': function(e, value, row, index) {
-                e.preventDefault();
-                e.stopPropagation();
-                // location.reload();
-                if (row.active == 1) {
+        search: true,
+        columns: [{
 
-                    fieldActive = 0;
-                    disableListPromo(row.id, fieldActive).then((res) => {
+                field: 'status',
+                title: 'Ativo',
+                sortable: false,
+                visible: true,
+                halign: 'center',
+                align: 'center',
+                width: '100',
+                widthUnit: 'px',
+                formatter: 'listaActionFormatter',
+                events: 'categoryStatusEvents',
 
-                        console.log(`Resolve em result: ${res}`);
+            },
+            {
+                field: 'id',
+                title: 'ID',
+                visible: false
+            },
+            {
+                field: 'name',
+                title: 'Name'
+            },
+            {
+                title: 'Ações',
+                sortable: false,
+                visible: true,
+                halign: 'center',
+                align: 'center',
+                width: '100',
+                widthUnit: 'px',
+                formatter: 'categoriesActionFormatter',
+                events: 'listPromoEditEvents',
+            }
+        ],
+        onLoadSuccess: function(data) {
+            html = '@can("gerenciar_listas",$group_id)';
+            html += '';
+            html +=
+                '<div class="bs-bars float-left"> <button type="button" id="create_list" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal_list" onclick="clickOpenModalListPromo(1);"><i class="fas fa-plus pr-2"></i> Lista </button> <br> </br>'
+            html += '@endcan'
+            $('#listsToolbar').html(html);
+        }
+    })
+
+    $('#button_insert_list').click(function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        let name = document.getElementById('name_list');
+        var resultValidation = formValidator(name);
+        var actionButtonSaveList = event.target.name;
+
+        if (actionButtonSaveList == 'Cadastrar' && resultValidation != false) {
+            insertPromosList(resultValidation.name);
+
+        } else {
+            if (actionButtonSaveList == 'Salvar' && resultValidation != false) {
+
+                updateListPromo(idPromoList, resultValidation.name, fieldStatus).then((result) => {
+                    if (result == true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Atualizado com sucesso',
+                            html: 'Informações Atualizadas!',
+                        });
                         $('#tbl_listas').bootstrapTable('refresh');
-                        if (res == true) {
+                        $('#modal_list').modal('hide');
+                    }
+                });
+            }
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Desativada',
-                                html: 'Lista desativada com sucesso!',
-                            });
+        }
 
-                        }
 
-                    }).catch(err => {
-                        console.log('erro' + err);
+    });
+
+    function insertPromosList(data) {
+        $.ajax({
+            url: urlBase + urlController + 'store',
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            data: {
+                'name': data
+            },
+            success: function(success) {
+
+                if (success == 2) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Atenção!',
+                        html: 'Já uma lista cadastrada com esse nome!',
+                    });
+                    // $(id_modal).modal('hide');
+                } else if (success == true) {
+                    $tbl_listas.bootstrapTable('refresh');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Salvo!',
+                        html: 'Lista salva com sucesso!',
+                    });
+                    $('#modal_list').modal('hide');
+                }
+            },
+            error: function(data) {
+                if (data.status === 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Sem conexão com internet!',
+                        html: '<br>Contate o administrador.',
+                    });
+                } else if (data.status == 404 || data.status == 405) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Página Solicitada não encontrada',
+                        html: '<br>Contate o administrador.',
+                    });
+
+                } else if (data.status == 500) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        html: '<br>Contate o administrador.',
                     });
 
                 } else {
-                    fieldActive = 1;
-                    disableListPromo(row.id, fieldActive).then((res) => {
-                        $('#tbl_listas').bootstrapTable('refresh');
-
-                        console.log(`Resolve em result: ${res}`);
-                        if (res == true) {
-
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Ativada',
-                                html: 'Lista ativada com sucesso!',
-                            });
-
-                        }
-
-                    }).catch(err => {
-                        console.log('erro' + err);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        html: 'Erro Crítico! <br>Contate o administrador.',
                     });
+
                 }
 
+                // console.log(
+                // 'STATUS : ' + data.status + 
+                // ' TEXT STATUS : ' + data.statusText + 
+                // 'TEXT RESPONSE :' + data.responseText);
             }
-        }
-
-        clickOpenModalListPromo = (val) => {
-            if (val == 1) {
-                clearFieldsModalList();
-            }
-        }
-
-        function clearFieldsModalList() {
-            $('#name_list').val('');
-            $('input').removeClass(["is-valid", "is-invalid"]);
-            $('#button_insert_list').text('Cadastrar');
-            $('#button_insert_list').removeAttr('name', 'Salvar');
-            $("#button_insert_list").attr('name', 'Cadastrar');
-            $('#modalList_label').html('<b>Criar Lista de Promoção</b>');
-            $('#modal_list').modal('show');
-        }
-
-        window.listPromoEditEvents = {
-
-            'click #editList': function(e, value, row, index) {
-
-                idPromoList = row.id;
-                fieldActive = row.active;
-                $('#name_list').val(row.name);
-                $('#modalList_label').html('<b>Editar Lista de promoção</b>');
-                $('#button_insert_list').text('Salvar');
-                // $('#orderCategory').val(row.order);
-                // $('#price').val(row.price);
-                // $('#promoProduct').attr('disabled', 'disabled');
-                // $("#promoProduct").val(row.product_id).change().prop('selected', true);
-                // $('#buttonSavePreco').text('Salvar Preço')
-                $('#button_insert_list').removeAttr('name', 'Cadastrar');
-                $("#button_insert_list").attr('name', 'Salvar');
-                $("input").removeClass(["is-valid", "is-invalid"])
-                // $("select").removeClass(["is-invalid"])
-                $('#modal_list').modal('show');
-
-
-            }
-        }
-
-        window.listaActionFormatter = function(index, row, $detail) {
-            var html = '<div>';
-            if (row.active == 1) {
-                var html = '@can("gerenciar_listas", $group_id)'
-                html += '<div class="custom-control custom-switch">';
-                html += '<input type="checkbox" class="custom-control-input" id="customSwitchList' + row.id + '" checked >';
-                html += '<label class="custom-control-label" for="customSwitchList' + row.id + '"></label>';
-                html += '</div>';
-                html += '@endcan';
-
-                return html;
-            } else {
-                var html = '@can("gerenciar_listas", $group_id)'
-                html += '<div class="custom-control custom-switch">';
-                html += '<input type="checkbox" class="custom-control-input" id="customSwitchList' + row.id + '">';
-                html += '<label class="custom-control-label" for="customSwitchList' + row.id + '"></label>';
-                html += '</div>';
-                html += '@endcan';
-                return html;
-            }
-
-        }
-
-        function formValidator(fieldName) {
-            var validatedFields = false;
-
-            if (fieldName.value == '') {
-                fieldName.classList.add("is-invalid");
-                return validatedFields = false;
-            } else {
-                fieldName.classList.remove("is-invalid");
-                fieldName.classList.add("is-valid");
-            }
-
-            const fields = {
-                name: fieldName.value,
-            }
-
-            return fields;
-
-        }
-
-
-
-        /* Criação Tabela Categoria*/
-        $tbl_listas.bootstrapTable({
-
-            url: urlBase + urlController + 'show/',
-            pagination: true,
-            // clickToSelect: true,
-            toolbar: '#listsToolbar',
-
-            search: true,
-            columns: [{
-                
-                    field: 'active',
-                    title: 'Ativo',
-                    sortable: false,
-                    visible: true,
-                    halign: 'center',
-                    align: 'center',
-                    width: '100',
-                    widthUnit: 'px',
-                    formatter: 'listaActionFormatter',
-                    events: 'categoryStatusEvents',
-
-                },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    visible:false
-                },
-                {
-                    field: 'name',
-                    title: 'Name'
-                },
-                {
-                    title: 'Ações',
-                    sortable: false,
-                    visible: true,
-                    halign: 'center',
-                    align: 'center',
-                    width: '100',
-                    widthUnit: 'px',
-                    formatter: 'categoriesActionFormatter',
-                    events: 'listPromoEditEvents',
-                }
-            ],
-            onLoadSuccess: function(data) {
-                html = '@can("gerenciar_listas",$group_id)';
-                html += '';
-                html += '<div class="bs-bars float-left"> <button type="button" id="create_list" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal_list" onclick="clickOpenModalListPromo(1);"><i class="fas fa-plus pr-2"></i> Lista </button> <br> </br>'
-                html +='@endcan'
-                $('#listsToolbar').html(html);
-            }
-        })
-    
-        $('#button_insert_list').click(function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            let name = document.getElementById('name_list');
-            var resultValidation = formValidator(name);
-            var actionButtonSaveList = event.target.name;
-            
-            if (actionButtonSaveList == 'Cadastrar' && resultValidation != false) {
-                insertPromosList(resultValidation.name);
-             
-            } else {
-                if (actionButtonSaveList == 'Salvar' && resultValidation != false) {
-                 
-                    updateListPromo(idPromoList, resultValidation.name, fieldActive).then((result) => {
-                        if (result == true) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Atualizado com sucesso',
-                                html: 'Informações Atualizadas!',
-                            });
-                            $('#tbl_listas').bootstrapTable('refresh');
-                            $('#modal_list').modal('hide');
-                        }
-                    });
-                }
-
-            }
-      
-
         });
 
-        function insertPromosList(data) {
+    }
+
+    updateListPromo = (id, name, status) => {
+        return new Promise((resolve, reject) => {
             $.ajax({
-                url: urlBase + urlController + 'store',
-                method: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
+                url: urlBase + urlController + 'update',
+                method: 'PUT',
                 data: {
-                    'name': data
+                    'id': id,
+                    'name': name,
+                    'status': status,
+
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(success) {
-                    
-                    if (success == 2) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Atenção!',
-                            html: 'Já uma lista cadastrada com esse nome!',
-                        });
-                        // $(id_modal).modal('hide');
-                    } else if (success == true) {
-                        $tbl_listas.bootstrapTable('refresh');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Salvo!',
-                            html: 'Lista salva com sucesso!',
-                        });
-                        $('#modal_list').modal('hide');
-                    }
+
+                    return resolve(success)
                 },
                 error: function(data) {
                     if (data.status === 0) {
@@ -357,12 +443,14 @@
                             title: 'Sem conexão com internet!',
                             html: '<br>Contate o administrador.',
                         });
+                        return reject(data)
                     } else if (data.status == 404 || data.status == 405) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Página Solicitada não encontrada',
                             html: '<br>Contate o administrador.',
                         });
+                        return reject(data)
 
                     } else if (data.status == 500) {
                         Swal.fire({
@@ -370,6 +458,7 @@
                             title: 'Erro!',
                             html: '<br>Contate o administrador.',
                         });
+                        return reject(data)
 
                     } else {
                         Swal.fire({
@@ -377,77 +466,78 @@
                             title: 'Erro!',
                             html: 'Erro Crítico! <br>Contate o administrador.',
                         });
-
+                        return reject(data)
                     }
 
-                    // console.log(
-                    // 'STATUS : ' + data.status + 
-                    // ' TEXT STATUS : ' + data.statusText + 
-                    // 'TEXT RESPONSE :' + data.responseText);
                 }
+
             });
+        });
 
-        }
+    }
 
-        updateListPromo = (id, name, active) => {
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: urlBase + urlController + 'update',
-                    method: 'PUT',
-                    data: {
-                        'id': id,
-                        'name': name,
-                        'active': active,
+    function destroyListPromo(id) {
 
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(success) {
-                        
-                        return resolve(success)
-                    },
-                    error: function(data) {
-                        if (data.status === 0) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Sem conexão com internet!',
-                                html: '<br>Contate o administrador.',
-                            });
-                            return reject(data)
-                        } else if (data.status == 404 || data.status == 405) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Página Solicitada não encontrada',
-                                html: '<br>Contate o administrador.',
-                            });
-                            return reject(data)
+        $.ajax({
+            url: urlBase + urlController + 'destroyListPromo',
+            method: 'PUT',
+            data: {
+                'id': id,
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 
-                        } else if (data.status == 500) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erro!',
-                                html: '<br>Contate o administrador.',
-                            });
-                            return reject(data)
-
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erro!',
-                                html: 'Erro Crítico! <br>Contate o administrador.',
-                            });
-                            return reject(data)
-                        }
-
-                    }
-
+            },
+            success: function(success) {
+                
+                $('#tbl_listas').bootstrapTable('refresh');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'OK',
+                    html: 'Lista Excluida com sucesso!',
                 });
-            });
 
-        }
 
-    });
+            },
+            error: function(data) {
+
+                if (data.status === 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Sem conexão com internet!',
+                        html: '<br>Contate o administrador.',
+                    });
+                } else if (data.status == 404 || data.status == 405) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Página Solicitada não encontrada',
+                        html: '<br>Contate o administrador.',
+                    });
+
+                } else if (data.status == 500) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        html: '<br>Contate o administrador.',
+                    });
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        html: 'Erro Crítico! <br>Contate o administrador.',
+                    });
+
+                }
+
+            }
+
+
+        })
+
+    }
+
+});
 </script>
 
 

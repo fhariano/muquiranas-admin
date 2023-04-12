@@ -58,7 +58,7 @@ class PromosListController extends Controller
     public function show()
     {
         try {
-            $listAll = PromosLists::where(['bar_id' => $this->bar_id])->get();
+            $listAll = PromosLists::where(['bar_id' => $this->bar_id , 'active' => 1])->get();
             if ($listAll) {
                 $data['rows'] = $listAll; //Criar formato rows para bootstrap ler o json
                 $listas_data = json_encode($data); //Enviado para tabela o Json
@@ -80,7 +80,7 @@ class PromosListController extends Controller
     {
         $id = $request->id;
         $name = $request->name;
-        $active = $request->active;
+        $status = $request->status;
         $bar = $this->bar_id;
 
         try {
@@ -88,7 +88,7 @@ class PromosListController extends Controller
             $updateFieldsListPromo = PromosLists::find($id);
             $updateFieldsListPromo->bar_id = $bar;
             $updateFieldsListPromo->name = $name;
-            $updateFieldsListPromo->active = $active;
+            $updateFieldsListPromo->status = $status;
             $updateFieldsListPromo->save();
             $resultUpdateListPromo = true;
         } catch (\Throwable $th) {
@@ -112,17 +112,33 @@ class PromosListController extends Controller
 
         try {
 
-            PromosLists::where('active',1)
-            ->update(['active' => 0]);
+            PromosLists::where('status',1)
+            ->update(['status' => 0]);
 
             $fieldsListPromo = PromosLists::find($id);
             $fieldsListPromo->bar_id = $this->bar_id;
-            $fieldsListPromo->active = $fieldsActive;
+            $fieldsListPromo->status = $fieldsActive;
             $fieldsListPromo->save();
             $resultUpdateListPromo = true;
         } catch (\Throwable $th) {
             return $th;
         }
         return $resultUpdateListPromo;
+    }
+    public function destroyListPromo(Request $request)
+    {
+       
+         $idList= $request->id;
+         
+        try {
+            $destroyListPromo = PromosLists::find($idList);
+            $destroyListPromo->active= false;
+            $destroyListPromo->save();
+            $resultDestroyListPromo = true;
+        } catch (\Throwable $th) {
+            return $th;
+        }
+        return $resultDestroyListPromo;
+      
     }
 }

@@ -29,7 +29,7 @@ class ProductsPromosListController extends Controller
         if($this->autenticacaoBar($this->bar_id) == false){
             return redirect(route('bar.selectBar'));
         }else{
-            $resultPromoList = PromosLists::where(['bar_id' => $this->bar_id,])->get();
+            $resultPromoList = PromosLists::where(['bar_id' => $this->bar_id,'active' => 1])->get();
             $resultProduct = Products::where(['bar_id' => $this->bar_id,'active' => 1])->get();
             
             return view('promocoes.index', 

@@ -78,6 +78,7 @@ Route::name('listas.')->middleware('auth')->prefix('/listas')->controller(Promos
     Route::put('/update', 'update')->name('update');
     Route::post('/delete', 'delete')->name('delete');
     Route::put('/disableListPromo', 'disableListPromo')->name('disableListPromo');
+    Route::put('/destroyListPromo', 'destroyListPromo')->name('destroyListPromo');
 });
 
 
