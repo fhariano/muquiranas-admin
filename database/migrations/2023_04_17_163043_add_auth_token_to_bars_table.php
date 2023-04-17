@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bars', function (Blueprint $table) {
+        Schema::table('bars', function (Blueprint $table) {
             $table->string('auth_token',255)->nullable()->after('image_url');
         });
     }
