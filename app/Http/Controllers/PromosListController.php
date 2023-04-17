@@ -45,6 +45,8 @@ class PromosListController extends Controller
         } else {
             $promosList->bar_id = $this->bar_id ;
             $promosList->name = $name;
+            $promosList->active = true;
+            $promosList->status = false;
             $promosList->inserted_for =  $this->name_user;
             $promosList->updated_for = $this->name_user;
             $promosList->save();
