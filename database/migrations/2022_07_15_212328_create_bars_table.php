@@ -28,6 +28,7 @@ class CreateBarsTable extends Migration
             $table->string('city_state',60);
             $table->string('cep',8)->nullable();
             $table->string('image_url',255)->nullable();
+            $table->string('auth_token',255)->nullable();
             $table->time('start_at');
             $table->time('end_at');
             $table->tinyInteger('order');
