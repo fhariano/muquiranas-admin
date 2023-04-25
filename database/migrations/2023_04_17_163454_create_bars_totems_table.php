@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('localization',60);
             $table->string('inserted_for',60);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
