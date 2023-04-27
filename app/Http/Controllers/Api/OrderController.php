@@ -412,8 +412,6 @@ class OrderController extends Controller
                                 array(
                                     "bar_id" => $data['bar_id'],
                                     "order_id" => $orderId,
-                                    "client_id" => $user->id,
-                                    "client_identify" => $user->identify,
                                     "product_id" => $items[$i]['product_id'],
                                     "barcode" => $barcode,
                                     "validate" => $validate,
