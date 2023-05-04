@@ -40,7 +40,6 @@ class CategoriesController extends Controller
     {
        
         $fieldsCategories = $categories->where('bar_id',$this->bar_id)
-        ->where('active',1)
         ->orderBy('order')
         ->get();
 
