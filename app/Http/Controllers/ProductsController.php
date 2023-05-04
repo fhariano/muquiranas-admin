@@ -138,6 +138,7 @@ class ProductsController extends Controller
         
         $result = $categories
             ->where('bar_id', $this->bar_id)
+            ->where('active',1)
             ->orderBy('name')->get();
         $data['rows'] = $result;
         $fields_categories = json_encode($data);
