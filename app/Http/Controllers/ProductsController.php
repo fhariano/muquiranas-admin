@@ -159,4 +159,5 @@ class ProductsController extends Controller
       
         return $fields;
     }
+  
 }

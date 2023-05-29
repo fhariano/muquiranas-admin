@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\SyncOrderWithErp;
 
 class OrderController extends Controller
 {
@@ -437,4 +438,56 @@ class OrderController extends Controller
             "data" => []
         ], 200);
     }
+
+
+    public function retornaOrdersParaApi()
+    {
+        
+        $order = DB::table('orders')
+            ->select('orders.*')
+            ->leftJoin('bars', 'orders.bar_id', 'bars.id')
+            ->where('orders.erp_id',null)
+            ->where('orders.active', 1)
+            ->where('bars.active', 1)
+            ->orderBy('orders.id', 'desc')
+            ->get();
+
+    
+        foreach ($order as $order) {
+            $items = DB::table('orders_items AS oi')
+                ->select(
+                    'oi.order_id',
+                    'oi.item',
+                    'oi.product_id',
+                    'p.erp_id',
+                    'p.short_name',
+                    'p.short_description',
+                    'p.marca',
+                    'p.unity',
+                    'p.image_url',
+                    'oi.quantity',
+                    'oi.price',
+                    'oi.total'
+                )
+                ->leftJoin('products AS p', 'oi.product_id', 'p.id')
+                ->where('order_id', $order->id)
+                ->orderBy('oi.item', 'asc')
+                ->get();
+
+            foreach ($items as $item) {
+                $order->items[] = $item;
+            }
+        }
+
+        // SyncOrderWithErp::dispatch($orderData)->onQueue('erp');
+
+        return response()->json([
+            "error" => false,
+            "message" => "Order by id!",
+            "data" => $order,
+        ], 200);
+    }
+
+
+
 }

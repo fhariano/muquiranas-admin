@@ -126,8 +126,7 @@ class TransferenciaController extends Controller
 
                 ]);
                 $productsFields->save();
-        
-                
+                        
             }
         }
         return true;

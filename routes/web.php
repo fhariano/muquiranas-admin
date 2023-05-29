@@ -11,6 +11,9 @@ use GuzzleHttp\Promise\Create;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Blade;
+use App\Http\Controllers\Api\OrderController;
+use App\Jobs\SyncVendasJob;
+use PhpParser\Node\Stmt\Return_;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,8 +40,25 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/getOrderForErp', [OrderController::class, 'retornaOrdersParaApi'])->name('getOrderForErp')->middleware('auth');
+Route::get('send-Order-to-erp', function(){
+        $json = '{
+        "order_type": 1,
+        "fiscal_operation": 24052,
+        "date_order": "2023-05-29",
+        "date_sell": "2023-05-29",
+        "customer": 9285552,
+        "payment_form": 59702,
+        "seller": 45574,
+        "delivery_time": "2023-05-29"
+    }';
+    SyncVendasJob::dispatch($json);
 
- Route::post('/home/requestConsolidadoDados', [HomeController::class, 'requestConsolidadoDados'])->name('requestConsolidadoDados');
+    return 'OI';
+
+});
+Route::post('/home/requestConsolidadoDados', [HomeController::class, 'requestConsolidadoDados'])->name('requestConsolidadoDados');
+
 // Route::get('/categorias/create', [CategoriesController::class, 'create'])->name('categorias.create');
 
 
@@ -94,8 +114,6 @@ Route::name('bar.')->middleware('auth')->prefix('/bar')->controller(BarsControll
     Route::put('/destroy','destroy')->name('destroy');
     Route::post('/updateStatusBar','updateStatusBar')->name('updateStatusBar');
     Route::post('/requestValorReceita','requestValorReceita')->name('requestValorReceita'); 
-
-
 
 });
 
