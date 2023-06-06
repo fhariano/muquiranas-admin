@@ -45,16 +45,16 @@ Route::get('send-Order-to-erp', function(){
         $json = '{
         "order_type": 1,
         "fiscal_operation": 24052,
-        "date_order": "2023-05-29",
-        "date_sell": "2023-05-29",
+        "date_order": "2023-05-31",
+        "date_sell": "2023-05-31",
         "customer": 9285552,
         "payment_form": 59702,
         "seller": 45574,
-        "delivery_time": "2023-05-29"
+        "delivery_time": "2023-05-31"
     }';
     SyncVendasJob::dispatch($json);
 
-    return 'OI';
+    return 'DADOS ENVIADOS PARA O ERP COM SUCESSSO. ';
 
 });
 Route::post('/home/requestConsolidadoDados', [HomeController::class, 'requestConsolidadoDados'])->name('requestConsolidadoDados');

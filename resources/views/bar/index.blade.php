@@ -264,9 +264,24 @@ $(function() {
             if (result.isConfirmed) {
 
                 getOrdersForErp().then((result) => {
-                    const jsonString = JSON.stringify(result);
-                    percorrerJSON(jsonString);
 
+                    console.log( 'resulta é:' +  result);
+                    if (result == false) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Atenção!',
+                            html: 'Não foram encontradas ordens para para comunicar ao ERP!',
+                        }).then(() => {
+                             fecharBar();
+                     
+                        });
+
+                    } else {
+                        
+                        const jsonString = JSON.stringify(result);
+                        console.log(jsonString);
+                        percorrerJSON(jsonString);
+                    }
 
                 });
 
@@ -274,6 +289,7 @@ $(function() {
                 fecharBar();
             }
 
+       
         });
 
 
@@ -282,6 +298,8 @@ $(function() {
 
 
     function percorrerJSON(jsonString) {
+
+        // console.log(jsonString);
         const json = JSON.parse(jsonString);
         const data = json.data;
         // console.log(JSON.stringify(data));
@@ -289,6 +307,7 @@ $(function() {
         if (data && data.items && Array.isArray(data.items)) {
             const items = data.items;
             const order = data.order
+            // const resultado = data.resultado;
 
             // Percorrendo os itens do JSON
             for (let i = 0; i < items.length; i++) {
@@ -299,13 +318,16 @@ $(function() {
                 const orderId = item.order_id;
                 const productId = item.product_id;
                 const shortName = item.short_name;
-                const order_at = item.order_at;
+                // const created_at = dataFormatada;
                 // Acesse outros valores do item conforme necessário
 
                 console.log('Order ID:', orderId);
                 console.log('Product ID:', productId);
                 console.log('Short Name:', shortName);
-                console.log('order_at:', data.order_at);
+                // console.log('Data formatada:', created_at);
+                // console.log('order_at:', data.order_at);
+
+
 
                 // Imprima ou utilize os valores como desejar
 

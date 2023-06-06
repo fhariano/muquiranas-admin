@@ -53,7 +53,7 @@ class PromosListController extends Controller
             return true;
         }
 
-        return $resultExistName;
+      
     }
 
 

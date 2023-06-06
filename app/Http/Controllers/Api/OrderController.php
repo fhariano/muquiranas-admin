@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use App\Jobs\SyncOrderWithErp;
+use App\Jobs\SyncVendasJob;
 
 class OrderController extends Controller
 {
@@ -40,8 +40,8 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     
+     
      */
     public function index($user_id, $bar_id)
     {
@@ -63,7 +63,7 @@ class OrderController extends Controller
             ], 404);
         }
 
-        foreach ($orders as $order) {
+     foreach ($orders as $order) {
             $items = DB::table('orders_items AS oi')
                 ->select(
                     'oi.order_id',
@@ -108,8 +108,10 @@ class OrderController extends Controller
         return response()->json([
             "error" => false,
             "message" => "Lista de orders!",
-            "data" => $orders,
+            "data" => $orders
         ], 200);
+
+        
     }
 
     public function show($order_num)
@@ -442,17 +444,21 @@ class OrderController extends Controller
 
     public function retornaOrdersParaApi()
     {
+    
         
         $order = DB::table('orders')
             ->select('orders.*')
-            ->leftJoin('bars', 'orders.bar_id', 'bars.id')
+            // ->leftJoin('bars', 'orders.bar_id', 'bars.id')
             ->where('orders.erp_id',null)
             ->where('orders.active', 1)
-            ->where('bars.active', 1)
-            ->orderBy('orders.id', 'desc')
+            // ->where('bars.active', 1)
+            ->orderBy('orders.id', 'asc')
             ->get();
 
-    
+        if ($order->isEmpty()) {
+            return false;
+        }
+
         foreach ($order as $order) {
             $items = DB::table('orders_items AS oi')
                 ->select(
@@ -477,17 +483,38 @@ class OrderController extends Controller
             foreach ($items as $item) {
                 $order->items[] = $item;
             }
-        }
+
+             $dataFormatada = substr($order->created_at, 0, 10);
+                 
+            $dados = [
+                    "idOrder"=>$order->id,
+                    "order_type" => 1,
+                    "fiscal_operation" => 24052,
+                    "date_order" => $dataFormatada,
+                    "date_sell" => $dataFormatada,
+                    "customer" => 9285552,
+                    "payment_form" => 59702,
+                    "seller" => 45574,
+                    "delivery_time" => $dataFormatada
+            ];
+            $json = json_encode($dados);
+            
+            SyncVendasJob::dispatch($json);
+       
+            
+    
+         }
+
+      
 
         // SyncOrderWithErp::dispatch($orderData)->onQueue('erp');
-
+      
         return response()->json([
             "error" => false,
             "message" => "Order by id!",
             "data" => $order,
+            // "dataFormatada" => $dataFormatada
+       
         ], 200);
     }
-
-
-
 }

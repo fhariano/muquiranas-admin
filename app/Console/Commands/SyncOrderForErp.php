@@ -2,11 +2,14 @@
 
 namespace App\Console\Commands;
 
+
 use Illuminate\Console\Command;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\RequestException;
+use App\Models\Orders;
+
 
 class SyncOrderForErp extends Command
 {
@@ -73,8 +76,28 @@ class SyncOrderForErp extends Command
                 // A solicitação foi bem-sucedida (código de status 2xx)
                 // Faça algo com a resposta
 
-                $this->info('Requisição enviada com sucesso!');
-                $this->info('Resposta: ' . $response->body());
+                $this->info(' -  Requisição enviada com sucessooo!');
+                $this->info('- Respostas: ' . $response->body());
+
+                $responseData = json_decode($response->body(), true);
+                $id = $responseData['registry']['id'];
+                // $this->info('O id recebi é: ' . $id . 'id admin é ' . 7);
+
+                
+                // Atualizar o campo "erp_ir" na tabela "order" onde o ID é igual
+                Orders::where('id', 7)->update(['erp_id' => $id]);
+
+
+                
+                dd('Resposta: ' . $response->body());
+
+               
+
+
+
+
+
+
             } else {
                 // A solicitação falhou (código de status diferente de 2xx)
                 // Obtenha o código de status e a mensagem de erro
