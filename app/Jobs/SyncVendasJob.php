@@ -100,7 +100,7 @@ class SyncVendasJob implements ShouldQueue
 
     public function handle()
 {
-    $url = 'https://app.cakeerp.com/api/sales_order';
+    $url = 'https://app.cakeerp.com/api/nfe';
     $token = '04d1be2fd17ba6769bbf';
 
     try {

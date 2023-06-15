@@ -299,10 +299,9 @@ $(function() {
 
     function percorrerJSON(jsonString) {
 
-        // console.log(jsonString);
         const json = JSON.parse(jsonString);
         const data = json.data;
-        // console.log(JSON.stringify(data));
+       
         // Verificando se a propriedade 'items' existe no JSON
         if (data && data.items && Array.isArray(data.items)) {
             const items = data.items;

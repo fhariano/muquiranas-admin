@@ -450,6 +450,7 @@ class OrderController extends Controller
             ->select('orders.*')
             // ->leftJoin('bars', 'orders.bar_id', 'bars.id')
             ->where('orders.erp_id',null)
+            ->where('orders.post_try', 0)
             ->where('orders.active', 1)
             // ->where('bars.active', 1)
             ->orderBy('orders.id', 'asc')
@@ -499,7 +500,7 @@ class OrderController extends Controller
             ];
             $json = json_encode($dados);
             
-            SyncVendasJob::dispatch($json);
+            // SyncVendasJob::dispatch($json);
        
             
     
