@@ -85,7 +85,7 @@ class SyncOrderForErp extends Command
 
                 
                 // Atualizar o campo "erp_ir" na tabela "order" onde o ID é igual
-                Orders::where('id', 7)->update(['erp_id' => $id]);
+                // Orders::where('id', 7)->update(['erp_id' => $id]);
 
 
                 

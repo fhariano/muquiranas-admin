@@ -265,22 +265,31 @@ $(function() {
 
                 getOrdersForErp().then((result) => {
 
-                    console.log( 'resulta é:' +  result);
-                    if (result == false) {
+                    if (result === false) {
                         Swal.fire({
-                            icon: 'warning',
-                            title: 'Atenção!',
-                            html: 'Não foram encontradas ordens para para comunicar ao ERP!',
+                            icon: 'info',
+                            title: 'Nenhuma ordem encontrada',
+                            html: '<br>Não há ordens para sincronizar.',
+
                         }).then(() => {
-                             fecharBar();
-                     
+                            fecharBar();
+
                         });
 
                     } else {
-                        
-                        const jsonString = JSON.stringify(result);
-                        console.log(jsonString);
-                        percorrerJSON(jsonString);
+
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Todos as orderes foi enviada para sincronização com o ERP!',
+                        html: '<br> Orders enviadas para sincronização.',
+                    }).then(() => {
+                        fecharBar();
+                    });
+                   
+
+                        // const jsonString = JSON.stringify(result);
+                        // console.log(jsonString);
+                        // percorrerJSON(jsonString);
                     }
 
                 });
@@ -289,7 +298,7 @@ $(function() {
                 fecharBar();
             }
 
-       
+
         });
 
 
@@ -297,58 +306,50 @@ $(function() {
     });
 
 
-    function percorrerJSON(jsonString) {
+    // function percorrerJSON(jsonString) {
 
-        const json = JSON.parse(jsonString);
-        const data = json.data;
-       
-        // Verificando se a propriedade 'items' existe no JSON
-        if (data && data.items && Array.isArray(data.items)) {
-            const items = data.items;
-            const order = data.order
-            // const resultado = data.resultado;
+    //     const json = JSON.parse(jsonString);
+    //     const data = json.data;
 
-            // Percorrendo os itens do JSON
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                console.log('Item:', item);
+    //     // Verificando se a propriedade 'items' existe no JSON
+    //     if (data && data.items && Array.isArray(data.items)) {
+    //         const items = data.items;
+    //         const order = data.order
+    //         // const resultado = data.resultado;
 
-                // Acessando os valores do item individualmente
-                const orderId = item.order_id;
-                const productId = item.product_id;
-                const shortName = item.short_name;
-                // const created_at = dataFormatada;
-                // Acesse outros valores do item conforme necessário
+    //         // Percorrendo os itens do JSON
+    //         for (let i = 0; i < items.length; i++) {
+    //             const item = items[i];
+    //             console.log('Item:', item);
 
-                console.log('Order ID:', orderId);
-                console.log('Product ID:', productId);
-                console.log('Short Name:', shortName);
-                // console.log('Data formatada:', created_at);
-                // console.log('order_at:', data.order_at);
+    //             // Acessando os valores do item individualmente
+    //             const orderId = item.order_id;
+    //             const productId = item.product_id;
+    //             const shortName = item.short_name;
+    //             // const created_at = dataFormatada;
+    //             // Acesse outros valores do item conforme necessário
 
-
-
-                // Imprima ou utilize os valores como desejar
-
-
-            }
-        } else {
-            console.log('O JSON não possui a estrutura esperada ou está ausente.');
-        }
-    }
+    //             console.log('Order ID:', orderId);
+    //             console.log('Product ID:', productId);
+    //             console.log('Short Name:', shortName);
+    //             // console.log('Data formatada:', created_at);
+    //             // console.log('order_at:', data.order_at);
 
 
 
+    //             // Imprima ou utilize os valores como desejar
+
+
+    //         }
+    //     } else {
+    //         console.log('O JSON não possui a estrutura esperada ou está ausente.');
+    //     }
+    // }
 
 
     getOrdersForErp = () => {
 
         return new Promise((resolve, reject) => {
-
-            //    $.getJSON(urlBase + '/orders/getOrderForErp', function(result) {
-            //     console.log('result é '  + result);
-            //        return resolve(result);
-            //    });
 
             $.ajax({
                 url: urlBase + '/getOrderForErp',
@@ -358,59 +359,40 @@ $(function() {
                 },
                 success: function(success) {
 
-                    // const jsonString = JSON.stringify(success);
-                    // console.log(jsonString);
-                    return resolve(success)
+                    return resolve(success);
+               
                 },
-                erro: function(data) {
+                erro: function(jqXHR) {
 
-                    if (data.status === 0) {
+                    if (jqXHR.status === 0) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Sem conexão com internet!',
+                            title: 'Sem conexão com a internet!',
                             html: '<br>Contate o administrador.',
                         });
-                        return reject(data)
-                    } else if (data.status == 404 || data.status == 405) {
+                    } else if (jqXHR.status == 404 || jqXHR.status == 405) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Página Solicitada não encontrada',
                             html: '<br>Contate o administrador.',
                         });
-                        return reject(data)
-
-                    } else if (data.status == 500) {
+                    } else if (jqXHR.status == 500) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Erro!',
                             html: '<br>Contate o administrador.',
                         });
-                        return reject(data)
-
                     } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Erro!',
                             html: 'Erro Crítico! <br>Contate o administrador.',
                         });
-                        return reject(data)
                     }
-
-
+                    return reject(jqXHR);
                 }
 
             });
-
-
-
-
-
-
-
-
-
-
-
         });
     }
 

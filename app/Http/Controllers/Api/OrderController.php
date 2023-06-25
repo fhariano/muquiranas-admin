@@ -446,7 +446,7 @@ class OrderController extends Controller
     {
     
         
-        $order = DB::table('orders')
+        $orders = DB::table('orders')
             ->select('orders.*')
             // ->leftJoin('bars', 'orders.bar_id', 'bars.id')
             ->where('orders.erp_id',null)
@@ -456,11 +456,11 @@ class OrderController extends Controller
             ->orderBy('orders.id', 'asc')
             ->get();
 
-        if ($order->isEmpty()) {
-            return false;
-        }
+            if ($orders->isEmpty()) {
+                return false;
+            }
 
-        foreach ($order as $order) {
+        foreach ($orders as $order) {
             $items = DB::table('orders_items AS oi')
                 ->select(
                     'oi.order_id',
@@ -474,48 +474,93 @@ class OrderController extends Controller
                     'p.image_url',
                     'oi.quantity',
                     'oi.price',
-                    'oi.total'
+                    'oi.total',
+                    'p.price_cost_erp'
                 )
                 ->leftJoin('products AS p', 'oi.product_id', 'p.id')
                 ->where('order_id', $order->id)
                 ->orderBy('oi.item', 'asc')
                 ->get();
 
-            foreach ($items as $item) {
-                $order->items[] = $item;
-            }
-
-             $dataFormatada = substr($order->created_at, 0, 10);
+             // Adiciona os itens ao objeto $order    
+            $order->items = $items;
+       
+            $dataFormatada = substr($order->created_at, 0, 10);
                  
+          // Cria o array de dados para envio ao SyncVendasJob
             $dados = [
-                    "idOrder"=>$order->id,
-                    "order_type" => 1,
-                    "fiscal_operation" => 24052,
-                    "date_order" => $dataFormatada,
-                    "date_sell" => $dataFormatada,
-                    "customer" => 9285552,
-                    "payment_form" => 59702,
-                    "seller" => 45574,
-                    "delivery_time" => $dataFormatada
+            
+                "order_number" => "",
+                "order_type" => 1,
+                "delivery_time" => $dataFormatada,
+                "date_order" => $dataFormatada,
+                "customer" => 9285552,
+                "validity" => null,
+                "canceled" => 0,
+                "inutilized" => 0,
+                "nfe" => null,
+                "fiscal_operation" => 24052,
+                "date_billed" => $dataFormatada,
+                "contact_name" => "Coelho",
+                "seller" => 45574,
+                "date_sell" => $dataFormatada,
+                "total" => $order->total,
+                "idOrder"=> $order->id,
+                "sales_parcel_groups" => [
+                    [
+                        "price" => $order->total,
+                        "payment_form" => 59703, //Cartão de Crédito
+                        "total_discount" => 0.0,
+                        "total_addition" => 0.0
+                    ]
+                ],
+                "sales_parcels" => [
+                    [
+                        "parcel" => 1,
+                        "expiration" => $dataFormatada,
+                        "price" => $order->total,
+                        "payment_form" => 59703,//Cartão de Crédito
+                        "sales_parcel_group" => null
+                    ]
+                ],
+                "sales_items" => [] // Os itens serão adicionados no foreach
             ];
-            $json = json_encode($dados);
+                foreach ($order->items as $item){
+                    //... monta o array de cada item ...
+                    $dados['sales_items'][] = 
+                    [
+                            "item_name" => $item->short_name,
+                            "price_sell" => $item->price,
+                            "price_cost" => $item->price_cost_erp, 
+                            "canceled" => 0,
+                            "qtd" => $item->quantity,
+                            "seller_id" => 12119, //ID consumidor Final
+                            "product_id" => $item->erp_id,
+                            "item_type" => "product"
+                    ];
+                    
+                }        
+           
+            // Converte o array de dados em JSON
+             $json = json_encode($dados);
             
-            // SyncVendasJob::dispatch($json);
-       
+             // Despacha o job para sincronizar as vendas
             
-    
-         }
-
-      
-
-        // SyncOrderWithErp::dispatch($orderData)->onQueue('erp');
-      
-        return response()->json([
-            "error" => false,
-            "message" => "Order by id!",
-            "data" => $order,
-            // "dataFormatada" => $dataFormatada
-       
-        ], 200);
+              SyncVendasJob::dispatch($json); 
+             
+            }
+           
+            
+            return response()->json([
+                "error" => false,
+                "message" => "Orders retrieved successfully.",
+                "data" => $order,          
+            ], 200);
     }
+
+  
 }
+
+
+
+
