@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrder;
 use App\Models\Orders;
+use App\Models\Bars;
 use App\Models\PromosLists;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -442,22 +443,26 @@ class OrderController extends Controller
     }
 
 
-    public function retornaOrdersParaApi()
+    public function retornaOrdersParaApi($idBarUsuarioLogado)
     {
     
         
         $orders = DB::table('orders')
             ->select('orders.*')
-            // ->leftJoin('bars', 'orders.bar_id', 'bars.id')
+           ->leftJoin('bars AS bar', 'orders.bar_id','=', 'bar.id')
             ->where('orders.erp_id',null)
-            ->where('orders.post_try', 0)
+            ->where('orders.post_try', '=', 0)
+            ->whereNotNull('orders.post_try')
             ->where('orders.active', 1)
-            // ->where('bars.active', 1)
+            ->where('bar.active', 1)
+            ->where('orders.bar_id', '=',  $idBarUsuarioLogado ) 
             ->orderBy('orders.id', 'asc')
             ->get();
 
             if ($orders->isEmpty()) {
-                return false;
+             
+                return false ;
+                
             }
 
         foreach ($orders as $order) {
@@ -546,7 +551,7 @@ class OrderController extends Controller
             
              // Despacha o job para sincronizar as vendas
             
-              SyncVendasJob::dispatch($json); 
+            //   SyncVendasJob::dispatch($json); 
              
             }
            

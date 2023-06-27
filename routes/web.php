@@ -40,7 +40,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
-Route::get('/getOrderForErp', [OrderController::class, 'retornaOrdersParaApi'])->name('getOrderForErp')->middleware('auth');
+Route::get('/getOrderForErp/{idBarUsuarioLogado}', [OrderController::class, 'retornaOrdersParaApi'])->name('getOrderForErp')->middleware('auth');
 Route::get('send-Order-to-erp', function(){
         $json = '{
         "order_type": 1,

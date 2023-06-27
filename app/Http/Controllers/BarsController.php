@@ -35,6 +35,8 @@ class BarsController extends Controller
             if (Gate::allows('visualizar_bar', $this->group_id)) {
                 return view('bar.index')
                     ->with('group_id', $this->group_id)
+                    ->with('bar_id', $this->bar_id)
+
                     // ->with('statusBar', $this->getStatusBar($this->bar_id))
                     ->with('statusBar', $this->statusBar)
                     ->with('group', $this->group_id);
@@ -50,9 +52,10 @@ class BarsController extends Controller
      */
     public function requestSelectBar(Request $request) 
     {
-        $fildsBarSelected = $this->UserIsOwnerOfBarSelected(Auth::user()->id, $request['idBarSelecionado']);
-        $this->atualizaSession($fildsBarSelected);
-        return route('home');
+        $fildsBarSelected = $this->UserIsOwnerOfBarSelected(Auth::user()->id, $request['idBarSelecionado'] );
+               
+        //  return $this->atualizaSessionFieldBarSelecionado($fildsBarSelected);
+          return route('home');
     }
 
 
@@ -71,6 +74,7 @@ class BarsController extends Controller
         if($fieldUserAtual[0]->group_id !=6 && $fieldUserAtual[0]->group_id !=7){
             $this->atualizaSession($fieldUserAtual);
             $this->atualizaReceitasSession($this->getReceitaBar($fieldUserAtual[0]->bar_id));
+           
             $this->salvaDadosBaresUsuarioSession($fieldUserAtual);
             return redirect(route('home'));
         }else{
@@ -102,7 +106,7 @@ class BarsController extends Controller
 
     public function getReceitaBar($idbars) {    
         $resultReceitaBar = 0;
-        if( is_array($idbars)){
+        if( is_array($idbars)){ //Verifica se é array com ids dos bares, onde é passado o id de cada bar no foreache e alimentando a variavel resultReceitaBar .
             foreach ($idbars as $bar) {
                 $resultReceitaBar += $this->consolidadoReceitas($bar->bar_id);
                 }
@@ -367,39 +371,81 @@ class BarsController extends Controller
             ->join('bars as bars', 'bars.id', '=', 'bar_id')
             ->where([
                 'user_id' => $idUser,
-                'is_owner' => '1',
-                'group_id' => '6'
+                // 'is_owner' => '1',
+                // 'group_id' => '6'
             ])
             ->get();
 
         return json_decode($resultIsOwnerOfBar);
     }
-    public function UserIsOwnerOfBarSelected($idUser, $idBar)
-    {
-        $resultIsOwnerOfBarSelected = UsersBar::select(
-            DB::raw('users_bars.bar_id as bar_id'),
-            DB::raw('users_bars.group_id as group_id'),
-            DB::raw('bars.status as statusBar'),
-            DB::raw('bars.short_name as nameBar'),
-            DB::raw('users_bars.is_owner as DonoBar'),
+    // public function UserIsOwnerOfBarSelected($idUser, $idBar)
+    // {
+    //     $resultIsOwnerOfBarSelected = UsersBar::select(
+    //         DB::raw('users_bars.bar_id as bar_id'),
+    //         DB::raw('users_bars.group_id as group_id'),
+    //         DB::raw('bars.status as statusBar'),
+    //         DB::raw('bars.short_name as nameBar'),
+    //         DB::raw('users_bars.is_owner as DonoBar'),
 
-        )
-            ->join('bars as bars', 'bars.id', '=', 'bar_id')
-            ->where([
-                'user_id' => $idUser,
-                'is_owner' => '1',
-                'bar_id' => $idBar,
+    //     )
+    //         ->join('bars as bars', 'bars.id', '=', 'bar_id')
+    //         ->where([
+    //             'user_id' => $idUser,
+    //             'is_owner' => '1',
+    //             'bar_id' => $idBar,
                
-            ])
-            ->get();
+    //         ])
+    //         ->get();
 
-        return json_decode($resultIsOwnerOfBarSelected);
+    //     return json_decode($resultIsOwnerOfBarSelected);
+    // }
+
+
+    public function UserIsOwnerOfBarSelected($idUser, $idBar)
+{
+    $resultIsOwnerOfBarSelected = UsersBar::select(
+        DB::raw('users_bars.bar_id as bar_id'),
+        DB::raw('users_bars.group_id as group_id'),
+        DB::raw('bars.status as statusBar'),
+        DB::raw('bars.short_name as nameBar'),
+        DB::raw('users_bars.is_owner as DonoBar'),
+    )
+        ->join('bars as bars', 'bars.id', '=', 'bar_id')
+        ->where([
+            'user_id' => $idUser,
+            // 'is_owner' => '1', //Verificar com Ariano, esse campo. 
+            'bar_id' => $idBar,
+        ])
+        ->get();
+
+    if (!empty($resultIsOwnerOfBarSelected)) {
+        $barId = $resultIsOwnerOfBarSelected[0]->bar_id;
+        $groupId = $resultIsOwnerOfBarSelected[0]->group_id;
+        $statusBar = $resultIsOwnerOfBarSelected[0]->statusBar;
+        $nameBar = $resultIsOwnerOfBarSelected[0]->nameBar;
+        $donoBar = $resultIsOwnerOfBarSelected[0]->DonoBar;
+
+        // return $resultIsOwnerOfBarSelected;
+
+        session([
+                    'bar_id' => $barId,
+                    'nameBar' => $nameBar,
+                    'group_id' => $groupId,
+                    'statusBar' => $statusBar,
+                ]);
+
+                return true;
     }
+
+    return null;
+}
+
 
 //Atualizar dados da sessão ;
     public function atualizaSession($fields)
     {
-               return session([
+      
+             return session([
             'bar_id' => $fields[0]->bar_id,
             'nameBar' => $fields[0]->nameBar,
             'group_id' => $fields[0]->group_id,
@@ -407,6 +453,9 @@ class BarsController extends Controller
          
         ]);
     }
+
+
+
 
     public function atualizaReceitasSession($valor)
     {

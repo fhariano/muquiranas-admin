@@ -23,6 +23,8 @@
                 &nbsp;
                 <div class="col-12 col-sm-6 col-md-3" id="divFecharBar">
                     <div class="info-box mb-3">
+                    <input hidden type="text" id="barId" class="form-control" value="<?= $bar_id; ?>">
+
                         <button href="javascript:void(0)" class="btn btn-sm" role="button" id="fecharBar"
                             title="Fechar Bar" aria-label="Fechar Bar">
                             <span class="info-box-icon sm-danger elevation-1"> <i class="fas fa-lock"></i> </span>
@@ -190,6 +192,8 @@ $(function() {
     var idBar = '';
     var urlControllerBar = 'updateStatusBar/';
     const statusBar = document.getElementById('statusBar').value;
+    const idAtualBarUsuario = document.getElementById('barId').value;
+  
 
     if (statusBar == 1) {
         document.getElementById("abrirBar").disabled = true;
@@ -265,7 +269,7 @@ $(function() {
 
                 getOrdersForErp().then((result) => {
 
-                    if (result === false) {
+                    if (result == false) {
                         Swal.fire({
                             icon: 'info',
                             title: 'Nenhuma ordem encontrada',
@@ -352,11 +356,12 @@ $(function() {
         return new Promise((resolve, reject) => {
 
             $.ajax({
-                url: urlBase + '/getOrderForErp',
+                url: urlBase + '/getOrderForErp/'+ idAtualBarUsuario,
                 method: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
+                           
                 success: function(success) {
 
                     return resolve(success);
@@ -440,6 +445,7 @@ $(function() {
                 data: {
                     'status': fieldStatus,
                 },
+                
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
