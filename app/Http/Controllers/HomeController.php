@@ -173,9 +173,13 @@ class HomeController extends Controller
         ->where('status', 1)
         ->where('bar_id', $this->bar_id)
         ->get();
-
-        $fields = json_decode($resultQuery);
-        return $fields[0]->name;
+        
+        if(!$resultQuery){
+            $fields = json_decode($resultQuery);
+            return $fields[0]->name;
+        }else {
+            return 'Nenhuma';
+        } 
     }
 
 
