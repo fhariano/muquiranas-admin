@@ -4,7 +4,7 @@
 <div class="card card-default">
 
     <div class="card-header">
-        <h1 align="center">Preços e Promoções</h1>
+        <h1 align="center"> <b> Preços e Promoções </b></h1>
     </div>
 
     <div class="card-body">

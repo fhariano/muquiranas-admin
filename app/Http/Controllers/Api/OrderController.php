@@ -506,7 +506,7 @@ class OrderController extends Controller
                 "nfe" => null,
                 "fiscal_operation" => 24052,
                 "date_billed" => $dataFormatada,
-                "contact_name" => "Coelho",
+                // "contact_name" => "Coelho",
                 "seller" => 45574,
                 "date_sell" => $dataFormatada,
                 "total" => $order->total,
@@ -547,13 +547,13 @@ class OrderController extends Controller
                 }        
            
             // Converte o array de dados em JSON
-             $json = json_encode($dados);
+            $json = json_encode($dados);
             
              // Despacha o job para sincronizar as vendas
             
-            //   SyncVendasJob::dispatch($json); 
+            SyncVendasJob::dispatch($json); 
              
-            }
+        }
            
             
             return response()->json([
@@ -562,7 +562,6 @@ class OrderController extends Controller
                 "data" => $order,          
             ], 200);
     }
-
   
 }
 

@@ -16,6 +16,7 @@ use App\Models\UsersBar; //apagar
 use App\Models\Categories;
 use App\Models\BarsHistory;
 use App\Models\Orders;
+use App\Models\PromosLists;
 use App\Models\OrdersItems;
 use App\Models\OrdersType;
 use App\Models\Products;
@@ -41,6 +42,7 @@ class HomeController extends Controller
            
                 $idBar = $this->bar_id;
                 $statusBar = $this->statusBar;
+                $nomeDaLista = $this->listActive();
 
                 $resultConsolidado = $this->buscarDadosConsolidados($idBar,1);
                 $nameBar = $this->nameBar;
@@ -57,6 +59,7 @@ class HomeController extends Controller
                     ->with('groupUser', $groupUser)
                     ->with('qtdTotalDia', $resultConsolidado['qtdTotalDia'])
                     ->with('receitas', $this->receitasBar)
+                    ->with('nomeDaLista', $nomeDaLista)
                     ->with('totalDia', $resultConsolidado['totalDia'])
                     ->with('mediaDia', $resultConsolidado['mediaDia'])
                     // ->with('totalGeral', $resultConsolidado['totalGeral'])
@@ -161,6 +164,22 @@ class HomeController extends Controller
 
         return json_decode($resultFieldUser);
     }
+
+    public function listActive(){
+        $resultQuery =  PromosLists::select(
+            DB::raw('name as name')
+        )  
+        ->where('active', 1)
+        ->where('status', 1)
+        ->where('bar_id', $this->bar_id)
+        ->get();
+
+        $fields = json_decode($resultQuery);
+        return $fields[0]->name;
+    }
+
+
+ 
 
 
 

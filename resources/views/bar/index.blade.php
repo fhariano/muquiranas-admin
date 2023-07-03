@@ -256,7 +256,7 @@ $(function() {
         Swal.fire({
             position: 'center',
             icon: 'warning',
-            title: 'Sincronizar Vendas ERP',
+            title: '<b> Sincronizar Vendas no ERP </b>',
             html: 'Deseja sincronizar dados das vendas no ERP?',
             allowOutsideClick: false,
             showCloseButton: true,

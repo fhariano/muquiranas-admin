@@ -4,9 +4,32 @@
 <div class="card card-default">
 
     <div class="card-body">
+
+    <div class="row" id="inputRow" align="center">
+  <div class="col-1">
+  
+    <div class="input-group">
+      <div class="input-group-prepend">
+ 
+        <span class="input-group-text">
+          <i class="fa fa-list" aria-hidden="true">  Lista Ativa: <br><br> <b>{{ $nomeDaLista }}</b> </i>
+        </span>
+      </div>
+      
+      <!-- <input type="text" class="form-control bg-primary text-white" id="inputListaAtiva" value="A LISTA DE PROMOÇÃO ATIVA É: <br> ?php echo $nomeDaLista; ?>" readonly> -->
+
+      <!-- <input type="text" class="form-control bg-success text-white text-break" id="inputListaAtiva" value="<b>{{ $nomeDaLista }}</b>" readonly> -->
+        
+    </div>
+  </div>
+</div>
+
+<br>
+
+
+
         <div class="row sr-only" id="selectBars" align="center">
-            <select class="js-selectBar-ajax form-control bg-primary d-flex justify-content-between" style="width:100%"
-                id="selectBar" name="selectBar">
+            <select class="js-selectBar-ajax form-control bg-primary d-flex justify-content-between" style="width:100%" id="selectBar" name="selectBar">
                 <option class="font-weight-bold sr-only" selected disabled value="" align="center">TODOS</option>
                 @foreach($fieldsBar as $key => $value)
                 <option value="{{ $value->bar_id }}">{{ $value->nameBar }}</option>
@@ -29,16 +52,16 @@
 
     <div class="container-fluid">
 
-   
-            <div class="bd-example sr-only">
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
+
+        <div class="bd-example sr-only">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
                 </div>
             </div>
+        </div>
 
-       
+
         <div class="row">
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardReceita'></div>
             <div class="col-12 col-sm-6 col-md-3 sr-only" id='clsCardITotaltens'></div>
@@ -96,417 +119,417 @@
 @section('js')
 
 <script>
-$(function() {
+    $(function() {
 
-    const URL_BASE = window.location.origin;
-    const ROTA_CATEGORIES = '/categorias/';
-    const ROTA_HOME = '/home/';
-    const ROTA_BAR = '/bar/';
-    const URL_CONTROLLER = '/resultBars';
-    let valorReceita = <?=$receitas?>;
-    let barUser = <?=$idBar?>;
-    let nameBar = '<?=$nameBar?>';
-    let groupUser = <?=$groupUser?>;
-    let idBarSelecionado = 1;
-    let control = 0;
-
-
-
-    $('#selectBar').select2();
-    $('#categoriesBar').select2();
-
-    const selectBar = $('#selectBar');
-    const selectCategories = $('#categoriesBar');
-
-    cardReceita(valorReceita);
-
-    function numberFormatPtBr(valor) {
-        return new Intl.NumberFormat('pt-BR', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(valor);
-    }
-    // Funções para criação dos cards
-
-    function cardReceita(valor) {
+        const URL_BASE = window.location.origin;
+        const ROTA_CATEGORIES = '/categorias/';
+        const ROTA_HOME = '/home/';
+        const ROTA_BAR = '/bar/';
+        const URL_CONTROLLER = '/resultBars';
+        let valorReceita = <?= $receitas ?>;
+        let barUser = <?= $idBar ?>;
+        let nameBar = '<?= $nameBar ?>';
+        let groupUser = <?= $groupUser ?>;
+        let idBarSelecionado = 1;
+        let control = 0;
 
 
-        // media = numberFormatPtBr(valor);
-        media = valor ? numberFormatPtBr(valor) : 0;
-        let cardReceita = '';
-        cardReceita += '<div class="info-box">';
-        cardReceita +=
-            '<span class="info-box-icon bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>';
-        cardReceita += '<div class="info-box-content">';
-        cardReceita += '<span class="info-box-text-receita"><b> RECEITAS </b></span>';
-        cardReceita += '<span class="info-box-number-receita">';
-        cardReceita += 'R$ ' + media;
 
-        cardReceita += '</span>';
-        cardReceita += '</div>';
-        cardReceita += '</div>';
-        $('#clsCardReceita').append(cardReceita);
-        $("#clsCardReceita").removeClass("sr-only");
+        $('#selectBar').select2();
+        $('#categoriesBar').select2();
 
-    }
+        const selectBar = $('#selectBar');
+        const selectCategories = $('#categoriesBar');
 
+        cardReceita(valorReceita);
 
-    function cardItens(valor, icon) {
-        let cardTotalItens = '';
-        cardTotalItens += '<div class="info-box mb-3" divBox>';
-        cardTotalItens +=
-            '     <span class="info-box-icon cardCategoria bg-danger elevation-1 material-icons">' + icon +
-            '</span>';
-        cardTotalItens += '      <div class="info-box-content">';
-        cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
-        cardTotalItens += '             <span class="info-box-number-itens">';
-        cardTotalItens += valor;
-        cardTotalItens += '             </span>';
-        cardTotalItens += '       </div>';
-        cardTotalItens += '       </div>';
-        cardTotalItens += '       </div>';
-        $('#clsCardITotaltens').append(cardTotalItens);
-        $("#clsCardITotaltens").removeClass("sr-only");
-    }
+        function numberFormatPtBr(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(valor);
+        }
+        // Funções para criação dos cards
 
-    function cardTotal(valor, icon) {
-        var total = numberFormatPtBr(valor);
-        let cardTotalp = '';
-        cardTotalp += '<div class="info-box mb-3" divBox>';
-        cardTotalp += '<span class="info-box-icon cardCategoria bg-info elevation-1 material-icons">' + icon +
-            '</span>';
-        cardTotalp += '<div class="info-box-content">';
-        cardTotalp += '<span class="info-box-text"><b>TOTAL</b></span>';
-        cardTotalp += '<span class="info-box-number-total">';
-        cardTotalp += 'R$ ' + total;
-        cardTotalp += '</span>';
-        cardTotalp += '</div>';
-        cardTotalp += '</div>';
-
-        $('#clsCardTotal').append(cardTotalp);
-        $("#clsCardTotal").removeClass("sr-only");
-    }
-
-    function cardMedia(valor, icon) {
-        media = numberFormatPtBr(valor);
-        let cardMedia = '';
-        cardMedia += '<div class="info-box mb-3" divBox>';
-        cardMedia += '<span class="info-box-icon cardCategoria bg-warning elevation-1 material-icons">' + icon +
-            '</span>';
-        cardMedia += '<div class="info-box-content">';
-        cardMedia += '<span class="info-box-text"><b>MÉDIA</b></span>';
-        cardMedia += '<span class="info-box-number-media">';
-        cardMedia += '<span class="info-box-number-media">';
-        cardMedia += 'R$ ' + media + '';
-        cardMedia += '</span>';
-        cardMedia += '</div>';
-        cardMedia += '</div>';
-
-        $('#clsCardMedia').append(cardMedia);
-        $("#clsCardMedia").removeClass("sr-only");
-
-    }
-
-    function updateValueCardReceita(newValue) {
-        //  valueReceitaFormatado = numberFormatPtBr(newValue);
-         valueReceitaFormatado = newValue ? numberFormatPtBr(newValue) : '0,00';
-       
-        $("#clsCardReceita").removeClass("sr-only");
-        
-        $('.info-box-number-receita').text('R$ ' + valueReceitaFormatado);
-        $('.info-box-text-receita').text('RECEITA');
-    }
-
-    function updateValueCardItens(newValue) {
-        $("#clsCardITotaltens").removeClass("sr-only");
-        $('.info-box-number-itens').text(newValue);
+        function cardReceita(valor) {
 
 
-    }
+            // media = numberFormatPtBr(valor);
+            media = valor ? numberFormatPtBr(valor) : 0;
+            let cardReceita = '';
+            cardReceita += '<div class="info-box">';
+            cardReceita +=
+                '<span class="info-box-icon bg-success elevation-1"> <i class="fas fa-qrcode"></i> </span>';
+            cardReceita += '<div class="info-box-content">';
+            cardReceita += '<span class="info-box-text-receita"><b> RECEITAS </b></span>';
+            cardReceita += '<span class="info-box-number-receita">';
+            cardReceita += 'R$ ' + media;
 
-    function updateValueCardTotal(newValue) {
-        valueTotalFormatado = numberFormatPtBr(newValue);
-        $("#clsCardTotal").removeClass("sr-only");
-        $('.info-box-number-total').text('R$ ' + valueTotalFormatado);
+            cardReceita += '</span>';
+            cardReceita += '</div>';
+            cardReceita += '</div>';
+            $('#clsCardReceita').append(cardReceita);
+            $("#clsCardReceita").removeClass("sr-only");
 
-
-    }
-
-    function updateValueCardMedia(newValue) {
-        valueMediaFormatado = numberFormatPtBr(newValue);
-        $("#clsCardMedia").removeClass("sr-only");
-        $('.info-box-number-media').text('R$ ' + valueMediaFormatado);
-
-    }
-
-    function updateIconCards(iconCard) {
-        $('.cardCategoria').text(iconCard);
-    }
+        }
 
 
-    // Função condicional, onde mostrará ou não o selctBar e o CardReceitas. 
-    if (groupUser != 6) {
+        function cardItens(valor, icon) {
+            let cardTotalItens = '';
+            cardTotalItens += '<div class="info-box mb-3" divBox>';
+            cardTotalItens +=
+                '     <span class="info-box-icon cardCategoria bg-danger elevation-1 material-icons">' + icon +
+                '</span>';
+            cardTotalItens += '      <div class="info-box-content">';
+            cardTotalItens += '             <span class="info-box-text"><b>ITENS</b></span>';
+            cardTotalItens += '             <span class="info-box-number-itens">';
+            cardTotalItens += valor;
+            cardTotalItens += '             </span>';
+            cardTotalItens += '       </div>';
+            cardTotalItens += '       </div>';
+            cardTotalItens += '       </div>';
+            $('#clsCardITotaltens').append(cardTotalItens);
+            $("#clsCardITotaltens").removeClass("sr-only");
+        }
 
-        $('.bd-example').removeClass("sr-only");
-        $('#categoriesBar').empty();
-        $("#clsCardReceita").addClass("sr-only");
-        $("#clsCardITotaltens").addClass("sr-only");
-        $("#clsCardTotal").addClass("sr-only");
-        $("#clsCardMedia").addClass("sr-only");
-        getReceitaBarForCard(barUser);
-        getCategoriesForSelect(barUser);
-        atualizarNomeBar(nameBar);
+        function cardTotal(valor, icon) {
+            var total = numberFormatPtBr(valor);
+            let cardTotalp = '';
+            cardTotalp += '<div class="info-box mb-3" divBox>';
+            cardTotalp += '<span class="info-box-icon cardCategoria bg-info elevation-1 material-icons">' + icon +
+                '</span>';
+            cardTotalp += '<div class="info-box-content">';
+            cardTotalp += '<span class="info-box-text"><b>TOTAL</b></span>';
+            cardTotalp += '<span class="info-box-number-total">';
+            cardTotalp += 'R$ ' + total;
+            cardTotalp += '</span>';
+            cardTotalp += '</div>';
+            cardTotalp += '</div>';
 
-    } else {
+            $('#clsCardTotal').append(cardTotalp);
+            $("#clsCardTotal").removeClass("sr-only");
+        }
+
+        function cardMedia(valor, icon) {
+            media = numberFormatPtBr(valor);
+            let cardMedia = '';
+            cardMedia += '<div class="info-box mb-3" divBox>';
+            cardMedia += '<span class="info-box-icon cardCategoria bg-warning elevation-1 material-icons">' + icon +
+                '</span>';
+            cardMedia += '<div class="info-box-content">';
+            cardMedia += '<span class="info-box-text"><b>MÉDIA</b></span>';
+            cardMedia += '<span class="info-box-number-media">';
+            cardMedia += '<span class="info-box-number-media">';
+            cardMedia += 'R$ ' + media + '';
+            cardMedia += '</span>';
+            cardMedia += '</div>';
+            cardMedia += '</div>';
+
+            $('#clsCardMedia').append(cardMedia);
+            $("#clsCardMedia").removeClass("sr-only");
+
+        }
+
+        function updateValueCardReceita(newValue) {
+            //  valueReceitaFormatado = numberFormatPtBr(newValue);
+            valueReceitaFormatado = newValue ? numberFormatPtBr(newValue) : '0,00';
+
+            $("#clsCardReceita").removeClass("sr-only");
+
+            $('.info-box-number-receita').text('R$ ' + valueReceitaFormatado);
+            $('.info-box-text-receita').text('RECEITA');
+        }
+
+        function updateValueCardItens(newValue) {
+            $("#clsCardITotaltens").removeClass("sr-only");
+            $('.info-box-number-itens').text(newValue);
 
 
-        $("#selectBars").removeClass("sr-only");
-        $("#clsCardReceita").removeClass("sr-only");
-        selectBar.change(function(event) {
+        }
+
+        function updateValueCardTotal(newValue) {
+            valueTotalFormatado = numberFormatPtBr(newValue);
+            $("#clsCardTotal").removeClass("sr-only");
+            $('.info-box-number-total').text('R$ ' + valueTotalFormatado);
 
 
-             atualizarNomeBar($(this).find("option:selected").text());
-      
-            //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
-            barUser = $(this).val();
+        }
 
-            //função ajax para atualizar o valor da receita baseado no is do bar selecionado.
+        function updateValueCardMedia(newValue) {
+            valueMediaFormatado = numberFormatPtBr(newValue);
+            $("#clsCardMedia").removeClass("sr-only");
+            $('.info-box-number-media').text('R$ ' + valueMediaFormatado);
+
+        }
+
+        function updateIconCards(iconCard) {
+            $('.cardCategoria').text(iconCard);
+        }
+
+
+        // Função condicional, onde mostrará ou não o selctBar e o CardReceitas. 
+        if (groupUser != 6) {
 
             $('.bd-example').removeClass("sr-only");
             $('#categoriesBar').empty();
-            $("#tabelaProdutos").addClass("sr-only");
             $("#clsCardReceita").addClass("sr-only");
             $("#clsCardITotaltens").addClass("sr-only");
             $("#clsCardTotal").addClass("sr-only");
             $("#clsCardMedia").addClass("sr-only");
             getReceitaBarForCard(barUser);
             getCategoriesForSelect(barUser);
+            atualizarNomeBar(nameBar);
 
-        });
-
-    }
-
-    function atualizarNomeBar(name){
-     
-        $("#nomeDoBar").text('Muquiranas '+ name);
-    }
+        } else {
 
 
-    function getReceitaBarForCard(idBar) {
-
-        $.ajax({
-            type: "POST",
-            url: URL_BASE + ROTA_BAR + 'requestValorReceita',
-            data: {
-                'idBar': idBar,
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            dataType: "json",
-            success: function(success) {
-              
-                updateValueCardReceita(success);
-
-            }
-        });
+            $("#selectBars").removeClass("sr-only");
+            $("#clsCardReceita").removeClass("sr-only");
+            selectBar.change(function(event) {
 
 
-    }
+                atualizarNomeBar($(this).find("option:selected").text());
 
-    function getCategoriesForSelect(idBar) {
+                //Fazer verificação onde mudando o id do bar, precisa ( atualizar o carde receita, esconder os outrs cards e a tabela de produtos. )
+                barUser = $(this).val();
 
-        if (idBar) {
-            $("#categoriesBar").show();
+                //função ajax para atualizar o valor da receita baseado no is do bar selecionado.
+
+                $('.bd-example').removeClass("sr-only");
+                $('#categoriesBar').empty();
+                $("#tabelaProdutos").addClass("sr-only");
+                $("#clsCardReceita").addClass("sr-only");
+                $("#clsCardITotaltens").addClass("sr-only");
+                $("#clsCardTotal").addClass("sr-only");
+                $("#clsCardMedia").addClass("sr-only");
+                getReceitaBarForCard(barUser);
+                getCategoriesForSelect(barUser);
+
+            });
+
+        }
+
+        function atualizarNomeBar(name) {
+
+            $("#nomeDoBar").text('Muquiranas ' + name);
+        }
+
+
+        function getReceitaBarForCard(idBar) {
+
             $.ajax({
                 type: "POST",
-                url: URL_BASE + ROTA_CATEGORIES + 'getCategories',
+                url: URL_BASE + ROTA_BAR + 'requestValorReceita',
                 data: {
-                    'idBarSelecionado': idBar,
+                    'idBar': idBar,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 dataType: "json",
-                success: function(categories) {
-                  
-                    $('.bd-example').addClass("sr-only");
-                    $("#categoriesBar").append(
-                        '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
-                    )
+                success: function(success) {
 
-                    $.each(categories, function(key, value) {
-                        
-                        $("#selectCategories").removeClass("sr-only");
-                        $("#categoriesBar").append('<option value="' + value['id'] +
-                            '">' + value['name'] + '<option>');
-                    });
+                    updateValueCardReceita(success);
 
-                    $("#categoriesBar").trigger("change");
                 }
             });
-        } else {
-            $("categoriesBar").hide();
+
+
         }
 
-    }
+        function getCategoriesForSelect(idBar) {
 
-    selectCategories.change(function(event) {
+            if (idBar) {
+                $("#categoriesBar").show();
+                $.ajax({
+                    type: "POST",
+                    url: URL_BASE + ROTA_CATEGORIES + 'getCategories',
+                    data: {
+                        'idBarSelecionado': idBar,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "json",
+                    success: function(categories) {
 
-        idCategories = $(this).val();
-        $("div").remove(".divBox");
+                        $('.bd-example').addClass("sr-only");
+                        $("#categoriesBar").append(
+                            '<option class="font-weight-bold" selected disabled value="" align="center">CATEGORIAS</option>'
+                        )
 
-        if (idCategories) {
+                        $.each(categories, function(key, value) {
 
-            if (control != 1) {
-                // icon = 'sports_bar';
+                            $("#selectCategories").removeClass("sr-only");
+                            $("#categoriesBar").append('<option value="' + value['id'] +
+                                '">' + value['name'] + '<option>');
+                        });
 
-                $('.bd-example').removeClass("sr-only");
-
-                getConsolidadoDados(barUser, idCategories).then((result) => {
-
-
-                    $('.bd-example').addClass("sr-only");
-                    if (result.noData != true) {
-                        $("#tabelaProdutos").removeClass("sr-only");
-                        $("#clsCardReceita").removeClass("sr-only");
-
+                        $("#categoriesBar").trigger("change");
                     }
-                    cardTotal(result.totalDia, result.category_icon);
-                    cardItens(result.qtdTotalDia, result.category_icon);
-                    cardMedia(result.mediaDia, result.category_icon);
-                    popularTabelaProdutos(result.fieldsProducts);
-
                 });
-
-                control = 1;
             } else {
-
-                $("#tabelaProdutos").addClass("sr-only");
-                $("#clsCardITotaltens").addClass("sr-only");
-                $("#clsCardTotal").addClass("sr-only");
-                $("#clsCardMedia").addClass("sr-only");
-                $('.bd-example').removeClass("sr-only");
-
-                getConsolidadoDados(barUser, idCategories).then((result) => {
-                   
-                    $('.bd-example').addClass("sr-only");
-                    if (result.noData != true) {
-                       
-                        $("#clsCardITotaltens").removeClass("sr-only");
-                        $("#clsCardTotal").removeClass("sr-only");
-                        $("#clsCardMedia").removeClass("sr-only");
-                        $("#tabelaProdutos").removeClass("sr-only");
-                    }
-                    updateValueCardTotal(result.totalDia);
-                    updateValueCardItens(result.qtdTotalDia);
-                    updateValueCardMedia(result.mediaDia);
-                    updateIconCards(result.category_icon);
-                    popularTabelaProdutos(result.fieldsProducts);
-
-                });
-
-
-
+                $("categoriesBar").hide();
             }
 
         }
-    })
+
+        selectCategories.change(function(event) {
+
+            idCategories = $(this).val();
+            $("div").remove(".divBox");
+
+            if (idCategories) {
+
+                if (control != 1) {
+                    // icon = 'sports_bar';
+
+                    $('.bd-example').removeClass("sr-only");
+
+                    getConsolidadoDados(barUser, idCategories).then((result) => {
 
 
-    function popularTabelaProdutos(produtos) {
-     
-        var tabelaBody = $('#tabelaProdutosBody');
-        tabelaBody.empty(); // limpa o conteúdo anterior da tabela
+                        $('.bd-example').addClass("sr-only");
+                        if (result.noData != true) {
+                            $("#tabelaProdutos").removeClass("sr-only");
+                            $("#clsCardReceita").removeClass("sr-only");
 
-        $.each(produtos, function(i, produto) {
-            var imgSrc = produto.product_image;
-            var nomeProduto = produto.product_name;
-            var quantidade = produto.quantity;
-            var total = numberFormatPtBr(produto.total)
-            var media = numberFormatPtBr(produto.mediaPorProduto)
-            var preco = numberFormatPtBr(produto.price)
+                        }
+                        cardTotal(result.totalDia, result.category_icon);
+                        cardItens(result.qtdTotalDia, result.category_icon);
+                        cardMedia(result.mediaDia, result.category_icon);
+                        popularTabelaProdutos(result.fieldsProducts);
 
-            var tr = $('<tr>');
-            var tdProduto = $('<td>');
-            var img = $('<img>').attr('src', imgSrc).addClass('img-circle img-size-32 mr-2');
-            tdProduto.append(img).append(nomeProduto);
-            var tdQuantidade = $('<td>').text(quantidade);
-            var tdTotal = $('<td>').text(total);
-            var tdMedia = $('<td>').text(media);
-            var tdPreco = $('<td>').text(preco);
+                    });
 
-            tr.append(tdProduto).append(tdQuantidade).append(tdTotal).append(tdMedia).append(tdPreco);
+                    control = 1;
+                } else {
 
-            tabelaBody.append(tr);
-        });
-    }
+                    $("#tabelaProdutos").addClass("sr-only");
+                    $("#clsCardITotaltens").addClass("sr-only");
+                    $("#clsCardTotal").addClass("sr-only");
+                    $("#clsCardMedia").addClass("sr-only");
+                    $('.bd-example').removeClass("sr-only");
+
+                    getConsolidadoDados(barUser, idCategories).then((result) => {
+
+                        $('.bd-example').addClass("sr-only");
+                        if (result.noData != true) {
+
+                            $("#clsCardITotaltens").removeClass("sr-only");
+                            $("#clsCardTotal").removeClass("sr-only");
+                            $("#clsCardMedia").removeClass("sr-only");
+                            $("#tabelaProdutos").removeClass("sr-only");
+                        }
+                        updateValueCardTotal(result.totalDia);
+                        updateValueCardItens(result.qtdTotalDia);
+                        updateValueCardMedia(result.mediaDia);
+                        updateIconCards(result.category_icon);
+                        popularTabelaProdutos(result.fieldsProducts);
+
+                    });
 
 
 
+                }
 
-    function getConsolidadoDados(idBar, idCategoria) {
-        // Validar as entradas do usuário
-        idBar = parseInt(idBar) || 0;
-        idCategoria = parseInt(idCategoria) || 0;
+            }
+        })
 
-        var dados = {
-            idBar: idBar,
-            idCategoria: idCategoria,
-            _token: $('meta[name="csrf-token"]').attr('content'),
-        };
 
-        // Retornar uma nova promise
-        return new Promise(function(resolve, reject) {
-            $.ajax({
-                type: "POST",
-                url: URL_BASE + ROTA_HOME + "requestConsolidadoDados",
-                data: dados,
-                dataType: "json",
-                success: function(response) {
-                    
-                    resolve(response);
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                   
-                    reject(errorThrown);
-                },
+        function popularTabelaProdutos(produtos) {
+
+            var tabelaBody = $('#tabelaProdutosBody');
+            tabelaBody.empty(); // limpa o conteúdo anterior da tabela
+
+            $.each(produtos, function(i, produto) {
+                var imgSrc = produto.product_image;
+                var nomeProduto = produto.product_name;
+                var quantidade = produto.quantity;
+                var total = numberFormatPtBr(produto.total)
+                var media = numberFormatPtBr(produto.mediaPorProduto)
+                var preco = numberFormatPtBr(produto.price)
+
+                var tr = $('<tr>');
+                var tdProduto = $('<td>');
+                var img = $('<img>').attr('src', imgSrc).addClass('img-circle img-size-32 mr-2');
+                tdProduto.append(img).append(nomeProduto);
+                var tdQuantidade = $('<td>').text(quantidade);
+                var tdTotal = $('<td>').text(total);
+                var tdMedia = $('<td>').text(media);
+                var tdPreco = $('<td>').text(preco);
+
+                tr.append(tdProduto).append(tdQuantidade).append(tdTotal).append(tdMedia).append(tdPreco);
+
+                tabelaBody.append(tr);
             });
-        });
-    }
+        }
 
 
 
-    // function getConsolidadoDados(idBar,idCategoria){
 
-    //     // Validar as entradas do usuário
-    //     idBar = parseInt(idBar) || 0;
-    //     idCategoria = parseInt(idCategoria) || 0;
+        function getConsolidadoDados(idBar, idCategoria) {
+            // Validar as entradas do usuário
+            idBar = parseInt(idBar) || 0;
+            idCategoria = parseInt(idCategoria) || 0;
 
-    //     var dados = {
-    //         idBar:idBar,
-    //         idCategoria:idCategoria,
-    //         _token: $('meta[name="csrf-token"]').attr('content')
-    //     };
+            var dados = {
+                idBar: idBar,
+                idCategoria: idCategoria,
+                _token: $('meta[name="csrf-token"]').attr('content'),
+            };
 
-    //     $.ajax({
-    //         type:"POST",
-    //         url: URL_BASE + ROTA_HOME + 'requestConsolidadoDados',
-    //         data: dados,
-    //         dataType:"json",
-    //         success:function(response){
-    //            
-    //             return response;
-    //         },
-    //         error:function(xhr,textStatus,errorThrown){
-    //           
-    //         }
-    //     })
+            // Retornar uma nova promise
+            return new Promise(function(resolve, reject) {
+                $.ajax({
+                    type: "POST",
+                    url: URL_BASE + ROTA_HOME + "requestConsolidadoDados",
+                    data: dados,
+                    dataType: "json",
+                    success: function(response) {
+
+                        resolve(response);
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+
+                        reject(errorThrown);
+                    },
+                });
+            });
+        }
 
 
-    // }
 
-});
+        // function getConsolidadoDados(idBar,idCategoria){
+
+        //     // Validar as entradas do usuário
+        //     idBar = parseInt(idBar) || 0;
+        //     idCategoria = parseInt(idCategoria) || 0;
+
+        //     var dados = {
+        //         idBar:idBar,
+        //         idCategoria:idCategoria,
+        //         _token: $('meta[name="csrf-token"]').attr('content')
+        //     };
+
+        //     $.ajax({
+        //         type:"POST",
+        //         url: URL_BASE + ROTA_HOME + 'requestConsolidadoDados',
+        //         data: dados,
+        //         dataType:"json",
+        //         success:function(response){
+        //            
+        //             return response;
+        //         },
+        //         error:function(xhr,textStatus,errorThrown){
+        //           
+        //         }
+        //     })
+
+
+        // }
+
+    });
 </script>
 
 
