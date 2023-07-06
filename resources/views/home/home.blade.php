@@ -12,7 +12,7 @@
       <div class="input-group-prepend">
  
         <span class="input-group-text">
-          <i class="fa fa-list" aria-hidden="true">  Lista Ativa: <br><br> <b>{{ $nomeDaLista }}</b> </i>
+          <i class="fa fa-list" aria-hidden="true">  Lista Ativa <br><br> <b>{{ $nomeDaLista }}</b> </i>  <i class="fa fa-list" aria-hidden="true"></i>
         </span>
       </div>
       
