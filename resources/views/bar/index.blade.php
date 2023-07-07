@@ -23,7 +23,7 @@
                 &nbsp;
                 <div class="col-12 col-sm-6 col-md-3" id="divFecharBar">
                     <div class="info-box mb-3">
-                    <input hidden type="text" id="barId" class="form-control" value="<?= $bar_id; ?>">
+                        <input hidden type="text" id="barId" class="form-control" value="<?= $bar_id; ?>">
 
                         <button href="javascript:void(0)" class="btn btn-sm" role="button" id="fecharBar"
                             title="Fechar Bar" aria-label="Fechar Bar">
@@ -43,7 +43,25 @@
         <h1 align="center"> <b> Informações do Bar </b></h1>
     </div>
 
+ <button type="button" class="btn btn-primary d-none" id="printButton">
+    Imprimir
+</button>
+
+<table id="data-table" class="table d-none" data-toggle="table" data-pagination="true" data-search="true">
+
+    <thead>
+        <tr>
+            <th data-field="category_name">Categoria</th>
+            <th data-field="product_name">Produto</th>
+            <th data-field="total_quantity">Quantidade</th>
+        </tr>
+    </thead>
+</table>
+
+
     <div class="card-body">
+
+   
 
         <div class="modal fade" id="modal_bar" tabindex="-1" role="dialog" aria-labelledby="modalbar_Label"
             aria-hidden="true">
@@ -189,11 +207,12 @@ $(function() {
     var $tbl_adminBar = $('#tbl_adminBar');
     var urlBase = window.location.origin;
     var urlController = '/bar/';
-    var idBar = '';
+    var urlControllerDashboard = '/dash/';
     var urlControllerBar = 'updateStatusBar/';
+    var idBar = '';
     const statusBar = document.getElementById('statusBar').value;
     const idAtualBarUsuario = document.getElementById('barId').value;
-  
+
 
     if (statusBar == 1) {
         document.getElementById("abrirBar").disabled = true;
@@ -250,6 +269,68 @@ $(function() {
 
     });
 
+    // function createTable(data) {
+    //     var tableHtml = '';
+
+    //     if (data.length > 0) {
+    //         // Cabeçalho da tabela
+    //         tableHtml += '<table>';
+    //         tableHtml += '<thead>';
+    //         tableHtml += '<tr>';
+    //         tableHtml +=
+    //             '<th>Categoria</th>';
+    //         tableHtml += '<th>Produto</th>';
+    //         tableHtml +=
+    //             '<th>Quantidade</th>';
+    //         tableHtml += '</tr>';
+    //         tableHtml += '</thead>';
+    //         tableHtml += '<tbody>';
+
+    //         // Linhas da tabela com os dados
+    //         for (var i = 0; i < data
+    //             .length; i++) {
+    //             tableHtml += '<tr>';
+    //             tableHtml += '<td>' + data[
+    //                     i].category_name +
+    //                 '</td>';
+    //             tableHtml += '<td>' + data[
+    //                     i].product_name +
+    //                 '</td>';
+    //             tableHtml += '<td>' + data[
+    //                     i].total_quantity +
+    //                 '</td>';
+    //             tableHtml += '</tr>';
+    //         }
+
+    //         tableHtml += '</tbody>';
+    //         tableHtml += '</table>';
+    //     } else {
+    //         tableHtml =
+    //             '<p>Nenhum dado encontrado.</p>';
+    //     }
+
+    //     return tableHtml;
+    // }
+
+ 
+    function fillDataTable(data) {
+        $('#data-table').bootstrapTable('load', data);
+        $('#data-table').removeClass('d-none');
+        $('#printButton').removeClass('d-none');
+    }
+
+    $('#printButton').on('click', function() {
+        window.print();
+    });
+
+    // function openModalWithData(data) {
+    //     var tableHtml = createTable(data);
+
+    //     // Abra o modal e insira a tabela nele
+    //     $('#modal').html(tableHtml);
+    //     $('#modal').modal('show');
+    // }
+
     $('#fecharBar').click(function() {
 
 
@@ -276,20 +357,48 @@ $(function() {
                             html: '<br>Não há ordens para sincronizar.',
 
                         }).then(() => {
-                            fecharBar();
+                            fetchData()
+                                .then(function(response) {
+                                    // Manipule os dados retornados aqui
+                                    // console.log('o response foi' +
+                                    //     response);
+                                        openModalWithData(response);
+
+
+
+
+                                })
+                                .catch(function(error) {
+                                    console.log(error);
+                                });
+
+                            // fecharBar();
 
                         });
 
                     } else {
 
                         Swal.fire({
-                        icon: 'success',
-                        title: 'Todos as orderes foi enviada para sincronização com o ERP!',
-                        html: '<br> Orders enviadas para sincronização.',
-                    }).then(() => {
-                        fecharBar();
-                    });
-                   
+                            icon: 'success',
+                            title: 'Todos as orderes foi enviada para sincronização com o ERP!',
+                            html: '<br> Orders enviadas para sincronização.',
+                        }).then(() => {
+
+                            fetchData()
+                                .then(function(response) {
+                                    // Manipule os dados retornados aqui
+                                    // console.log('o response foi' +
+                                    //     response);
+
+                                    fillDataTable(response);
+                                })
+                                .catch(function(error) {
+                                    console.log(error);
+                                });
+
+                            // fecharBar();
+                        });
+
 
                         // const jsonString = JSON.stringify(result);
                         // console.log(jsonString);
@@ -356,16 +465,16 @@ $(function() {
         return new Promise((resolve, reject) => {
 
             $.ajax({
-                url: urlBase + '/getOrderForErp/'+ idAtualBarUsuario,
+                url: urlBase + '/getOrderForErp/' + idAtualBarUsuario,
                 method: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                           
+
                 success: function(success) {
 
                     return resolve(success);
-               
+
                 },
                 erro: function(jqXHR) {
 
@@ -436,6 +545,30 @@ $(function() {
         });
     }
 
+    function fetchData() {
+
+        return new Promise(function(resolve, reject) {
+            $.ajax({
+                url: urlBase + urlControllerDashboard + 'getdataEstoqueFinal',
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    resolve(response);
+                },
+                error: function(xhr, status, error) {
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    // Chame a função fetchData quando necessário
+
+
+
 
     updateStatusBar = (fieldStatus) => {
         return new Promise((resolve, reject) => {
@@ -445,7 +578,7 @@ $(function() {
                 data: {
                     'status': fieldStatus,
                 },
-                
+
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },

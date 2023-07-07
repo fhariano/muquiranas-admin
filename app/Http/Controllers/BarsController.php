@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bars;
+use App\Models\Dashboard;
 use App\Models\UsersBar;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
@@ -14,6 +15,7 @@ use App\Models\Orders;
 use App\Models\BarsHistory;
 use JeroenNoten\LaravelAdminLte\View\Components\Form\Select;
 use Laravel\Sail\Console\PublishCommand;
+
 
 class BarsController extends Controller
 {
@@ -378,27 +380,6 @@ class BarsController extends Controller
 
         return json_decode($resultIsOwnerOfBar);
     }
-    // public function UserIsOwnerOfBarSelected($idUser, $idBar)
-    // {
-    //     $resultIsOwnerOfBarSelected = UsersBar::select(
-    //         DB::raw('users_bars.bar_id as bar_id'),
-    //         DB::raw('users_bars.group_id as group_id'),
-    //         DB::raw('bars.status as statusBar'),
-    //         DB::raw('bars.short_name as nameBar'),
-    //         DB::raw('users_bars.is_owner as DonoBar'),
-
-    //     )
-    //         ->join('bars as bars', 'bars.id', '=', 'bar_id')
-    //         ->where([
-    //             'user_id' => $idUser,
-    //             'is_owner' => '1',
-    //             'bar_id' => $idBar,
-               
-    //         ])
-    //         ->get();
-
-    //     return json_decode($resultIsOwnerOfBarSelected);
-    // }
 
 
     public function UserIsOwnerOfBarSelected($idUser, $idBar)
@@ -469,6 +450,16 @@ class BarsController extends Controller
     //  ] ;
         return session(['baresUserLogado' => $fieldsBares]);
 
+    }
+
+    public function getDataEstoqueFinal()
+    {
+        $barId = $this->bar_id; // Defina o valor adequado para o ID do bar
+
+        $data = Dashboard::getDataByBarId($barId);
+        return $data;
+
+        // Resto do código para manipular os dados
     }
 
 

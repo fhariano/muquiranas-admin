@@ -34,6 +34,23 @@ class PromosLists extends Model
         return $existName;
     }
 
+    public function listActive($bar_id){
+        $resultQuery =  PromosLists::select(
+            DB::raw('name as name')
+        )  
+        ->where('active', 1)
+        ->where('status', 1)
+        ->where('bar_id', $bar_id)
+        ->get();
+        
+        if (!$resultQuery->isEmpty()) {
+            $fields = $resultQuery->toArray();
+            return $fields[0]['name'];
+        } else {
+            return 'Nenhuma';
+        }
+    }
+
     use HasFactory;
 }
 

@@ -102,6 +102,13 @@ Route::name('listas.')->middleware('auth')->prefix('/listas')->controller(Promos
 });
 
 
+
+Route::name('dashboard.')->middleware('auth')->prefix('/dash')->group(function () {
+    Route::get('/getdataEstoqueFinal', [BarsController::class, 'getDataEstoqueFinal'])->name('getDataEstoqueFinal');
+    // Outras rotas do dashboard...
+});
+
+
 Route::name('bar.')->middleware('auth')->prefix('/bar')->controller(BarsController::class)->group(function() {
 
     Route::any('/selectBar', 'selectBar')->name('selectBar');
@@ -114,6 +121,7 @@ Route::name('bar.')->middleware('auth')->prefix('/bar')->controller(BarsControll
     Route::put('/destroy','destroy')->name('destroy');
     Route::post('/updateStatusBar','updateStatusBar')->name('updateStatusBar');
     Route::post('/requestValorReceita','requestValorReceita')->name('requestValorReceita'); 
+  
 
 });
 

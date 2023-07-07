@@ -551,7 +551,7 @@ class OrderController extends Controller
             
              // Despacha o job para sincronizar as vendas
             
-            SyncVendasJob::dispatch($json); 
+            // SyncVendasJob::dispatch($json); 
              
         }
            
