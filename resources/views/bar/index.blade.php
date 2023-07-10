@@ -38,30 +38,9 @@
 
     @endCan
 
-
-    <div class="card-header">
-        <h1 align="center"> <b> Informações do Bar </b></h1>
-    </div>
-
- <button type="button" class="btn btn-primary d-none" id="printButton">
-    Imprimir
-</button>
-
-<table id="data-table" class="table d-none" data-toggle="table" data-pagination="true" data-search="true">
-
-    <thead>
-        <tr>
-            <th data-field="category_name">Categoria</th>
-            <th data-field="product_name">Produto</th>
-            <th data-field="total_quantity">Quantidade</th>
-        </tr>
-    </thead>
-</table>
-
-
     <div class="card-body">
 
-   
+
 
         <div class="modal fade" id="modal_bar" tabindex="-1" role="dialog" aria-labelledby="modalbar_Label"
             aria-hidden="true">
@@ -207,7 +186,7 @@ $(function() {
     var $tbl_adminBar = $('#tbl_adminBar');
     var urlBase = window.location.origin;
     var urlController = '/bar/';
-    var urlControllerDashboard = '/dash/';
+    // var urlControllerDashboard = '/dash/';
     var urlControllerBar = 'updateStatusBar/';
     var idBar = '';
     const statusBar = document.getElementById('statusBar').value;
@@ -312,16 +291,18 @@ $(function() {
     //     return tableHtml;
     // }
 
- 
-    function fillDataTable(data) {
-        $('#data-table').bootstrapTable('load', data);
-        $('#data-table').removeClass('d-none');
-        $('#printButton').removeClass('d-none');
-    }
 
-    $('#printButton').on('click', function() {
-        window.print();
-    });
+    // function fillDataTableEstoqueFinal(data) {
+    //     $('#data-table').bootstrapTable('load', data);
+    //     $('#data-table').removeClass('d-none');
+    //     $('#printButton').removeClass('d-none');
+
+    //     generateChart(data);
+    // }
+
+    // $('#printButton').on('click', function() {
+    //     window.print();
+    // });
 
     // function openModalWithData(data) {
     //     var tableHtml = createTable(data);
@@ -357,22 +338,8 @@ $(function() {
                             html: '<br>Não há ordens para sincronizar.',
 
                         }).then(() => {
-                            fetchData()
-                                .then(function(response) {
-                                    // Manipule os dados retornados aqui
-                                    // console.log('o response foi' +
-                                    //     response);
-                                        openModalWithData(response);
 
-
-
-
-                                })
-                                .catch(function(error) {
-                                    console.log(error);
-                                });
-
-                            // fecharBar();
+                            fecharBar();
 
                         });
 
@@ -384,25 +351,10 @@ $(function() {
                             html: '<br> Orders enviadas para sincronização.',
                         }).then(() => {
 
-                            fetchData()
-                                .then(function(response) {
-                                    // Manipule os dados retornados aqui
-                                    // console.log('o response foi' +
-                                    //     response);
+                            fecharBar();
 
-                                    fillDataTable(response);
-                                })
-                                .catch(function(error) {
-                                    console.log(error);
-                                });
-
-                            // fecharBar();
                         });
 
-
-                        // const jsonString = JSON.stringify(result);
-                        // console.log(jsonString);
-                        // percorrerJSON(jsonString);
                     }
 
                 });
@@ -414,9 +366,9 @@ $(function() {
 
         });
 
-
-
     });
+
+
 
 
     // function percorrerJSON(jsonString) {
@@ -531,13 +483,15 @@ $(function() {
                 statusBarAtualizado = 0;
 
                 updateStatusBar(statusBarAtualizado).then((result) => {
-                    Swal.fire({
+                    return Swal.fire({
                         icon: 'success',
                         title: 'BAR FECHADO!',
                         html: 'O bar foi fechado com sucesso!',
+                    }).then(() => {
+                        window.location.replace('{{ route("dashboard.index") }}');
                     });
 
-                    location.reload();
+                  
 
                 });
 
@@ -545,25 +499,25 @@ $(function() {
         });
     }
 
-    function fetchData() {
+    // function fetchDataEstoqueFinal() {
 
-        return new Promise(function(resolve, reject) {
-            $.ajax({
-                url: urlBase + urlControllerDashboard + 'getdataEstoqueFinal',
-                type: 'GET',
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    resolve(response);
-                },
-                error: function(xhr, status, error) {
-                    reject(error);
-                }
-            });
-        });
-    }
+    //     return new Promise(function(resolve, reject) {
+    //         $.ajax({
+    //             url: urlBase + urlControllerDashboard + 'getdataEstoqueFinal',
+    //             type: 'GET',
+    //             dataType: 'json',
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //             },
+    //             success: function(response) {
+    //                 resolve(response);
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 reject(error);
+    //             }
+    //         });
+    //     });
+    // }
 
     // Chame a função fetchData quando necessário
 

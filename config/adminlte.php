@@ -290,6 +290,13 @@ return [
             'icon'       => 'fas fa-fw fa-share',
             'can'        => 'bloquearDono_view' //esconder do menu
         ],
+        [
+            'text'       => 'Dashboard',
+            'icon_color' => 'green',
+            'url'        => 'dash',
+            'icon'       => 'fas fa-fw fa-share',
+            'can'        => 'bloquearDono_view' //esconder do menu
+        ],
 
 
 

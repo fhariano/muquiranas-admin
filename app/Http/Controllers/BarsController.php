@@ -452,15 +452,7 @@ class BarsController extends Controller
 
     }
 
-    public function getDataEstoqueFinal()
-    {
-        $barId = $this->bar_id; // Defina o valor adequado para o ID do bar
 
-        $data = Dashboard::getDataByBarId($barId);
-        return $data;
-
-        // Resto do código para manipular os dados
-    }
 
 
     

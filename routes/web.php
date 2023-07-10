@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Blade;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\DashboardController;
 use App\Jobs\SyncVendasJob;
+use App\Models\Dashboard;
 use PhpParser\Node\Stmt\Return_;
 
 /*
@@ -103,8 +105,9 @@ Route::name('listas.')->middleware('auth')->prefix('/listas')->controller(Promos
 
 
 
-Route::name('dashboard.')->middleware('auth')->prefix('/dash')->group(function () {
-    Route::get('/getdataEstoqueFinal', [BarsController::class, 'getDataEstoqueFinal'])->name('getDataEstoqueFinal');
+Route::name('dashboard.')->middleware('auth')->prefix('/dash')->controller(DashboardController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/getdataEstoqueFinal','getDataEstoqueFinal')->name('getDataEstoqueFinal');
     // Outras rotas do dashboard...
 });
 

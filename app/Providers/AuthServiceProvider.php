@@ -45,6 +45,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('editar_bar', function(){
             return session('group_id') <= 2;
         });
+        Gate::define('visualizar_dash', function(){
+            return session('group_id') <= 2;
+        });
 
         Gate::define('transferir_produto', function(){
             return session('group_id') <= 2 || session('group_id') == 7;
