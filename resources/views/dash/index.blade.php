@@ -87,7 +87,7 @@ $(function() {
 
     function fillDataTableEstoqueFinal(data) {
         var header = $(
-            ' <div class="bs-dash float-left"> <button class="btn btn-primary d-none" id="printButton" type="button" title="Imprimir" onclick="printviewDash();">Imprimir </button> <br> <br> <h4 align="center" id="headerEstoqueBar">Estoque</h4></div>'
+            ' <div class="bs-dash float-left"> <button class="btn btn-primary d-none" id="printButton" type="button" title="Imprimir" onclick="printviewDash();">Imprimir </button> <br> <br> <h4 align="center" id="headerEstoqueBar">Estoque Atual</h4></div>'
         );
         $('.fixed-table-toolbar').prepend(header);
 
@@ -141,7 +141,7 @@ $(function() {
                     title: {
                         display: true,
                         text: chartHeaderText,
-                        fontSize: 18
+                        
                     }
                 },
                 scales: {
