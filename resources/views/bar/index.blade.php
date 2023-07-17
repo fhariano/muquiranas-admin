@@ -297,7 +297,7 @@ $(function() {
     //     $('#data-table').removeClass('d-none');
     //     $('#printButton').removeClass('d-none');
 
-    //     generateChart(data);
+    //     generateProductConsumptionChart(data);
     // }
 
     // $('#printButton').on('click', function() {

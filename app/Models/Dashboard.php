@@ -108,9 +108,7 @@ class Dashboard extends Model
     {
         try {
             $data = DB::table('products as p')
-                ->select(
-                    'p.name AS product_name',
-                    DB::raw('SUM(p.quantity) AS total_quantity'),
+                ->select('p.name AS product_name', DB::raw('SUM(p.quantity) AS total_quantity'),
                     'c.name AS category_name',
                     'c.icon_name AS category_icon'
                 )
@@ -118,6 +116,8 @@ class Dashboard extends Model
                 ->where('p.bar_id', $barId)
                 ->where('p.active', 1)
                 ->groupBy('c.name', 'c.icon_name', 'p.name')
+                ->orderBy('category_name', 'asc') 
+                ->orderBy('total_quantity', 'asc')
                 ->get();
 
             return $data;
@@ -126,6 +126,31 @@ class Dashboard extends Model
             return [];
         }
     }
+
+
+    public static function generateProductConsumptionChart(int $barId)
+{
+    $data = DB::table('categories')
+        ->select('categories.name AS category_name', 'products.short_name AS product_name', 'orders_items.quantity AS total_quantity')
+        ->join('products', 'categories.id', '=', 'products.category_id')
+        ->join('orders_items', function ($join) {
+            $join->on('products.id', '=', 'orders_items.product_id')
+                ->where('orders_items.quantity', '=', function ($query) {
+                    $query->select(DB::raw('MAX(quantity)'))
+                        ->from('orders_items')
+                        ->whereColumn('products.id', '=', 'orders_items.product_id');
+                });
+        })
+        ->where('products.bar_id', $barId)
+        ->where('products.active', 1)
+        ->groupBy('categories.name', 'products.short_name', 'orders_items.quantity')
+        ->orderBy('categories.name')
+        ->get();
+
+    return $data;
+}
+
+    
 
     
 

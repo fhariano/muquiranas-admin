@@ -25,14 +25,17 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $barId = $this->bar_id; 
+        $dataChart = Dashboard::generateProductConsumptionChart($barId);
+
+    
 
         if($this->autenticacaoBar($this->bar_id) == false){
             return redirect(route('bar.selectBar'));
         }else{
         
             if (Gate::allows('visualizar_dash', $this->group_id)) {
-                return view('dash.index');
-             
+                return view('dash.index')->with(compact('dataChart'));
             } 
         }
 
