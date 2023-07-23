@@ -104,158 +104,83 @@ $(function() {
         window.print();
     }
 
-
-
-
     function generateProductConsumptionChart(data) {
+  const sortedData = data.sort((a, b) => b.total_quantity - a.total_quantity);
 
-        const sortedData = data.sort((a, b) => a.total_quantity - b.total_quantity);
+  const categoryNames = Array.from(new Set(data.map(item => item.category_name)));
+  const productNames = Array.from(new Set(data.map(item => item.product_name)));
 
-        const categoryNames = Array.from(new Set(data.map(item => item.category_name)));
-        const productNames = Array.from(new Set(data.map(item => item.product_name)));
-        // Criar matriz para armazenar as quantidades de cada produto por categoria
-        const quantities = [];
-        for (const category of categoryNames) {
-            const categoryQuantities = [];
-            for (const product of productNames) {
-                const foundItem = sortedData.find(item => item.category_name === category && item
-                    .product_name === product);
-                if (foundItem) {
-                    categoryQuantities.push(foundItem.total_quantity);
-                } else {
-                    categoryQuantities.push(0);
-                }
-            }
-            quantities.push(categoryQuantities);
-        }
-
-
-        // var labels = [];
-        // // var quantities = [];
-
-        // // Extrair as categorias e quantidades dos dados
-        // for (var i = 0; i < data.length; i++) {
-        //     labels.push(data[i].product_name);
-        //     quantities.push(data[i].total_quantity);
-        // }
-
-        // function getRandomColor(alpha, index, productName) {
-        //     const r = Math.floor(Math.random() * 256);
-        //     const g = Math.floor(Math.random() * 256);
-        //     const b = Math.floor(Math.random() * 256);
-        //     //   return `rgba(${r}, ${g}, ${b}, ${alpha},${index / productNames.length})`;
-        //     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-        // }
-
-
-        var chartHeaderText = 'Produtos mais vendidos por categoria';
-        // Configurações do gráfico
-        const ctx = document.getElementById('barChart').getContext('2d');
-
-        const chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: categoryNames,
-                datasets: productNames.map((productName, index) => ({
-                    label: productName,
-                    data: quantities.map(categoryQuantities => categoryQuantities[index]),
-                    backgroundColor: `rgba(54, 162, 235, 0.6)`, // Cor das barras
-                    borderColor: `rgba(75, 192, 192, 1)`, // Cor da borda das barras
-                    borderWidth: 1
-                }))
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
-                        }
-                    },
-                    x: {
-                        stacked: true
-                    }
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: chartHeaderText,
-                        font: {
-                            size: 16 
-                        }
-                    },
-                    legend: {
-                        position: 'bottom'
-                    },
-                    tooltips: {
-                        enabled: true,
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            label: function(tooltipItem, data) {
-                                const datasetLabel = data.datasets[tooltipItem.datasetIndex]
-                                    .label || '';
-                                return datasetLabel + ': ' + tooltipItem.yLabel;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        //         const chart = new Chart(ctx, {
-        //   type: 'bar',
-        //   data: {
-        //     labels: categoryNames,
-        //     datasets: productNames.map((productName, index) => ({
-        //       label: productName,
-        //       data: quantities.map(categoryQuantities => categoryQuantities[index]),
-        //     //   backgroundColor: `rgba(75, 192, 192, ${index / productNames.length})`, // Cor das barras
-        //       backgroundColor: getRandomColor(1.0,index,productName.length), // Cor das barras
-        //       borderColor: 'rgba(75, 192, 192, 1)', // Cor da borda das barras
-        //       borderWidth: 1
-        //     }))
-        //   },
-        //   options: {
-        //     responsive: true,
-        //     scales: {
-        //       y: {
-        //         beginAtZero: true
-        //       }
-        //     }
-        //   }
-        // });
-        // var ctx = document.getElementById('barChart').getContext('2d');
-        // var chartHeaderText = 'Produtos mais vendidos por categoria';
-
-        // var chart = new Chart(ctx, {
-        //     type: 'bar',
-        //     data: {
-        //         labels: labels,
-        //         datasets: [{
-        //             label: 'Quantidade',
-        //             data: quantities,
-        //             backgroundColor: 'rgba(54, 162, 235, 0.6)',
-        //             borderColor: 'rgba(54, 162, 235, 1)',
-        //             borderWidth: 1
-        //         }]
-        //     },
-        //     options: {
-        //         plugins: {
-        //             title: {
-        //                 display: true,
-        //                 text: chartHeaderText,
-
-        //             }
-        //         },
-        //         scales: {
-        //             y: {
-        //                 beginAtZero: true
-        //             }
-        //         }
-        //     }
-        // });
+  // Criar matriz para armazenar as quantidades de cada produto por categoria
+  const quantities = [];
+  for (const category of categoryNames) {
+    const categoryQuantities = [];
+    for (const product of productNames) {
+      const foundItem = sortedData.find(item => item.category_name === category && item.product_name === product);
+      if (foundItem) {
+        categoryQuantities.push(foundItem.total_quantity);
+      } else {
+        categoryQuantities.push(0);
+      }
     }
+    quantities.push(categoryQuantities);
+  }
+
+  var chartHeaderText = 'Produtos mais vendidos por categoria';
+  // Configurações do gráfico
+  const ctx = document.getElementById('barChart').getContext('2d');
+
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: categoryNames,
+      datasets: productNames.map((productName, index) => ({
+        label: `${productName}: ${quantities[index][index]}`, // Concatenando o nome do produto com a quantidade
+        data: quantities.map(categoryQuantities => categoryQuantities[index]),
+        backgroundColor: `rgba(54, 162, 235, 0.6)`, // Cor das barras
+        borderColor: `rgba(75, 192, 192, 1)`, // Cor da borda das barras
+        borderWidth: 1
+      }))
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            precision: 0
+          }
+        },
+        x: {
+          stacked: true
+        }
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: chartHeaderText,
+          font: {
+            size: 16
+          }
+        },
+        legend: {
+          position: 'bottom'
+        },
+        tooltips: {
+          enabled: true,
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: function(tooltipItem, data) {
+              const datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+              return datasetLabel;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
 
     function getProductsByMaxQuantity(data) {
         const productsByCategory = {};
