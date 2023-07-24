@@ -128,7 +128,7 @@ class Dashboard extends Model
     }
 
 
-    public static function generateProductConsumptionChart(int $barId)
+    public static function generateProductConsumptionChart($barId)
 {
     $data = DB::table('categories')
         ->select('categories.name AS category_name', 'products.short_name AS product_name', 'orders_items.quantity AS total_quantity')

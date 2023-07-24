@@ -69,8 +69,7 @@ class ProductController extends Controller
 
     public function barProducts(Request $request)
     {
-        // $nowTime = \Carbon\Carbon::now()->addHours(5);
-        // $nowTime = \Carbon\Carbon::now()->subHours(2);
+      
         $nowTime = \Carbon\Carbon::now();
         $nowTime = (string) $nowTime->format('H:i:s');
         $bar_id = $request->bar_id;
@@ -84,12 +83,7 @@ class ProductController extends Controller
             ->orderBy('p.order', 'asc')
             ->get();
 
-        // $products = Products::where('products.active', 1)
-        //     ->where('products.bar_id', $bar_id)
-        //     ->orderBy('products.category_id', 'asc')
-        //     ->orderBy('products.order', 'asc')
-        //     ->get();
-        // dd($products);
+  
         if ($products->isEmpty()) {
             return response()->json([
                 "error" => true,
@@ -99,7 +93,7 @@ class ProductController extends Controller
         }
 
         $promo_list = PromosLists::where('promos_lists.bar_id', $bar_id)->where('promos_lists.active', 1)->first();
-        // dd($promo_list);
+   
         if ($promo_list) {
             $products_promo_list = ProductsPromosLists::where('products_promos_lists.promos_list_id', $promo_list->id)
                 ->where('products_promos_lists.active', 1)
@@ -107,7 +101,7 @@ class ProductController extends Controller
                 ->orderBy('products_promos_lists.product_id', 'asc')
                 ->orderBy('products_promos_lists.hour_start', 'asc')
                 ->get();
-            // dd($products_promo_list);
+     
 
             foreach ($products as $product) {
                 $product->promo = 0;

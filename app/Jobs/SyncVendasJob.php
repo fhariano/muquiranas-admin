@@ -59,25 +59,13 @@ class SyncVendasJob implements ShouldQueue
             ])->post($url . $metododoPrincipal, json_decode($this->json, true));
 
             if ($response->successful()) {
-                // echo 'Requisição enviada com sucesso!';
-
-                // // $responseData = $response->json();
-                // echo('Resposta yy : ' . $response->body());
-
-
-                // echo 'Requisição enviada com sucesso!';
-
+               
                 $responseData = json_decode($response->json()['registry'], true);
                 $idRetorno = $responseData['id'];
 
-
                 // Requisição POST para a URL concatenada com o método 'bill_order' e o parâmetro 'idRetorno'
                 $billOrderUrl = $url . $metodoFaturaVenda;
-                //    $billOrderResponse = Http::withHeaders([
-                //       'x-cake-token' => $token,
-                //  ])->post($billOrderUrl, ['sales_order_id' => $idRetorno]);
-                //   $billOrderBody = json_encode(['sales_order_id' => $idRetorno]);
-
+           
                 $billOrderBody = [
                     'sales_order_id' => $idRetorno
                 ];
