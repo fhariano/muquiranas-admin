@@ -452,6 +452,10 @@ class BarsController extends Controller
 
     }
 
+    public function autenticacaoBar($idBar){
+        return isset($idBar);
+    }
+
 
 
 

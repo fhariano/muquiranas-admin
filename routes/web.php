@@ -43,27 +43,7 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 Route::get('/getOrderForErp/{idBarUsuarioLogado}', [OrderController::class, 'retornaOrdersParaApi'])->name('getOrderForErp')->middleware('auth');
-Route::get('send-Order-to-erp', function(){
-        $json = '{
-        "order_type": 1,
-        "fiscal_operation": 24052,
-        "date_order": "2023-05-31",
-        "date_sell": "2023-05-31",
-        "customer": 9285552,
-        "payment_form": 59702,
-        "seller": 45574,
-        "delivery_time": "2023-05-31"
-    }';
-    SyncVendasJob::dispatch($json);
-
-    return 'DADOS ENVIADOS PARA O ERP COM SUCESSSO. ';
-
-});
 Route::post('/home/requestConsolidadoDados', [HomeController::class, 'requestConsolidadoDados'])->name('requestConsolidadoDados');
-
-// Route::get('/categorias/create', [CategoriesController::class, 'create'])->name('categorias.create');
-
-
 Route::name('transferencia.')->middleware('auth')->prefix('/transferencia')->controller(App\Http\Controllers\Cake\TransferenciaController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/consultaApi', 'consultaApi');
